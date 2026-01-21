@@ -1,0 +1,287 @@
+/* ================= SIDEBAR ================= */
+.sidebar {
+    width: 260px;
+    background: #2F3E4E;
+    color: #E5E7EB;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.25s ease;
+  }
+  
+  .sidebar.collapsed {
+    width: 64px;
+  }
+  
+  /* ---------- HEADER ---------- */
+  .sidebar-header {
+    padding: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  
+  .sidebar-title {
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .sidebar-subtitle {
+    font-size: 11px;
+    opacity: 0.7;
+  }
+  
+  .sidebar.collapsed .sidebar-title,
+  .sidebar.collapsed .sidebar-subtitle {
+    display: none;
+  }
+  
+  /* ================= MENU ================= */
+  .sidebar-menu {
+    padding: 12px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  /* ---------- MENU ITEM ---------- */
+  .menu {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 20px;
+    font-size: 13px;
+    width: 100%;
+    color: #E5E7EB;
+    position: relative;
+    border-radius: 6px;
+    cursor: pointer;
+    background: transparent;
+  }
+  
+  .menu img {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    filter: brightness(0) invert(1);
+  }
+  
+  .menu-text {
+    white-space: nowrap;
+  }
+  
+  .sidebar.collapsed .menu-text {
+    display: none;
+  }
+  
+  .sidebar.collapsed .menu {
+    justify-content: center;
+  }
+  
+  /* NORMAL (TIDAK COLLAPSE) */
+  .sidebar:not(.collapsed) .menu {
+    justify-content: flex-start;
+  }
+  
+  .menu:hover {
+    background: #3A4A5A;
+  }
+  
+  .menu.active {
+    background: #3F5367;
+    font-weight: 500;
+  }
+  
+  .menu.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: #4FC3F7;
+  }
+  
+  /* ---------- BADGE ---------- */
+  .badge {
+    background: #EF4444;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    color: white;
+  }
+  
+  .sidebar.collapsed .badge {
+    display: none;
+  }
+  
+  /* ================= SUBMENU ================= */
+  .menu-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .has-submenu {
+    justify-content: space-between;
+  }
+  
+  .submenu-arrow {
+    font-size: 12px;
+    opacity: 0.7;
+    transition: transform 0.500s ease;
+  }
+  
+  .menu-group.open .submenu-arrow {
+    transform: rotate(90deg);
+  }
+  
+  /* ---------- SUBMENU CONTAINER (SMOOTH) ---------- */
+  .submenu {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    background: #263442;
+    transition: max-height .800s ease, opacity 0.25s ease;
+  }
+  
+  .menu-group.open .submenu {
+    max-height: 500px;
+    opacity: 1;
+  }
+  
+  /* ---------- SUBMENU ITEM (FINAL FIX) ---------- */
+  .submenu-item {
+    display: flex;                 /* ICON & TEXT SEJAJAR */
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px 10px 44px;  /* INDENT RAPI */
+    font-size: 12px;
+    color: #CBD5E1;
+    text-align: left;
+    cursor: pointer;
+    background: transparent;
+  }
+  
+  /* ICON SUBMENU */
+  .submenu-item img {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    filter: brightness(0) invert(1); /* PUTIH */
+    opacity: 0.9;
+  }
+  
+  /* TEXT SUBMENU */
+  .submenu-item span {
+    white-space: nowrap;
+  }
+  
+  /* HOVER */
+  .submenu-item:hover {
+    background: #334155;
+  }
+  
+  /* Hide submenu when sidebar collapsed */
+  .sidebar.collapsed .submenu {
+    display: none !important;
+  }
+  
+  /* ================= TOOLTIP ================= */
+  .sidebar.collapsed .menu::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 72px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1F2937;
+    color: #F9FAFB;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 9999;
+  }
+  
+  .sidebar.collapsed .menu::before {
+    content: "";
+    position: absolute;
+    left: 64px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent #1F2937 transparent transparent;
+    opacity: 0;
+  }
+  
+  .sidebar.collapsed .menu:hover::after,
+  .sidebar.collapsed .menu:hover::before {
+    opacity: 1;
+  }
+  
+  /* ================= TOPBAR ================= */
+  .topbar {
+    background: white;
+    padding: 14px 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  
+  .topbar h1 {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  .toggle-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  /* ================= CONTENT ================= */
+  #content {
+    scroll-behavior: smooth;
+  }
+  
+
+  /* ===============================
+   SUBMENU ARROW (Cloudflare-like)
+================================ */
+
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* text tetap di kiri */
+.menu-text {
+  margin-right: auto;
+}
+
+/* arrow kecil & halus */
+.submenu-arrow {
+  display: flex;
+  align-items: center;
+}
+
+.submenu-arrow svg {
+  width: 10px;
+  height: 10px;
+  color: #9ca3af;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* saat submenu terbuka */
+.menu.open .submenu-arrow svg {
+  transform: rotate(90deg);
+  color: #e5e7eb;
+}

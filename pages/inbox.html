@@ -1,0 +1,108 @@
+<!-- ================= INBOX BERKAS ================= -->
+<script src="../js/auth.js"></script>
+<script src="../js/auth-guard.js"></script>
+<div class="bg-white rounded-lg shadow">
+
+  <!-- HEADER -->
+  <div class="px-6 py-3 border-b flex items-center gap-2">
+    <img src="icons/inbox.svg" class="w-4 h-4">
+    <h2 class="text-sm font-semibold text-blue-600">
+      Inbox Berkas
+    </h2>
+    <span class="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded">
+      <span id="badgeBaru">0</span> baru
+    </span>
+  </div>
+
+  <!-- FILTER -->
+  <div class="px-6 py-4 flex flex-wrap items-center gap-4 text-sm">
+    <div class="flex items-center gap-2">
+      <label class="text-gray-600">Nomor:</label>
+      <input id="filterNomor" type="text"
+             class="border rounded px-3 py-1.5 w-32"
+             placeholder="Nomor">
+    </div>
+
+    <div class="flex items-center gap-2">
+      <label class="text-gray-600">Tahun:</label>
+      <input id="filterTahun" type="text"
+             class="border rounded px-3 py-1.5 w-24"
+             placeholder="Tahun">
+    </div>
+
+    <button onclick="applyFilter()"
+      class="bg-blue-600 text-white px-4 py-1.5 rounded hover:bg-blue-700">
+      🔍 Cari
+    </button>
+
+    <button onclick="resetFilter()"
+      class="bg-gray-200 text-gray-700 px-4 py-1.5 rounded hover:bg-gray-300">
+      Reset
+    </button>
+  </div>
+
+  <!-- TABLE -->
+  <div class="px-6 pb-4 overflow-x-auto">
+
+    <table class="w-full border text-sm">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border px-2 py-2 w-8 text-center">#</th>
+          <th class="border px-2 py-2">Nomor/Tahun</th>
+          <th class="border px-2 py-2">Pengirim</th>
+          <th class="border px-2 py-2">Tgl Dikirim</th>
+          <th class="border px-2 py-2">Nama Seksi</th>
+          <th class="border px-2 py-2">Dikirim Ke</th>
+          <th class="border px-2 py-2">Penerima</th>
+          <th class="border px-2 py-2">Tgl Diterima</th>
+          <th class="border px-2 py-2">Status</th>
+          <th class="border px-2 py-2">Keterangan</th>
+        </tr>
+      </thead>
+
+      <tbody id="tableBody"></tbody>
+    </table>
+
+    <!-- ACTION + PAGINATION (SEJAJAR) -->
+    <div class="mt-4 flex justify-between items-center text-sm">
+
+      <!-- ACTION -->
+      <div class="flex gap-2">
+        <button
+          class="bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 text-xs">
+          ✔ Terima
+        </button>
+
+        <button
+          class="bg-red-600 text-white px-3 py-1.5 rounded hover:bg-red-700 text-xs">
+          ✖ Tolak
+        </button>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="flex items-center gap-2 text-xs">
+        <button id="btnPrev"
+          onclick="prevPage()"
+          class="bg-purple-600 text-white px-2 py-1.5 rounded
+                 disabled:opacity-50"
+          disabled>
+          ◀ Prev
+        </button>
+
+        <span class="text-gray-500">
+          Hal <span id="currentPage">1</span> /
+          <span id="totalPage">1</span>
+        </span>
+
+        <button id="btnNext"
+          onclick="nextPage()"
+          class="bg-purple-600 text-white px-2 py-1.5 rounded">
+          Next ▶
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

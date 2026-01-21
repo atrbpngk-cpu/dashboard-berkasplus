@@ -1,0 +1,132 @@
+<!-- ======================================================
+     BEBAN PETUGAS UKUR
+====================================================== -->
+<script src="../js/auth.js"></script>
+<script src="../js/auth-guard.js"></script>
+
+
+<div class="bg-white rounded-lg shadow">
+
+    <!-- HEADER -->
+    <div class="px-6 py-3 border-b flex items-center gap-2">
+      <img src="icons/book-open.svg" class="w-4 h-4">
+      <h2 class="text-sm font-semibold text-blue-600">
+        Beban Petugas Ukur
+      </h2>
+    </div>
+  
+  <!-- CONTENT -->
+  <div class="px-6 py-5 space-y-5 text-sm text-gray-700">
+
+    <!-- INFO + REFRESH -->
+    <div class="flex justify-between items-start gap-6">
+
+      <!-- SUMMARY CARD -->
+      <div class="grid grid-cols-4 gap-4 flex-1">
+
+        <div class="border rounded p-3 text-center">
+          <div class="text-xs text-gray-500 flex justify-center gap-1">
+            📦 TOTAL
+          </div>
+          <div class="text-xl font-semibold text-blue-600">0</div>
+        </div>
+
+        <div class="border rounded p-3 text-center">
+          <div class="text-xs text-gray-500 flex justify-center gap-1">
+            🔄 PROSES
+          </div>
+          <div class="text-xl font-semibold text-yellow-500">0</div>
+        </div>
+
+        <div class="border rounded p-3 text-center">
+          <div class="text-xs text-gray-500 flex justify-center gap-1">
+            ❌ DITOLAK
+          </div>
+          <div class="text-xl font-semibold text-red-500">0</div>
+        </div>
+
+        <div class="border rounded p-3 text-center">
+          <div class="text-xs text-gray-500 flex justify-center gap-1">
+            ✔ SELESAI
+          </div>
+          <div class="text-xl font-semibold text-green-600">0</div>
+        </div>
+
+      </div>
+
+      <!-- PROGRESS + REFRESH -->
+      <div class="w-72 space-y-2">
+        <div class="text-xs text-gray-500">Progress Penyelesaian</div>
+        <div class="w-full bg-gray-200 rounded h-3 overflow-hidden">
+          <div class="bg-blue-600 h-full w-[0%]"></div>
+        </div>
+        <div class="text-xs text-right text-gray-500">0%</div>
+
+        <button
+          class="mt-2 w-full bg-blue-600 text-white px-5 py-1.5 rounded
+                 hover:bg-blue-700 transition text-xs">
+          🔄 Refresh Data
+        </button>
+      </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="border rounded overflow-hidden">
+
+      <div class="max-h-[360px] overflow-y-auto">
+        <table class="w-full border-collapse text-xs">
+          <thead class="bg-gray-100 sticky top-0 z-10">
+            <tr>
+              <th class="border px-3 py-2">Nomor Berkas</th>
+              <th class="border px-3 py-2">Nama Pemohon</th>
+              <th class="border px-3 py-2">Jenis Permohonan</th>
+              <th class="border px-3 py-2">Desa / Kecamatan</th>
+              <th class="border px-3 py-2">Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <!-- DATA KOSONG / CONTOH -->
+            <tr>
+              <td colspan="5"
+                  class="text-center py-6 text-gray-400">
+                Belum ada data
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PAGINATION -->
+      <div
+        class="flex justify-between items-center
+               px-4 py-2 border-t text-xs">
+
+        <span class="text-gray-500">
+          Halaman 1 / 1
+        </span>
+
+        <div class="flex gap-2">
+          <button
+            class="px-2 py-1 border rounded bg-gray-100
+                   text-gray-600 disabled:opacity-50"
+            disabled>
+            ◀ Prev
+          </button>
+
+          <button
+            class="px-2 py-1 border rounded bg-gray-100
+                   text-gray-600 disabled:opacity-50"
+            disabled>
+            Next ▶
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

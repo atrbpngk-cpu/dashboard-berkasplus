@@ -1,0 +1,125 @@
+<!-- ================= HISTORY BERKAS ================= -->
+<script src="../js/auth.js"></script>
+<script src="../js/auth-guard.js"></script>
+
+<div class="bg-white rounded-lg shadow">
+
+    <!-- HEADER -->
+    <div class="px-6 py-3 border-b flex items-center gap-2">
+      <img src="icons/history.svg" class="w-4 h-4">
+      <h2 class="text-sm font-semibold text-blue-600">
+        History Berkas
+      </h2>
+    </div>
+  
+    <!-- FILTER -->
+    <div class="px-6 py-4 border-b">
+      <div class="flex flex-wrap gap-3 items-center">
+  
+        <input
+          type="text"
+          placeholder="Nomor"
+          class="border rounded px-3 py-2 text-sm w-40
+                 focus:ring-1 focus:ring-blue-500 focus:outline-none">
+  
+        <input
+          type="text"
+          placeholder="Tahun"
+          class="border rounded px-3 py-2 text-sm w-32
+                 focus:ring-1 focus:ring-blue-500 focus:outline-none">
+  
+        <button
+          class="bg-blue-600 text-white px-4 py-2 rounded text-sm
+                 hover:bg-blue-700 flex items-center gap-1">
+          🔍 Cari
+        </button>
+  
+        <button
+          class="bg-gray-200 px-4 py-2 rounded text-sm
+                 hover:bg-gray-300">
+          Reset
+        </button>
+  
+      </div>
+    </div>
+  
+    <!-- ================= TABLE ================= -->
+    <div class="px-6 py-4">
+  
+      <!-- FRAME SCROLL -->
+      <div class="overflow-y-auto max-h-[420px] border rounded">
+  
+        <table class="w-full text-sm border-collapse">
+          <thead class="bg-gray-100 sticky top-0 z-10">
+            <tr>
+              <th class="border px-2 py-2 w-10">#</th>
+              <th class="border px-2 py-2">Nomor/Tahun</th>
+              <th class="border px-2 py-2">Pengirim</th>
+              <th class="border px-2 py-2">Tgl Dikirim</th>
+              <th class="border px-2 py-2">Nama Seksi</th>
+              <th class="border px-2 py-2">Dikirim Ke</th>
+              <th class="border px-2 py-2">Penerima</th>
+              <th class="border px-2 py-2">Tgl Diterima</th>
+              <th class="border px-2 py-2">Status</th>
+              <th class="border px-2 py-2">Keterangan</th>
+            </tr>
+          </thead>
+  
+          <tbody>
+  
+            <!-- ROW SAMPLE (maks 15 per halaman) -->
+            <tr>
+              <td class="border px-2 py-1 text-center">1</td>
+              <td class="border px-2 py-1">110/2024</td>
+              <td class="border px-2 py-1">Nur Wahyudhi Wibowo</td>
+              <td class="border px-2 py-1">18/01/2026 06:52</td>
+              <td class="border px-2 py-1">Seksi Survei dan Pemetaan</td>
+              <td class="border px-2 py-1">Dummy2</td>
+              <td class="border px-2 py-1">-</td>
+              <td class="border px-2 py-1">-</td>
+              <td class="border px-2 py-1 text-green-600 font-medium">
+                Terkirim
+              </td>
+              <td class="border px-2 py-1">gas lagi</td>
+            </tr>
+  
+            <!-- DUPLIKASI ROW sampai max 15 -->
+            <!-- Data berikutnya nanti dari JS / backend -->
+  
+          </tbody>
+        </table>
+  
+      </div>
+    </div>
+  
+    <!-- ================= PAGINATION ================= -->
+        <div
+          class="flex justify-between items-center
+                 px-4 py-3 border-t text-xs">
+  
+          <div class="flex gap-2">
+            <button
+              id="btnPrev"
+              onclick="prevPage()"
+              class="bg-purple-600 text-white px-3 py-1.5 rounded
+                     disabled:opacity-50"
+              disabled>
+              ◀ Prev
+            </button>
+  
+            <button
+              id="btnNext"
+              onclick="nextPage()"
+              class="bg-purple-600 text-white px-3 py-1.5 rounded">
+              Next ▶
+            </button>
+          </div>
+  
+      <div class="text-sm text-gray-600">
+        Halaman <b>1</b> / <b>2</b>
+      </div>
+  
+    </div>
+  
+  </div>
+  

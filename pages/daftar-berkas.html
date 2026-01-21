@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Daftar Berkas</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/auth-guard.js"></script>
+
+</head>
+
+<body class="bg-gray-100 p-4 text-gray-700 text-sm">
+
+<!-- ======================================================
+     DAFTAR BERKAS
+====================================================== -->
+<div class="bg-white rounded-lg shadow w-full">
+
+  <!-- HEADER -->
+  <div class="px-6 py-3 border-b flex items-center gap-2">
+    <img src="icons/folder.svg" class="w-4 h-4" alt="">
+    <h2 class="text-sm font-semibold text-blue-600">
+      Daftar Berkas (Informasi Berkas)
+    </h2>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="px-6 py-3 flex flex-wrap items-center gap-2 border-b text-xs">
+
+    <input
+      type="text"
+      placeholder="Nomor berkas (misal: 123)"
+      class="border rounded px-3 py-1.5 w-56">
+
+    <input
+      type="text"
+      placeholder="Tahun (misal: 2024)"
+      class="border rounded px-3 py-1.5 w-40">
+
+    <button
+      class="bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700">
+      Cari
+    </button>
+
+    <button
+      class="bg-gray-400 text-white px-3 py-1.5 rounded hover:bg-gray-500">
+      Reset
+    </button>
+
+  </div>
+
+  <!-- ACTION BAR -->
+  <div class="px-6 py-3 flex items-center gap-2 border-b">
+
+    <button
+      class="bg-indigo-600 text-white px-3 py-1.5 rounded
+             hover:bg-indigo-700 text-xs">
+      ✏ Edit Berkas
+    </button>
+
+    <button
+      class="bg-red-500 text-white px-3 py-1.5 rounded
+             hover:bg-red-600 text-xs">
+      🗑 Hapus Berkas
+    </button>
+
+  </div>
+
+  <!-- TABLE AREA -->
+  <div class="px-6 py-4">
+
+    <div class="border rounded">
+
+      <!-- SCROLL CONTAINER -->
+      <div class="max-h-[460px] overflow-x-auto overflow-y-auto">
+
+        <table class="w-full border-collapse text-xs whitespace-nowrap">
+
+          <thead class="bg-gray-100 sticky top-0 z-10">
+            <tr>
+              <th class="border px-2 py-2">Tanggal Mulai</th>
+              <th class="border px-2 py-2">Nomor Berkas</th>
+              <th class="border px-2 py-2">Nama Pemohon</th>
+              <th class="border px-2 py-2">Jenis Permohonan</th>
+              <th class="border px-2 py-2">Desa / Kecamatan</th>
+              <th class="border px-2 py-2">Petugas Ukur</th>
+              <th class="border px-2 py-2">Status Berkas</th>
+              <th class="border px-2 py-2">Tanggal Terakhir</th>
+              <th class="border px-2 py-2">Posisi Terakhir</th>
+              <th class="border px-2 py-2">Nama Petugas</th>
+              <th class="border px-2 py-2">Keterangan</th>
+            </tr>
+          </thead>
+
+          <tbody class="hover:[&>tr]:bg-gray-50 cursor-pointer">
+
+            <tr>
+              <td class="border px-2 py-1">03/01/2024</td>
+              <td class="border px-2 py-1">110/2024</td>
+              <td class="border px-2 py-1 max-w-[160px] truncate">
+                JENIS PANJI
+              </td>
+              <td class="border px-2 py-1 max-w-[180px] truncate">
+                Pemecahan Bidang
+              </td>
+              <td class="border px-2 py-1 max-w-[200px] truncate">
+                Ngeposari / Semanu
+              </td>
+              <td class="border px-2 py-1">RIZAL ALI</td>
+              <td class="border px-2 py-1">Diterima</td>
+              <td class="border px-2 py-1"></td>
+              <td class="border px-2 py-1"></td>
+              <td class="border px-2 py-1"></td>
+              <td class="border px-2 py-1"></td>
+            </tr>
+
+            <tr>
+              <td class="border px-2 py-1">12/01/2024</td>
+              <td class="border px-2 py-1">1200/2024</td>
+              <td class="border px-2 py-1 max-w-[160px] truncate">
+                EDY WAHYONO
+              </td>
+              <td class="border px-2 py-1 max-w-[180px] truncate">
+                Pengukuran
+              </td>
+              <td class="border px-2 py-1 max-w-[200px] truncate">
+                Giripanggung
+              </td>
+              <td class="border px-2 py-1">RAHAYU</td>
+              <td class="border px-2 py-1">Proses</td>
+              <td class="border px-2 py-1"></td>
+              <td class="border px-2 py-1"></td>
+              <td class="border px-2 py-1"></td>
+              <td class="border px-2 py-1"></td>
+            </tr>
+
+            <tr>
+              <td class="border px-2 py-1">17/01/2024</td>
+              <td class="border px-2 py-1">1675/2024</td>
+              <td class="border px-2 py-1 max-w-[160px] truncate">
+                BERNADETA
+              </td>
+              <td class="border px-2 py-1 max-w-[180px] truncate">
+                Pendaftaran Tanah
+              </td>
+              <td class="border px-2 py-1 max-w-[200px] truncate">
+                Grogol / Paliyan
+              </td>
+              <td class="border px-2 py-1">SAHID</td>
+              <td class="border px-2 py-1">Diterima</td>
+              <td class="border px-2 py-1">17/01/2026</td>
+              <td class="border px-2 py-1">Loket</td>
+              <td class="border px-2 py-1">Nur Wahyudhi</td>
+              <td class="border px-2 py-1"></td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

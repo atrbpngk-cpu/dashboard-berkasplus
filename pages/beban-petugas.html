@@ -1,0 +1,168 @@
+<!-- ======================================================
+     BEBAN PETUGAS
+====================================================== -->
+<script src="../js/auth.js"></script>
+<script src="../js/auth-guard.js"></script>
+
+
+<div class="bg-white rounded-lg shadow">
+
+    <!-- HEADER -->
+    <div class="px-6 py-3 border-b flex items-center gap-2">
+      <img src="icons/archive.svg" class="w-4 h-4">
+      <h2 class="text-sm font-semibold text-blue-600">
+        Beban Petugas
+      </h2>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="px-6 py-5 space-y-4 text-sm text-gray-700">
+  
+      <!-- INFO BAR -->
+      <div class="flex justify-between items-center">
+        <div class="border rounded px-4 py-2">
+          <div class="text-xs text-gray-500">Total Beban</div>
+          <div
+            id="totalBeban"
+            class="text-xl font-semibold text-blue-600">
+            0
+          </div>
+        </div>
+  
+        <button
+          onclick="refreshData()"
+          class="bg-blue-600 text-white px-4 py-2 rounded
+                 hover:bg-blue-700 transition">
+          Refresh Data
+        </button>
+      </div>
+  
+      <!-- TABLE -->
+      <div class="border rounded overflow-hidden">
+  
+        <!-- AUTO SCROLL -->
+        <div class="max-h-[360px] overflow-y-auto">
+  
+          <table class="w-full border-collapse text-xs">
+            <thead class="bg-gray-50 sticky top-0 z-10">
+              <tr class="text-left text-gray-600">
+                <th class="px-3 py-2 border-b">Nomor Berkas</th>
+                <th class="px-3 py-2 border-b">Nama Pemohon</th>
+                <th class="px-3 py-2 border-b">Jenis Permohonan</th>
+                <th class="px-3 py-2 border-b">Desa / Kecamatan</th>
+                <th class="px-3 py-2 border-b">Petugas Ukur</th>
+              </tr>
+            </thead>
+  
+            <tbody id="tableBody"></tbody>
+          </table>
+  
+        </div>
+  
+        <!-- PAGINATION  -->
+        <div
+          class="flex justify-between items-center
+                 px-4 py-3 border-t text-xs">
+  
+          <div class="flex gap-2">
+            <button
+              id="btnPrev"
+              onclick="prevPage()"
+              class="bg-purple-600 text-white px-3 py-1.5 rounded
+                     disabled:opacity-50"
+              disabled>
+              ◀ Prev
+            </button>
+  
+            <button
+              id="btnNext"
+              onclick="nextPage()"
+              class="bg-purple-600 text-white px-3 py-1.5 rounded">
+              Next ▶
+            </button>
+          </div>
+  
+          <div class="text-gray-500">
+            Halaman
+            <span id="currentPage">1</span> /
+            <span id="totalPage">1</span>
+          </div>
+  
+        </div>
+  
+      </div>
+  
+    </div>
+  
+  </div>
+  
+  <!-- ================= SCRIPT ================= -->
+  <script>
+  /* ================= DATA CONTOH ================= */
+  const dataBeban = [];
+  for (let i = 1; i <= 42; i++) {
+    dataBeban.push({
+      nomor: (1000 + i) + "/2024",
+      pemohon: "Pemohon " + i,
+      jenis: "Pengukuran Ulang",
+      desa: "Desa Contoh / Tepus",
+      petugas: "Petugas " + ((i % 3) + 1)
+    });
+  }
+  
+  /* ================= PAGINATION CONFIG ================= */
+  const limit = 15;
+  let page = 1;
+  let totalPage = Math.ceil(dataBeban.length / limit);
+  
+  /* ================= RENDER TABLE ================= */
+  function renderTable() {
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+  
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    const pageData = dataBeban.slice(start, end);
+  
+    pageData.forEach(row => {
+      tbody.innerHTML += `
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2 border-b">${row.nomor}</td>
+          <td class="px-3 py-2 border-b">${row.pemohon}</td>
+          <td class="px-3 py-2 border-b">${row.jenis}</td>
+          <td class="px-3 py-2 border-b">${row.desa}</td>
+          <td class="px-3 py-2 border-b">${row.petugas}</td>
+        </tr>
+      `;
+    });
+  
+    document.getElementById("totalBeban").innerText = dataBeban.length;
+    document.getElementById("currentPage").innerText = page;
+    document.getElementById("totalPage").innerText = totalPage;
+  
+    document.getElementById("btnPrev").disabled = page === 1;
+    document.getElementById("btnNext").disabled = page === totalPage;
+  }
+  
+  /* ================= NAVIGATION ================= */
+  function nextPage() {
+    if (page < totalPage) {
+      page++;
+      renderTable();
+    }
+  }
+  
+  function prevPage() {
+    if (page > 1) {
+      page--;
+      renderTable();
+    }
+  }
+  
+  function refreshData() {
+    renderTable();
+  }
+  
+  renderTable();
+  </script>
+  

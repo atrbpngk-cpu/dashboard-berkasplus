@@ -1,0 +1,111 @@
+<!-- ======================================================
+     ENTRY DATA BERKAS
+====================================================== -->
+<script src="../js/auth.js"></script>
+<script src="../js/auth-guard.js"></script>
+<div class="bg-white rounded-lg shadow">
+
+    <!-- HEADER -->
+    <div class="px-6 py-3 border-b flex items-center gap-2">
+      <img src="icons/edit-3.svg" class="w-4 h-4">
+      <h2 class="text-sm font-semibold text-blue-600">
+        Entry Data Berkas Baru
+      </h2>
+    </div>
+  
+    <!-- FORM -->
+    <form class="px-6 py-6 text-sm text-gray-700 space-y-6">
+  
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+  
+        <!-- ================= KOLOM KIRI ================= -->
+        <div class="space-y-4">
+  
+          <!-- TANGGAL MULAI -->
+          <div>
+            <label class="block font-semibold mb-1">Tanggal Mulai</label>
+            <input
+              type="date"
+              class="w-full border rounded px-3 py-2 text-sm
+                     focus:outline-none focus:ring-1 focus:ring-blue-500">
+          </div>
+  
+          <!-- NOMOR BERKAS -->
+          <div>
+            <label class="block font-semibold mb-1">Nomor Berkas</label>
+            <input
+              type="text"
+              placeholder="Nomor Berkas"
+              class="w-full border rounded px-3 py-2 text-sm
+                     focus:outline-none focus:ring-1 focus:ring-blue-500">
+          </div>
+  
+          <!-- TAHUN -->
+          <div>
+            <label class="block font-semibold mb-1">Tahun</label>
+            <input
+              type="text"
+              placeholder="Tahun (contoh: 2025)"
+              class="w-full border rounded px-3 py-2 text-sm
+                     focus:outline-none focus:ring-1 focus:ring-blue-500">
+          </div>
+  
+        </div>
+  
+        <!-- ================= KOLOM KANAN ================= -->
+        <div class="space-y-4">
+  
+          <!-- NAMA PEMOHON -->
+          <div>
+            <label class="block font-semibold mb-1">Nama Pemohon</label>
+            <input
+              type="text"
+              placeholder="Nama Pemohon"
+              class="w-full border rounded px-3 py-2 text-sm
+                     focus:outline-none focus:ring-1 focus:ring-blue-500">
+          </div>
+  
+          <!-- JENIS PERMOHONAN -->
+          <div>
+            <label class="block font-semibold mb-1">Jenis Permohonan</label>
+            <select
+              class="w-full border rounded px-3 py-2 text-sm
+                     focus:outline-none focus:ring-1 focus:ring-blue-500">
+              <option value="">-- Pilih Jenis Permohonan --</option>
+              <option>Pengukuran Ulang</option>
+              <option>Pemetaan Kadastral</option>
+              <option>Pemecahan Bidang</option>
+            </select>
+          </div>
+  
+          <!-- DESA / KECAMATAN -->
+          <div>
+            <label class="block font-semibold mb-1">Desa / Kecamatan</label>
+            <select
+              class="w-full border rounded px-3 py-2 text-sm
+                     focus:outline-none focus:ring-1 focus:ring-blue-500">
+              <option value="">-- Pilih Desa / Kecamatan --</option>
+              <option>Giripanggung / Tepus</option>
+              <option>Sidoharjo / Tepus</option>
+            </select>
+          </div>
+  
+        </div>
+  
+      </div>
+  
+      <!-- ================= ACTION BUTTON ================= -->
+      <div class="flex justify-end pt-4">
+        <button
+          type="submit"
+          class="flex items-center gap-2
+                 bg-purple-600 text-white px-5 py-2
+                 rounded hover:bg-purple-700 transition">
+          💾 Simpan & Kirim
+        </button>
+      </div>
+  
+    </form>
+  
+  </div>
+  

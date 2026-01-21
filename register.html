@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Register | BERKAS+</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" href="icons/ATR1.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/auth.js" defer></script>
+</head>
+
+<body class="min-h-screen bg-gray-100 flex items-center justify-center">
+
+<div class="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+
+  <div class="flex items-center justify-center gap-3 mb-6">
+    <img src="icons/ATR1(2).png" class="w-10 h-10">
+    <div>
+      <div class="font-semibold text-sm">ATR/BPN</div>
+      <div class="text-xs text-gray-500">KANTAH GUNUNGKIDUL</div>
+    </div>
+  </div>
+  
+  <h2 class="text-lg text-gray-500 text-center">Registrasi Pengguna</h2>
+  <p class="text-sm font-semibold  text-center mb-6">BERKAS+</p>
+
+  <form onsubmit="register(event)" class="space-y-4">
+
+    <div>
+      <label class="text-sm">Nama Lengkap</label>
+      <input id="reg-name"
+             class="w-full border rounded-lg px-3 py-2 text-sm"
+             placeholder="Nama lengkap" required>
+    </div>
+
+    <div>
+      <label class="text-sm">Username</label>
+      <input id="reg-username"
+             class="w-full border rounded-lg px-3 py-2 text-sm"
+             placeholder="Username" required>
+    </div>
+
+    <div>
+      <label class="text-sm">Password</label>
+      <input id="reg-password" type="password"
+             class="w-full border rounded-lg px-3 py-2 text-sm"
+             placeholder="Password" required>
+    </div>
+
+    <button class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
+      Daftar
+    </button>
+  </form>
+
+  <p id="reg-success" class="text-sm text-green-600 text-center mt-4 hidden">
+    Registrasi berhasil, silakan login
+  </p>
+
+  <p class="text-sm text-center mt-6 text-gray-500">
+    Sudah punya akun?
+    <a href="login.html" class="text-blue-600 hover:underline">
+      Login
+    </a>
+  </p>
+
+</div>
+</body>
+</html>

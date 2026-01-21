@@ -1,0 +1,152 @@
+<!-- ================= PENCARIAN BERKAS ================= -->
+<script src="../js/auth.js"></script>
+<script src="../js/auth-guard.js"></script>
+<div class="bg-white rounded-lg shadow mb-6">
+
+    <div class="px-6 py-3 border-b flex items-center gap-2">
+      <img src="icons/send.svg" class="w-4 h-4">
+      <h2 class="text-sm font-semibold text-blue-600">
+        Kirim Berkas
+      </h2>
+    </div>
+  
+    <div class="px-6 py-5">
+      <div class="max-w-xl space-y-3">
+  
+        <!-- Nomor -->
+        <div class="flex items-center gap-4">
+          <label class="w-24 text-sm text-gray-600">Nomor</label>
+          <input class="flex-1 max-w-md border rounded px-3 py-2 text-sm"
+                 placeholder="Nomor Berkas">
+        </div>
+  
+        <!-- Tahun -->
+        <div class="flex items-center gap-4">
+          <label class="w-24 text-sm text-gray-600">Tahun</label>
+          <input class="flex-1 max-w-md border rounded px-3 py-2 text-sm"
+                 placeholder="Tahun">
+        </div>
+  
+        <!-- Button -->
+        <div class="flex gap-2 pl-28 pt-2">
+          <button class="bg-green-600 text-white text-sm px-4 py-2 rounded">
+            Cari
+          </button>
+          <button class="bg-orange-500 text-white text-sm px-4 py-2 rounded">
+            Reset
+          </button>
+        </div>
+  
+      </div>
+  
+    </div>
+  </div>
+  
+<!-- ================= HASIL & KIRIM BERKAS ================= -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- ================= FRAME HASIL PENCARIAN ================= -->
+    <div class="bg-white rounded-lg shadow border">
+  
+      <div class="px-5 py-3 border-b">
+        <h3 class="text-sm font-semibold text-blue-600 flex items-center gap-2">
+          📄 Hasil Pencarian Berkas
+        </h3>
+      </div>
+  
+      <div class="px-5 py-4 text-sm text-gray-700 space-y-3">
+  
+        <div>
+          <p class="font-semibold">Tanggal Mulai</p>
+          <p class="text-gray-600">19/01/2026</p>
+        </div>
+  
+        <div>
+          <p class="font-semibold">Nomor Berkas</p>
+          <p class="text-gray-600">1200/2026</p>
+        </div>
+  
+        <div>
+          <p class="font-semibold">Nama Pemohon</p>
+          <p class="text-gray-600">EDY WAHYONO</p>
+        </div>
+  
+        <div>
+          <p class="font-semibold">Jenis Permohonan</p>
+          <p class="text-gray-600">
+            Pengukuran Ulang dan Pemetaan Kadastral
+          </p>
+        </div>
+  
+        <div>
+          <p class="font-semibold">Desa / Kecamatan</p>
+          <p class="text-gray-600">Giripanggung / Tepus</p>
+        </div>
+  
+        <div>
+          <p class="font-semibold">Petugas Ukur</p>
+          <p class="text-gray-700 font-medium">
+            RAHAYU PRASETYA NING TYAS
+          </p>
+        </div>
+  
+      </div>
+    </div>
+  
+    <!-- ================= FRAME PROSES KIRIM ================= -->
+    <div class="bg-white rounded-lg shadow border">
+  
+      <div class="px-5 py-3 border-b">
+        <h3 class="text-sm font-semibold text-purple-600 flex items-center gap-2">
+          📤 Proses Kirim Berkas
+        </h3>
+      </div>
+  
+      <div class="px-5 py-4 space-y-4 text-sm">
+  
+        <!-- Seksi -->
+        <div>
+          <label class="block mb-1 text-gray-600">Seksi</label>
+          <select class="w-full border rounded px-3 py-2">
+            <option>Seksi Survei dan Pemetaan</option>
+          </select>
+        </div>
+  
+        <!-- Petugas Ukur -->
+        <div>
+          <label class="block mb-1 text-gray-600">Petugas Ukur</label>
+          <select class="w-full border rounded px-3 py-2">
+            <option>RIZAL ALI</option>
+          </select>
+        </div>
+  
+        <!-- Dikirim ke -->
+        <div>
+          <label class="block mb-1 text-gray-600">Dikirim ke</label>
+          <select class="w-full border rounded px-3 py-2">
+            <option>-- Pilih --</option>
+          </select>
+        </div>
+  
+        <!-- Keterangan -->
+        <div>
+          <label class="block mb-1 text-gray-600">Keterangan</label>
+          <textarea rows="4"
+                    class="w-full border rounded px-3 py-2"
+                    placeholder="Catatan pengiriman"></textarea>
+        </div>
+  
+        <!-- Button -->
+        <div class="flex justify-end pt-2">
+          <button
+            class="bg-purple-600 text-white px-4 py-2 rounded
+                   hover:bg-purple-700 flex items-center gap-2">
+            💾 Simpan & Kirim
+          </button>
+        </div>
+  
+      </div>
+    </div>
+  
+  </div>
+   
