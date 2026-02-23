@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Register | BERKAS+</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" href="icons/ATR1.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+
+  
+  <script src="js/register.js" defer></script>
+</head>
+
+<body class="login-page">
+
+<div class="login-card">
+
+  
+  <div class="flex items-center justify-center gap-3 mb-6">
+    <img src="icons/ATR1(2).png" class="w-12 h-12">
+    <div>
+      <div class="font-semibold text-sm text-white">ATR/BPN</div>
+      <div class="text-xs text-white">KANTAH GUNUNGKIDUL</div>
+    </div>
+  </div>
+
+  <form onsubmit="register(event)" class="space-y-4">
+
+    <div>
+      <label class="text-sm text-white">Username</label>
+      <input id="username"
+        class="w-full border rounded-lg px-3 py-2 text-sm"
+        placeholder="Username"
+        required>
+    </div>
+
+    <div>
+      <label class="text-sm text-white">Password</label>
+      <input id="password" type="password"
+        class="w-full border rounded-lg px-3 py-2 text-sm"
+        placeholder="Password"
+        required>
+    </div>
+
+    <div>
+      <label class="text-sm text-white">Nama Lengkap</label>
+      <input id="nama"
+        class="w-full border rounded-lg px-3 py-2 text-sm"
+        placeholder="Nama lengkap"
+        required>
+    </div>
+
+    <button
+      class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition">
+      Daftar
+    </button>
+  </form>
+
+  <p class="text-sm text-center mt-6 text-gray-200">
+    Sudah punya akun?
+    <a href="login.html" class="text-black font-medium hover:underline">
+      Login
+    </a>
+  </p>
+
+</div>
+
+</body>
+</html>
