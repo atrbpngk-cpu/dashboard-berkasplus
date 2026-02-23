@@ -2,6 +2,8 @@
 // KONFIGURASI
 // ===============================
 const API_WEB = "https://webapi.berkasplus.my.id";
+// atau langsung Apps Script:
+// const API_WEB = "https://script.google.com/macros/s/AKfycbXXXX/exec";
 
 // ===============================
 // REGISTER
@@ -19,28 +21,28 @@ async function register(e) {
   }
 
   try {
+    // 🔑 GUNAKAN FormData (simple request, TANPA CORS preflight)
+    const formData = new FormData();
+    formData.append("action", "register");
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("nama", nama);
+
     const res = await fetch(API_WEB, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        action: "register",
-        username: username,
-        password: password,
-        nama: nama
-      })
+      body: formData
+      // ⛔ JANGAN set headers Content-Type
     });
 
     const result = await res.json();
     console.log("REGISTER RESPONSE:", result);
 
-    // ✅ KONTRAK SESUAI responseSuccess / responseError
-    if (result.success === true) {
+    // ✅ SESUAI responseSuccess / responseError di Apps Script
+    if (result && result.success === true) {
       alert("Registrasi berhasil, silakan login");
       window.location.href = "login.html";
     } else {
-      alert(result.message || "Registrasi gagal");
+      alert(result?.message || "Registrasi gagal");
     }
 
   } catch (err) {
