@@ -1,7 +1,7 @@
 // ===============================
 // KONFIGURASI
 // ===============================
-const API_WEB = "https://webapi.berkasplus.my.id";
+const API_WEB = "https://script.google.com/macros/s/AKfycbytu9uajQr3lESV5iVJcDISVfk7Tah4v3kkF3Kglgz9-J2X-noIClIsc5r3sgv5eNkjmg/exec";
 
 // ===============================
 // REGISTER
@@ -47,4 +47,5 @@ async function register(e) {
     console.error("REGISTER ERROR:", err);
     alert("Gagal terhubung ke server");
   }
+
 }
