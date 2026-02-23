@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Data Berkas (DI302)</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script src="../js/upload-berkas.js" defer></script>
+</head>
+
+<body class="bg-gray-100 p-4 text-gray-700 text-sm">
+
+<div class="bg-white rounded-lg shadow w-full">
+
+  <div class="px-6 py-3 border-b">
+    <h2 class="text-sm font-semibold text-blue-600">
+      Upload Data Berkas (Excel DI302)
+    </h2>
+  </div>
+
+  <div class="px-6 py-4 border-b text-xs">
+    <div class="bg-blue-50 border border-blue-200 rounded p-3">
+      <ul class="list-disc ml-4 space-y-1">
+        <li>Upload diproses <b>Halaman ini belum fix</b></li>
+        <li>Validasi & preview sebelum import</li>
+        <li>Nomor berkas otomatis format <b>nomor/tahun</b></li>
+        <li>Duplikat otomatis <b>di cek ulang</b></li>
+        <li>Entry manual DB <b>Silahkan Download dahulu</b></li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="px-6 py-6 space-y-4">
+    <input
+      type="file"
+      id="fileExcel"
+      accept=".xlsx"
+      class="block w-full border rounded px-3 py-2 text-xs">
+
+    <div class="flex gap-2">
+      <button
+        id="btnUpload"
+        type="button"
+        class="bg-blue-600 text-white px-4 py-2 rounded text-xs hover:bg-blue-700">
+        Upload & Preview
+      </button>
+
+      <button
+        id="btnImport"
+        type="button"
+        class="bg-green-600 text-white px-4 py-2 rounded text-xs hover:bg-green-700">
+        Import Data
+      </button>
+
+      <button
+        id="btnCancel"
+        type="button"
+        class="bg-red-400 text-white px-4 py-2 rounded text-xs hover:bg-red-500">
+        Batal
+      </button>
+
+      <button id="btnDownloadPreview"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded text-sm">
+        Download
+      </button>
+
+    </div>
+
+ 
+    <div id="uploadResult" class="text-xs"></div>
+
+    <div id="previewSection" class="hidden mt-4">
+
+      <h3 class="font-semibold text-sm mb-2">
+        Preview Data (LOCAL – Belum Disimpan)
+      </h3>
+
+      <div class="border rounded overflow-auto max-h-[360px]">
+        <table class="w-full text-xs border-collapse">
+          <thead class="bg-gray-100 sticky top-0">
+            <tr>
+              <th class="border px-2 py-1">Tanggal mulai</th>
+              <th class="border px-2 py-1">Nomor Berkas</th>
+              <th class="border px-2 py-1">Nama Pemohon</th>
+              <th class="border px-2 py-1">Jenis permohonan</th>
+              <th class="border px-2 py-1">Desa/Kecamatan</th>
+              <th class="border px-2 py-1">Petugas ukur</th>
+            </tr>
+          </thead>
+          <tbody id="previewTable"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (typeof initUploadBerkas === "function") {
+      initUploadBerkas();
+    }
+  });
+</script>
+
+</body>
+</html>

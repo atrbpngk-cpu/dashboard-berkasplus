@@ -1,0 +1,151 @@
+
+<script src="../js/auth.js"></script>
+<script src="../js/auth-guard.js"></script>
+
+
+<div class="bg-white rounded-lg shadow mb-6">
+<div class="bg-white rounded-lg shadow mb-6 relative">
+
+
+  <div class="px-6 py-3 border-b flex items-center gap-2">
+    <img src="icons/send.svg" class="w-4 h-4">
+    <h2 class="text-sm font-semibold text-blue-600">Kirim Berkas</h2>
+  </div>
+
+  <div class="px-6 py-5">
+    <div class="max-w-xl space-y-3">
+      <div class="flex items-center gap-4">
+        <label class="w-24 text-sm text-gray-600">Nomor</label>
+        <input id="nomorBerkas"
+          class="flex-1 max-w-md border rounded px-3 py-2 text-sm"
+          placeholder="Nomor Berkas">
+      </div>
+      <div class="flex items-center gap-4">
+        <label class="w-24 text-sm text-gray-600">Tahun</label>
+        <input id="tahunBerkas"
+          class="flex-1 max-w-md border rounded px-3 py-2 text-sm"
+          placeholder="Tahun">
+      </div>
+      <div class="flex gap-2 pl-28 pt-2">
+        <button id="btnCari"
+          class="bg-green-600 text-white text-sm px-4 py-2 rounded">
+          Cari
+        </button>
+        <button id="btnReset"
+          class="bg-orange-500 text-white text-sm px-4 py-2 rounded">
+          Reset
+        </button>
+      </div>
+      <div id="loadingCari"
+      class="hidden absolute inset-0 flex items-center justify-center
+            bg-white/70 backdrop-blur-sm rounded-lg z-50">
+
+      <div class="flex items-center gap-3 text-sm text-gray-600">
+        <svg class="animate-spin h-5 w-5 text-blue-600"
+          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10"
+            stroke="currentColor" stroke-width="4"/>
+          <path class="opacity-75" fill="currentColor"
+            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+        </svg>
+        <span>Sedang Mencari . . .</span>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="frameBawah"
+  class="grid grid-cols-1 lg:grid-cols-2 gap-6 hidden">
+
+  <div class="bg-white rounded-lg shadow border">
+
+    <div class="px-5 py-3 border-b">
+      <h3 class="text-sm font-semibold text-blue-600">
+        📄 Hasil Pencarian Berkas
+      </h3>
+    </div>
+
+    <div class="px-5 py-4 text-sm text-gray-700 space-y-3">
+
+      <div>
+        <p class="font-semibold">Tanggal Mulai</p>
+        <p id="hasilTanggal" class="text-gray-600">-</p>
+      </div>
+
+      <div>
+        <p class="font-semibold">Nomor Berkas</p>
+        <p id="hasilNomor" class="text-gray-600">-</p>
+      </div>
+
+      <div>
+        <p class="font-semibold">Nama Pemohon</p>
+        <p id="hasilNama" class="text-gray-600">-</p>
+      </div>
+
+      <div>
+        <p class="font-semibold">Jenis Permohonan</p>
+        <p id="hasilJenis" class="text-gray-600">-</p>
+      </div>
+
+      <div>
+        <p class="font-semibold">Desa / Kecamatan</p>
+        <p id="hasilDesa" class="text-gray-600">-</p>
+      </div>
+
+      <div>
+        <p class="font-semibold">Petugas Ukur</p>
+        <p id="hasilPetugas"
+           class="text-gray-700 font-medium">-</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow border">
+
+    <div class="px-5 py-3 border-b">
+      <h3 class="text-sm font-semibold text-purple-600">
+        📤 Proses Kirim Berkas
+      </h3>
+    </div>
+
+    <div class="px-5 py-4 space-y-4 text-sm">
+      <div>
+        <label class="block mb-1 text-gray-600">Seksi</label>
+        <select id="selectSeksi"
+          class="w-full border rounded px-3 py-2">
+        </select>
+      </div>
+      <div>
+        <label class="block mb-1 text-gray-600">Petugas Ukur</label>
+        <select id="selectPetugasUkur"
+          class="w-full border rounded px-3 py-2">
+        </select>
+      </div>
+      <div>
+        <label class="block mb-1 text-gray-600">Dikirim ke</label>
+        <select id="selectDikirimKe"
+          class="w-full border rounded px-3 py-2">
+          <option value="">-- Pilih --</option>
+        </select>
+      </div>
+      <div>
+        <label class="block mb-1 text-gray-600">Keterangan</label>
+        <textarea id="keterangan" rows="4"
+          class="w-full border rounded px-3 py-2"
+          placeholder="Catatan pengiriman"></textarea>
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button id="btnKirim"
+          class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+          Kirim
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

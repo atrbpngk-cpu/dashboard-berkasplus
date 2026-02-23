@@ -1,0 +1,84 @@
+<div class="bg-white rounded-lg shadow">
+
+  
+  <div class="px-6 py-3 border-b flex items-center gap-2">
+    <img src="icons/archive.svg" class="w-4 h-4">
+    <h2 class="text-sm font-semibold text-blue-600">
+      Beban Petugas
+    </h2>
+  </div>
+
+  
+  <div class="px-6 py-6 space-y-8 text-sm text-gray-700">
+
+    
+    <div class="bg-gray-50 p-6 rounded shadow">
+
+      <h3 class="text-sm font-semibold mb-4 text-gray-600">
+        Distribusi Beban Petugas
+      </h3>     
+      <div class="flex gap-8 h-[180px]">
+        <div class="w-1/2 flex items-center justify-center">
+          <div class="w-[220px] h-[220px]">
+            <canvas id="pieChart"></canvas>
+          </div>
+        </div>
+        <div id="pieLegend"
+            class="w-1/2 text-sm space-y-3 overflow-y-auto pr-2 border-l pl-4">
+        </div>
+      </div>
+    </div>
+
+    <p class="text-xs text-gray-500 mt-1 mb-4 italic">
+      *Jumlah dihitung berdasarkan total berkas yang dikirim kepada masing-masing petugas.
+    </p>
+
+    <div class="flex flex-col md:flex-row justify-between gap-6 items-end">
+      <div class="w-full md:w-72">
+        <label class="text-xs text-gray-500">
+          Pilih Petugas
+        </label>
+        <select id="selectPetugas"
+          onchange="filterPetugas()"
+          class="border rounded px-3 py-2 text-sm w-full mt-1">
+        </select>
+      </div>
+
+      <div class="border rounded px-4 py-2">
+        <div class="text-xs text-gray-500">Total Beban</div>
+        <div id="totalBeban"
+             class="text-xl font-semibold text-blue-600">
+          0
+        </div>
+      </div>
+
+      <button onclick="downloadExcel()"
+        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+        Download Excel
+      </button>
+
+    </div>
+
+    <div id="tableContainer"
+         class="border rounded overflow-hidden hidden">
+
+      <div class="max-h-[420px] overflow-y-auto">
+        <table class="w-full border-collapse text-xs">
+
+          <thead class="bg-gray-50 sticky top-0 z-10">
+            <tr class="text-left text-gray-600">
+              <th class="px-3 py-2 border-b">Nomor Berkas</th>
+              <th class="px-3 py-2 border-b">Nama Pemohon</th>
+              <th class="px-3 py-2 border-b">Jenis Permohonan</th>
+              <th class="px-3 py-2 border-b">Desa / Kecamatan</th>
+              <th class="px-3 py-2 border-b">Petugas Ukur</th>
+            </tr>
+          </thead>
+
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../js/beban-petugas.js"></script>

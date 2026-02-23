@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Test WEB API</title>
+</head>
+<body>
+  <button onclick="test()">Test Login</button>
+  <pre id="out"></pre>
+
+  <script>
+    function test() {
+      fetch("https://webapi.berkasplus.my.id", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "login",
+          payload: {
+            username: "admin",
+            password: "admin111"
+          }
+        })
+      })
+      .then(r => r.text())
+      .then(t => {
+        document.getElementById("out").textContent = t;
+      })
+      .catch(e => {
+        document.getElementById("out").textContent = e.toString();
+      });
+    }
+  </script>
+</body>
+</html>

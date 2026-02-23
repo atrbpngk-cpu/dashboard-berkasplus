@@ -1,0 +1,135 @@
+<script src="../js/auth.js"></script>
+<script src="../js/auth-guard.js"></script>
+
+
+<div
+  id="searchContainer"
+  class="relative bg-white rounded-lg shadow mb-6">
+
+  <div class="px-6 py-3 border-b flex items-center gap-2">
+    <img src="icons/info.svg" class="w-4 h-4">
+    <h2 class="text-sm font-semibold text-blue-600">Pencarian Berkas</h2>
+  </div>
+
+  <div class="px-6 py-5">
+    <div class="max-w-xl space-y-3">
+
+      <div class="flex items-center gap-4">
+        <label class="w-24 text-sm text-gray-600">Nomor</label>
+        <input id="inputNomor" type="text"
+          class="flex-1 max-w-md border rounded px-3 py-2 text-sm"
+          placeholder="Nomor Berkas">
+      </div>
+
+      <div class="flex items-center gap-4">
+        <label class="w-24 text-sm text-gray-600">Tahun</label>
+        <input id="inputTahun" type="text"
+          class="flex-1 max-w-md border rounded px-3 py-2 text-sm"
+          placeholder="Tahun">
+      </div>
+
+      <div class="flex gap-2 pl-28 pt-2">
+        <button
+          id="btnCari"
+          type="button"
+          class="bg-green-600 text-white text-sm px-4 py-2 rounded hover:bg-green-700">
+          Cari
+        </button>
+
+        <button
+          id="btnReset"
+          type="button"
+          class="bg-orange-500 text-white text-sm px-4 py-2 rounded hover:bg-orange-600">
+          Reset
+        </button>
+      </div>
+
+      
+      <div
+      id="loadingCari"
+      class="hidden absolute inset-0 flex items-center justify-center bg-white/70 rounded-lg z-20">
+    
+      <div class="flex items-center gap-3 text-sm text-gray-600">
+        <svg class="animate-spin h-5 w-5 text-blue-600"
+             xmlns="http://www.w3.org/2000/svg"
+             fill="none"
+             viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10"
+                  stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+        </svg>
+        <span>Sedang mencari berkas…</span>
+      </div>
+    
+    </div>
+    
+      
+
+    </div>
+  </div>
+</div>
+
+
+<div id="hasilContainer" class="bg-white rounded-lg shadow hidden">
+
+  <div class="px-6 py-3 border-b">
+    <h2 class="text-sm font-semibold text-blue-600">Hasil Pencarian</h2>
+  </div>
+
+  <div class="px-6 py-6 text-sm text-gray-700">
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      
+      <div id="detailUtama" class="lg:col-span-2 space-y-3"></div>
+
+      
+      <div class="space-y-4">
+        <div>
+          <div class="font-semibold mb-1">Keterangan</div>
+          <div id="detailKeterangan">-</div>
+        </div>
+
+        <div class="text-center">
+          <div class="font-semibold mb-2">QR Berkas</div>
+          <img id="qrImage"
+            class="w-32 h-32 mx-auto border p-2 rounded hidden">
+          <button id="btnCetakQR"
+            class="mt-3 bg-purple-500 text-white text-sm px-4 py-2 rounded hidden">
+            Cetak QR
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    
+    <div class="mt-8">
+      <h3 class="text-sm font-semibold mb-3">Riwayat Ekspedisi</h3>
+
+      
+      <div class="riwayat-wrapper">
+        <table class="w-full text-sm border-separate border-spacing-0">
+          <thead>
+            <tr>
+              <th class="th-riwayat">Nomor/Tahun</th>
+              <th class="th-riwayat">Pengirim</th>
+              <th class="th-riwayat">Tgl Dikirim</th>
+              <th class="th-riwayat">Dikirim Ke</th>
+              <th class="th-riwayat">Penerima</th>
+              <th class="th-riwayat">Tgl Diterima</th>
+              <th class="th-riwayat">Status</th>
+              <th class="th-riwayat">Keterangan</th>
+            </tr>
+          </thead>
+
+          <tbody id="riwayatBody">
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

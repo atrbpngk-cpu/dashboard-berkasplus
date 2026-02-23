@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Daftar Petugas</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/auth-guard.js"></script>
+</head>
+
+<body class="bg-gray-100 p-4 text-gray-700 text-sm">
+
+<div class="bg-white rounded-lg shadow">
+
+  <div class="px-6 py-3 border-b flex items-center gap-2">
+    <h2 class="text-sm font-semibold text-blue-600">
+      Daftar Petugas
+    </h2>
+  </div>
+
+  <div class="px-6 py-3 flex items-center gap-2 border-b">
+
+    <button id="btnTambah"
+      onclick="openTambahPetugas()"
+      class="bg-blue-600 text-white px-3 py-1.5 rounded text-xs">
+      Tambah
+    </button>
+
+    <button id="btnEdit" disabled
+      onclick="openEditPetugas()"
+      class="bg-indigo-400 text-white px-3 py-1.5 rounded text-xs cursor-not-allowed">
+      Edit
+    </button>
+
+    <button id="btnHapus" disabled
+      onclick="hapusPetugas()"
+      class="bg-red-400 text-white px-3 py-1.5 rounded text-xs cursor-not-allowed">
+      Hapus
+    </button>
+
+  </div>
+
+  <div class="px-6 py-4">
+    <table class="w-full border text-xs">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border px-3 py-2 w-12">No</th>
+          <th class="border px-3 py-2 text-left">Nama Petugas</th>
+          <th class="border px-3 py-2 text-left">Role</th>
+        </tr>
+      </thead>
+      <tbody id="tablePetugas"
+        class="[&>tr.selected]:bg-blue-50 cursor-pointer">
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div
+  id="modalPetugas"
+  class="fixed inset-0 z-50 hidden flex items-center justify-center"
+>
+
+  <div
+    class="absolute inset-0 bg-black/40"
+    onclick="closeModal()"
+  ></div>
+
+  <div
+    class="relative w-full max-w-md mx-4
+           bg-white rounded-2xl shadow-xl
+           animate-[fadeIn_.2s_ease-out]"
+  >
+
+    <div class="flex items-center justify-between px-6 py-4 border-b">
+      <h3 id="modalTitle" class="text-lg font-semibold text-gray-800">
+        Tambah Petugas
+      </h3>
+      <button
+        onclick="closeModal()"
+        class="text-2xl text-gray-400 hover:text-gray-600"
+      >
+        &times;
+      </button>
+    </div>
+    <div class="px-6 py-5 space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Nama Lengkap
+        </label>
+        <input
+          type="text"
+          id="mpNama"
+          placeholder="Masukkan nama lengkap"
+          class="w-full rounded-lg border border-gray-300
+                 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Role
+        </label>
+        <select
+          id="mpRole"
+          class="w-full rounded-lg border border-gray-300
+                 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option>User</option>
+          <option>Administrator</option>
+        </select>
+      </div>
+
+    </div>
+    <div class="flex justify-end gap-2 px-6 py-4 border-t bg-gray-50 rounded-b-2xl">
+
+      <button
+        onclick="closeModal()"
+        class="px-4 py-2 text-sm rounded-lg
+               bg-gray-200 hover:bg-gray-300 text-gray-700"
+      >
+        Batal
+      </button>
+
+      <button
+        onclick="submitPetugas()"
+        class="px-4 py-2 text-sm rounded-lg
+               bg-blue-600 hover:bg-blue-700 text-white"
+      >
+        Simpan
+      </button>
+    </div>
+  </div>
+</div>
+<script src="../js/daftar-petugas.js"></script>
+
+</body>
+</html>

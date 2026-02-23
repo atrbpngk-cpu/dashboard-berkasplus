@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Petugas Ukur</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/auth-guard.js"></script>
+</head>
+
+<body class="bg-gray-100 p-4 text-gray-700 text-sm">
+
+<div class="bg-white rounded-lg shadow">
+
+  
+  <div class="px-6 py-3 border-b flex items-center gap-2">
+    <h2 class="text-sm font-semibold text-blue-600">
+      Petugas Ukur
+    </h2>
+  </div>
+
+
+<div class="px-6 py-3 flex items-center gap-2 border-b">
+
+  <button id="btnTambahUkur"
+    class="bg-blue-600 text-white px-3 py-1.5 rounded text-xs">
+    Tambah
+  </button>
+
+  <button id="btnEditUkur" disabled
+    class="bg-indigo-400 text-white px-3 py-1.5 rounded text-xs cursor-not-allowed">
+    Edit
+  </button>
+
+  <button id="btnHapusUkur" disabled
+    class="bg-red-400 text-white px-3 py-1.5 rounded text-xs cursor-not-allowed">
+    Hapus
+  </button>
+
+</div>
+  
+  
+  <div class="px-6 py-4">
+    <table class="w-full border text-xs">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border px-3 py-2 text-left">Nama</th>
+        </tr>
+      </thead>
+      <tbody id="tablePetugasUkur"
+        class="cursor-pointer [&>tr.selected]:bg-blue-50">
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+
+<div
+  id="modalUkur"
+  class="fixed inset-0 z-50 hidden flex items-center justify-center"
+>
+
+  
+  <div
+    class="absolute inset-0 bg-black/40"
+    onclick="closeModalPetugasUkur()"
+  ></div>
+
+  
+  <div
+    class="relative w-full max-w-sm mx-4
+           bg-white rounded-2xl shadow-xl
+           animate-[fadeIn_.2s_ease-out]"
+  >
+
+   
+    <div class="flex items-center justify-between px-6 py-4 border-b">
+      <h3 class="text-lg font-semibold text-gray-800">
+        Tambah Petugas Ukur
+      </h3>
+      <button
+        onclick="closeModalPetugasUkur()"
+        class="text-2xl text-gray-400 hover:text-gray-600"
+      >
+        &times;
+      </button>
+    </div>
+
+   
+    <div class="px-6 py-5 space-y-4">
+
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Nama Petugas Ukur
+        </label>
+        <input
+          id="puNama"
+          type="text"
+          placeholder="Masukkan nama petugas ukur"
+          class="w-full rounded-lg border border-gray-300
+                 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+      </div>
+
+    </div>
+
+    
+    <div
+      class="flex justify-end gap-2 px-6 py-4
+             border-t bg-gray-50 rounded-b-2xl"
+    >
+      <button
+        onclick="closeModalPetugasUkur()"
+        class="px-4 py-2 text-sm rounded-lg
+               bg-gray-200 hover:bg-gray-300 text-gray-700"
+      >
+        Batal
+      </button>
+
+      <button
+        onclick="submitPetugasUkur()"
+        class="px-4 py-2 text-sm rounded-lg
+               bg-blue-600 hover:bg-blue-700 text-white"
+      >
+        Simpan
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/daftar-petugas-ukur.js"></script>
+</body>
+</html>

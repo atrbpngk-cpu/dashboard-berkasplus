@@ -1,0 +1,118 @@
+<div class="bg-white rounded-lg shadow">
+
+  <div class="px-6 py-3 border-b">
+    <h2 class="text-sm font-semibold text-blue-600">
+      Jenis Permohonan
+    </h2>
+  </div>
+
+  <div class="px-6 py-3 flex gap-2 border-b">
+    <button id="jpBtnTambah"
+      class="bg-blue-600 text-white px-3 py-1.5 rounded text-xs">
+      Tambah
+    </button>
+
+    <button id="jpBtnEdit" disabled
+      class="bg-indigo-400 text-white px-3 py-1.5 rounded text-xs cursor-not-allowed">
+      Edit
+    </button>
+
+    <button id="jpBtnHapus" disabled
+      class="bg-red-400 text-white px-3 py-1.5 rounded text-xs cursor-not-allowed">
+      Hapus
+    </button>
+  </div>
+
+  <div class="px-6 py-4">
+    <table class="w-full border text-xs">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border px-3 py-2 text-left">
+            Nama Jenis Permohonan
+          </th>
+        </tr>
+      </thead>
+      <tbody id="tableJenisPermohonan"
+        class="cursor-pointer [&>tr.selected]:bg-blue-50">
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+
+<div
+  id="modalJP"
+  class="fixed inset-0 z-50 hidden flex items-center justify-center"
+>
+
+  
+  <div
+    class="absolute inset-0 bg-black/40"
+    onclick="jpCloseModal()"
+  ></div>
+
+  
+  <div
+    class="relative w-full max-w-sm mx-4
+           bg-white rounded-2xl shadow-xl"
+  >
+
+    
+    <div class="flex items-center justify-between px-6 py-4 border-b">
+      <h3
+        id="jpModalTitle"
+        class="text-lg font-semibold text-gray-800"
+      ></h3>
+      <button
+        onclick="jpCloseModal()"
+        class="text-2xl text-gray-400 hover:text-gray-600"
+      >
+        &times;
+      </button>
+    </div>
+
+    
+    <div class="px-6 py-5 space-y-4">
+
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Nama Jenis Permohonan
+        </label>
+        <input
+          id="jpNama"
+          type="text"
+          placeholder="Masukkan nama jenis permohonan"
+          class="w-full rounded-lg border border-gray-300
+                 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+      </div>
+
+    </div>
+
+    
+    <div
+      class="flex justify-end gap-2 px-6 py-4
+             border-t bg-gray-50 rounded-b-2xl"
+    >
+      <button
+        onclick="jpCloseModal()"
+        class="px-4 py-2 text-sm rounded-lg
+               bg-gray-200 hover:bg-gray-300 text-gray-700"
+      >
+        Batal
+      </button>
+
+      <button
+        onclick="jpSubmit()"
+        class="px-4 py-2 text-sm rounded-lg
+               bg-blue-600 hover:bg-blue-700 text-white"
+      >
+        Simpan
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/jenis-permohonan.js"></script>
