@@ -401,14 +401,14 @@
           <td>
             ${
               d.status_proses === "PROCESSING"
-                ? `<span class="bg-yellow-400 text-white px-3 py-0 text-xs rounded">
+                ? `<span class="bg-yellow-400 text-white px-2 py-0 text-xs rounded">
                     Diproses
                   </span>`
                 : d.status_proses === "DONE"
-                ? `<span class="bg-green-600 text-white px-3 py-0 text-xs rounded">
+                ? `<span class="bg-green-600 text-white px-2 py-0 text-xs rounded">
                     DONE
                   </span>`
-                : `<button class="btn-pilih bg-indigo-600 text-white px-3 py-0 text-xs rounded"
+                : `<button class="btn-pilih bg-indigo-600 text-white px-2 py-0 text-xs rounded"
                     data-item="${encoded}">
                     Proses
                   </button>`
@@ -515,4 +515,5 @@
   }
 
 })();
+
 
