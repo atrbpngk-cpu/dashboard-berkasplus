@@ -21,7 +21,6 @@ async function login(e) {
 
   if (error) error.classList.add("hidden");
 
-  // Validasi input
   if (!username || !password) {
     if (error) {
       error.textContent = "Username dan password wajib diisi";
@@ -41,16 +40,34 @@ async function login(e) {
       })
     });
 
+    // ===============================
+    // 🔐 HANDLE RATE LIMIT (CLOUDFLARE)
+    // ===============================
+    if (res.status === 429 || res.status === 403) {
+      if (error) {
+        error.textContent =
+          "Terlalu banyak percobaan login. Silakan tunggu beberapa menit sebelum mencoba kembali.";
+        error.classList.remove("hidden");
+      }
+      return;
+    }
+
+    // ===============================
+    // HANDLE ERROR SERVER LAIN
+    // ===============================
+    if (!res.ok) {
+      throw new Error("SERVER_ERROR");
+    }
+
     const json = await res.json();
 
     // ===============================
-    // ✅ VALIDASI RESPONSE (FIX)
+    // VALIDASI RESPONSE LOGIN
     // ===============================
     if (!json.success || !json.data) {
       if (error) {
         error.textContent =
-          json.message ||
-          "Login gagal! Username atau password salah";
+          json.message || "Login gagal! Username atau password salah";
         error.classList.remove("hidden");
       }
       return;
@@ -60,22 +77,17 @@ async function login(e) {
     // SIMPAN SESSION
     // ===============================
     localStorage.setItem("login", "true");
-    localStorage.setItem(
-      "user",
-      JSON.stringify(json.data) // ⬅️ LANGSUNG data
-    );
+    localStorage.setItem("user", JSON.stringify(json.data));
 
-    // Redirect ke dashboard
     window.location.href = "index.html";
 
   } catch (err) {
     if (error) {
-      error.textContent = "Gagal koneksi ke server";
+      error.textContent = "Tidak dapat terhubung ke server. Silakan coba lagi.";
       error.classList.remove("hidden");
     }
   }
 }
-
 // ===============================
 // LOGOUT
 // ===============================
@@ -110,3 +122,4 @@ window.logout = logout;
 window.getCurrentUser = getCurrentUser;
 window.isLogin = isLogin;
 window.isAdmin = isAdmin;
+
