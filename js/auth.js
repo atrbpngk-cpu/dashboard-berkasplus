@@ -21,7 +21,6 @@ async function login(e) {
 
   if (error) error.classList.add("hidden");
 
-  // Validasi input
   if (!username || !password) {
     if (error) {
       error.textContent = "Username dan password wajib diisi";
@@ -41,20 +40,39 @@ async function login(e) {
       })
     });
 
-    const json = await res.json();
-
     // ===============================
-    // ✅ VALIDASI RESPONSE (FIX)
+    // 🔐 HANDLE RATE LIMIT (CLOUDFLARE)
     // ===============================
-    if (!json.success || !json.data) {
+    if (res.status === 429 || res.status === 403) {
       if (error) {
         error.textContent =
-          json.message ||
-          "Login gagal! Username atau password salah";
+          "Terlalu banyak percobaan login. Silakan tunggu beberapa menit sebelum mencoba kembali.";
         error.classList.remove("hidden");
       }
       return;
     }
+
+    // ===============================
+    // HANDLE ERROR SERVER LAIN
+    // ===============================
+    if (!res.ok) {
+      throw new Error("SERVER_ERROR");
+    }
+
+    const json = await res.json();
+
+    // ===============================
+    // VALIDASI RESPONSE LOGIN
+    // ===============================
+    if (!json.success || !json.data) {
+      if (error) {
+        error.textContent =
+          json.message || "Login gagal! Username atau password salah";
+        error.classList.remove("hidden");
+      }
+      return;
+    }
+
     // ===============================
     // SIMPAN SESSION
     // ===============================
