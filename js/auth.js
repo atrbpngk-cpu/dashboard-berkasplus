@@ -7,7 +7,7 @@
 // ===============================
 // KONFIGURASI
 // ===============================
-const API_WEB = "https://webapi.berkasplus.my.id";
+const API_WEB = "https://webapi.berkasplus.my.id/login";
 
 // ===============================
 // LOGIN
@@ -122,4 +122,5 @@ window.logout = logout;
 window.getCurrentUser = getCurrentUser;
 window.isLogin = isLogin;
 window.isAdmin = isAdmin;
+
 
