@@ -27,6 +27,7 @@
   window.initPloting = function () {
     console.log("INIT PLOTTING ✔");
     resetFormProses();   // ⬅️ WAJIB
+    showEmptyProses();
     setupTabs();
     setupEvents();
     loadPlotingData();
@@ -136,6 +137,7 @@
         setLink("info-Lampiran", item.lampiran);
     
         // ➡️ PINDAH TAB SETELAH SERVER OK
+        showFormProses();
         document.querySelector('[data-tab="tab-proses"]')?.click();
       })
       .catch(err => {
@@ -190,6 +192,7 @@
 
         // reset state frontend
         resetFormProses();
+        showEmptyProses();
 
         // reload tabel
         loadPlotingData();
@@ -307,6 +310,7 @@
           
             btnDone.onclick = () => {
               resetFormProses();
+              showEmptyProses();
               loadPlotingData();
               document.querySelector('[data-tab=\"tab-data\"]')?.click();
             };
@@ -401,14 +405,14 @@
           <td>
             ${
               d.status_proses === "PROCESSING"
-                ? `<span class="bg-yellow-400 text-white px-2 py-0 text-xs rounded">
+                ? `<span class="bg-yellow-400 text-white px-2 py-1 text-xs rounded">
                     Diproses
                   </span>`
                 : d.status_proses === "DONE"
-                ? `<span class="bg-green-600 text-white px-2 py-0 text-xs rounded">
+                ? `<span class="bg-green-600 text-white px-1 py-0 text-xs rounded">
                     DONE
                   </span>`
-                : `<button class="btn-pilih bg-indigo-600 text-white px-2 py-0 text-xs rounded"
+                : `<button class="btn-pilih bg-indigo-600 text-white px-1 py-0 text-xs rounded"
                     data-item="${encoded}">
                     Proses
                   </button>`
@@ -471,6 +475,16 @@
       reader.readAsDataURL(file);
     });
   }
+
+  function showEmptyProses() {
+    document.getElementById("emptyProses")?.classList.remove("hidden");
+    document.getElementById("formProses")?.classList.add("hidden");
+  }
+  
+  function showFormProses() {
+    document.getElementById("emptyProses")?.classList.add("hidden");
+    document.getElementById("formProses")?.classList.remove("hidden");
+  }
     /* ======================================================
      RESET FORM PROSES (WAJIB ADA)
   ====================================================== */
@@ -515,5 +529,3 @@
   }
 
 })();
-
-
