@@ -2897,10 +2897,21 @@ function initDashboardRekapBerkas() {
   });
   
 /* 17===============================dashboard-permohonan.js=============================== */
-
 /* ================= GLOBAL CACHE (SHARED) ================= */
 window.CACHE_BERKAS = window.CACHE_BERKAS || [];
 window.CACHE_READY  = window.CACHE_READY  || false;
+
+/* ================= PARSE TANGGAL (TAMBAHKAN DI SINI) ================= */
+function parseTanggalIndonesia(str) {
+  if (!str) return null;
+
+  const parts = str.split("/");
+  if (parts.length !== 3) return null;
+
+  const [dd, mm, yyyy] = parts;
+
+  return new Date(`${yyyy}-${mm}-${dd}`);
+}
 
 /* ================= STATE ================= */
 let permohonanChartInstance = null;
@@ -2956,7 +2967,7 @@ function initTahunDropdown() {
   const tahunSet = new Set();
 
   window.CACHE_BERKAS.forEach(row => {
-    const tgl = new Date(row["Tanggal mulai"]);
+    const tgl = parseTanggalIndonesia(row["Tanggal mulai"]);
     if (!isNaN(tgl)) {
       tahunSet.add(tgl.getFullYear());
     }
@@ -2991,7 +3002,7 @@ function rekapByField({ field, tahun = null, bulan = null }) {
   window.CACHE_BERKAS.forEach(row => {
 
     if (tahun || bulan) {
-      const tgl = new Date(row["Tanggal mulai"]);
+      const tgl = parseTanggalIndonesia(row["Tanggal mulai"]);
       if (isNaN(tgl)) return;
 
       if (tahun && tahun !== "all" && tgl.getFullYear() !== Number(tahun)) return;
@@ -3132,7 +3143,7 @@ function lihatDetailPermohonan(jenis) {
 
     if (row["Jenis permohonan"] !== jenis) return false;
 
-    const tgl = new Date(row["Tanggal mulai"]);
+    const tgl = parseTanggalIndonesia(row["Tanggal mulai"]);
     if (isNaN(tgl)) return false;
 
     if (tahun && tahun !== "all" && tgl.getFullYear() !== Number(tahun)) {
@@ -3251,6 +3262,7 @@ function tutupDetailPermohonan() {
   document.getElementById("permohonanChart")
     ?.scrollIntoView({ behavior: "smooth", block: "center" });
 }
+
 
 /* 18===============================daftar-petugas.js=============================== */
 /* 19===============================daftar-petugas-ukur.js=============================== */
@@ -4444,6 +4456,13 @@ function getCurrentUser() {
 
 /* 23===============================daftar-plotting.js=============================== */
 
+/* ======================================================
+   DAFTAR PLOTING - FRONTEND (FINAL PRODUKSI)
+   - SPA ROUTER
+   - API ROUTER APPS SCRIPT
+   - APP_CONFIG GLOBAL
+====================================================== */
+
 /* ===============================
    API CONFIG (GLOBAL)
 =============================== */
@@ -4491,25 +4510,45 @@ function initTabDaftarPloting() {
    TAB 1 : LOAD DATA PLOTING (API)
 ====================================================== */
 function loadDaftarPloting() {
-  const noHak = document.getElementById("filterNoHak")?.value || "";
-  const desa  = document.getElementById("filterDesa")?.value || "";
-
-  const url = `${API_URL}?action=daftarPlot_getPlot&noHak=${encodeURIComponent(noHak)}&desa=${encodeURIComponent(desa)}`;
+  const url = `${API_URL}?action=daftarPlot_getPlot`;
   console.log("FETCH:", url);
 
   fetch(url)
     .then(res => res.json())
     .then(res => {
-      if (!res.success || !res.data || !Array.isArray(res.data.data)) {
-        console.error("FORMAT DATA API SALAH:", res);
-        alert("Format data dari API tidak valid");
+
+      console.log("RESPONSE API:", res);
+
+      let data = [];
+
+      // 🔥 HANDLE SEMUA FORMAT API
+      if (Array.isArray(res)) {
+        data = res;
+      } 
+      else if (res.data && Array.isArray(res.data)) {
+        data = res.data;
+      } 
+      else if (res.data && Array.isArray(res.data.data)) {
+        data = res.data.data;
+      } 
+      else {
+        console.error("FORMAT DATA TIDAK DIKENALI:", res);
+        alert("Format data tidak dikenali");
         return;
       }
-      renderTablePloting(res.data.data);
+
+      console.log("DATA FINAL:", data);
+      console.log("JUMLAH DATA:", data.length);
+
+      // ✅ SIMPAN KE GLOBAL
+      GLOBAL_DATA_PLOTING = data;
+
+      // ✅ TAMPILKAN KE TABEL
+      renderTablePloting(GLOBAL_DATA_PLOTING);
     })
     .catch(err => {
-      console.error("API ERROR:", err);
-      alert("Koneksi API gagal");
+      console.error("ERROR:", err);
+      alert("Koneksi gagal");
     });
 }
 
@@ -4579,18 +4618,48 @@ function renderTablePloting(data) {
 /* ======================================================
    TAB 1 : FILTER (SERVER SIDE)
 ====================================================== */
+let GLOBAL_DATA_PLOTING = [];
+
 function initFilterDaftarPloting() {
   const btnCari = document.getElementById("btnCari");
   const btnReset = document.getElementById("btnReset");
 
   if (!btnCari || !btnReset) return;
 
-  btnCari.addEventListener("click", loadDaftarPloting);
+  btnCari.addEventListener("click", () => {
+
+    const inputNoHak = document.getElementById("filterNoHak").value.toLowerCase();
+    const inputDesa  = document.getElementById("filterDesa").value.toLowerCase();
+
+    const hasil = GLOBAL_DATA_PLOTING.filter(row => {
+
+      // ✅ KOLOM J (No Hak)
+      const rawNoHak = (row[9] || "").toString().toLowerCase();
+
+      // 🔥 NORMALISASI (BUANG HURUF, AMBIL ANGKA SAJA)
+      const cleanNoHak = rawNoHak.replace(/[^\d]/g, "");
+      const cleanInput = inputNoHak.replace(/[^\d]/g, "");
+
+      // ✅ KOLOM DESA
+      const desa = (row[12] || "").toString().toLowerCase();
+
+      // 🔍 LOGIKA MATCH
+      const cocokNoHak =
+        rawNoHak.includes(inputNoHak) ||     // cocok asli
+        cleanNoHak.includes(cleanInput);     // cocok angka
+
+      const cocokDesa = desa.includes(inputDesa);
+
+      return cocokNoHak && cocokDesa;
+    });
+
+    renderTablePloting(hasil);
+  });
 
   btnReset.addEventListener("click", () => {
     document.getElementById("filterNoHak").value = "";
     document.getElementById("filterDesa").value = "";
-    loadDaftarPloting();
+    renderTablePloting(GLOBAL_DATA_PLOTING);
   });
 }
 
@@ -4683,7 +4752,7 @@ function loadDaftarEmail() {
     })
     .catch(err => {
       console.error("LOAD EMAIL ERROR:", err);
-      alert("Koneksi API gagal");
+      alert("Koneksi gagal");
     });
 }
 function initSearchEmail(){
@@ -4810,7 +4879,7 @@ function postAPI(payload, callback) {
       if (typeof callback === "function") callback();
     })
     .catch(err => {
-      console.error("POST API ERROR:", err);
-      alert("Koneksi API gagal");
+      console.error("POST ERROR:", err);
+      alert("Koneksi gagal");
     });
 }
