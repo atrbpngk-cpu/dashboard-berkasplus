@@ -53,7 +53,7 @@
           <input
             id="filterNoHak"
             type="text"
-            placeholder="Nomor HM / HGB / Wakaf"
+            placeholder="Nomor HM / HGB / Wakaf "
             class="border rounded px-2 py-1 w-48">
 
           <input
@@ -118,6 +118,7 @@
 
         <div class="flex flex-wrap gap-2 items-center text-xs">
           <input
+            id="searchEmail"
             type="text"
             placeholder="Cari email / nama notaris..."
             class="border rounded px-2 py-1 w-60">
@@ -165,22 +166,9 @@ tabs.forEach(btn => {
 </script>
 
 <script>
-document.getElementById('btnCari').addEventListener('click', () => {
-  const noHak = document.getElementById('filterNoHak').value.toLowerCase();
-  const desa  = document.getElementById('filterDesa').value.toLowerCase();
 
-  document.querySelectorAll('#tab-plot tbody tr').forEach(row => {
-    const kolomNoHak = row.cells[10]?.innerText.toLowerCase() || '';
-    const kolomDesa  = row.cells[13]?.innerText.toLowerCase() || '';
 
-    row.style.display =
-      kolomNoHak.includes(noHak) && kolomDesa.includes(desa)
-      ? ''
-      : 'none';
-  });
-});
-
-document.getElementById('btnReset').addEventListener('click', () => {
+  document.getElementById('btnReset').addEventListener('click', () => {
   document.getElementById('filterNoHak').value = '';
   document.getElementById('filterDesa').value = '';
 
@@ -189,6 +177,31 @@ document.getElementById('btnReset').addEventListener('click', () => {
   });
 });
 </script>
+<script>
 
+  setInterval(function(){
+  
+    const input = document.getElementById("searchEmail");
+    if(!input) return;
+  
+    const keyword = input.value.toLowerCase();
+  
+    const rows = document.querySelectorAll("#tab-email tbody tr");
+  
+    rows.forEach(row => {
+  
+      const text = row.innerText.toLowerCase();
+  
+      if(text.includes(keyword)){
+        row.style.display = "";
+      }else{
+        row.style.display = "none";
+      }
+  
+    });
+  
+  },300);
+  
+  </script>
 </body>
 </html>
