@@ -5,7 +5,9 @@ window.APP_CONFIG = {
     DEBUG: false
   };
 
+
 /* 2===============================Console-clean.js========================= */
+
 
 if (!window.APP_CONFIG?.DEBUG) {
     console.log  = () => {};
@@ -14,7 +16,9 @@ if (!window.APP_CONFIG?.DEBUG) {
     console.debug = () => {};
   }
 
+
 /* 3===============================auth.js================================== */
+
 
 const API_WEB = "https://webapi.berkasplus.my.id";
 async function login(e) {
@@ -59,7 +63,7 @@ async function login(e) {
     localStorage.setItem("login", "true");
     localStorage.setItem(
       "user",
-      JSON.stringify(json.data) // ⬅️ LANGSUNG data
+      JSON.stringify(json.data)
     );
     window.location.href = "index.html";
 
@@ -100,32 +104,25 @@ window.isAdmin = isAdmin;
 
 /* 4===============================auth-guard.js=============================== */
 
+
 (function authGuard() {
-    // Halaman yang boleh diakses tanpa login
     const publicPages = ["login.html", "register.html"];
-  
-    // Ambil nama file saat ini
     const currentPage = location.pathname
       .split("/")
       .pop()
       .toLowerCase();
-  
-    // Jika halaman publik → lewati guard
     if (publicPages.includes(currentPage)) {
       return;
     }
-  
-    // Ambil session
+
     const loginStatus = localStorage.getItem("login");
     const userRaw = localStorage.getItem("user");
   
-    // Tidak login / session rusak
     if (loginStatus !== "true" || !userRaw) {
       clearSessionAndRedirect();
       return;
     }
   
-    // Validasi user JSON
     let user;
     try {
       user = JSON.parse(userRaw);
@@ -134,7 +131,6 @@ window.isAdmin = isAdmin;
       return;
     }
   
-    // Validasi minimal user (SESUAI BACKEND)
     if (!user.username) {
       clearSessionAndRedirect();
       return;
@@ -148,7 +144,9 @@ window.isAdmin = isAdmin;
     window.location.replace("login.html");
   }
   
+
 /* 5===============================router.js=============================== */
+
 
 (function checkAuth() {
     if (localStorage.getItem("login") !== "true") {
@@ -177,7 +175,6 @@ window.isAdmin = isAdmin;
   }
   function loadPage(page) {
   
-    // 🔐 ADMIN ONLY PAGES
     const adminPages = [
       "daftar-petugas.html",
       "petugas-ukur.html",
@@ -204,7 +201,6 @@ window.isAdmin = isAdmin;
 
         setTimeout(() => {
   
-          // DASHBOARD
           if (page === "dashboard.html") {
   
             if (typeof showWelcomeOnce === "function") {
@@ -234,7 +230,7 @@ window.isAdmin = isAdmin;
               console.log("INIT: Dashboard Permohonan 🧾");
               initDashboardPermohonan();
             }
-            // DASHBOARD PETUGAS UKUR ==================
+            
             if (typeof initDashboardPU === "function") {
               console.log("INIT: Dashboard Petugas Ukur 📐");
               initDashboardPU();
@@ -242,67 +238,67 @@ window.isAdmin = isAdmin;
                       
           }
     
-          // INFORMASI BERKAS
+         
           if (page === "informasi-berkas.html" &&
               typeof initInformasiBerkas === "function") {
             console.log("INIT: Informasi Berkas 🚀");
             initInformasiBerkas();
           }
   
-          // ENTRY DATA BERKAS
+          
           if (page === "entry-data-berkas.html" &&
               typeof initEntryBerkas === "function") {
             console.log("INIT: Entry Data Berkas 🚀");
             initEntryBerkas();
           }
   
-           // KIRIM BERKAS
+           
           if (page === "kirim-berkas.html" &&
               typeof initKirimBerkas === "function") {
             console.log("INIT: Kirim Berkas 🚀");
             initKirimBerkas();
           }
   
-          // INBOX BERKAS
+          
           if (page === "inbox.html" &&
               typeof initInboxBerkas === "function") {
             console.log("INIT: Inbox Berkas");
             initInboxBerkas();
           }
   
-          // HISTORY BERKAS
+          
           if (page === "history-berkas.html" &&
               typeof initHistoryBerkas === "function") {
             console.log("INIT: History Berkas");
             initHistoryBerkas();                
           }
   
-          // BEBAN PETUGAS
+          
           if (page === "beban-petugas.html" &&
               typeof initBebanPetugas === "function") {
             console.log("INIT: Beban Petugas 📊");
             initBebanPetugas();
           }
   
-          // BEBAN PETUGAS UKUR
+          
           if (page === "beban-petugas-ukur.html" &&
               typeof initBebanPetugasUkur === "function") {
             console.log("INIT: Beban Petugas Ukur 📐");
             initBebanPetugasUkur();
           }
   
-          // MONITORING PETUGAS UKUR
+          
           if (page === "monitoring-petugas-ukur.html" &&
               typeof initBebanPetugasUkur === "function") {
           initBebanPetugasUkur("monitoring");
           }
           
-          // ================== PLOTTING ==================
+          
           if (page === "ploting.html" && typeof initPloting === "function") {
             initPloting();
           }
   
-          // ================== DAFTAR PLOTING ==================
+          
           if (page === "daftar-ploting.html" && typeof initDaftarPloting === "function") {
             console.log("INIT: Daftar Ploting 📊");
             initDaftarPloting();
@@ -310,8 +306,8 @@ window.isAdmin = isAdmin;
           
         
   
-          // (ADMIN)
-          // ================== DAFTAR PETUGAS ==================
+         
+          
           if (
             page === "daftar-petugas.html" &&
             typeof initDaftarPetugas === "function"
@@ -320,7 +316,7 @@ window.isAdmin = isAdmin;
             initDaftarPetugas();
           }
   
-          // ================== DAFTAR PETUGAS UKUR ==================
+          
           if (
             page === "petugas-ukur.html" &&
             typeof initPetugasUkur === "function"
@@ -329,7 +325,7 @@ window.isAdmin = isAdmin;
             initPetugasUkur();
           }
   
-          // ================== JENIS PERMOHONAN ==================
+          
           if (
             page === "jenis-permohonan.html" &&
             typeof initJenisPermohonan === "function"
@@ -338,7 +334,7 @@ window.isAdmin = isAdmin;
             initJenisPermohonan();
           }
           
-          // ================= UPLOAD BERKAS =================
+          
           if (page === "daftar-berkas.html" &&
               typeof initUploadBerkas === "function") {
             initUploadBerkas();
@@ -433,7 +429,9 @@ window.isAdmin = isAdmin;
     window.location.href = "login.html";
   }
   
+
 /* 6===============================notif.js=============================== */
+
 
 function loadInboxNotif() {
     const userLogin = JSON.parse(localStorage.getItem("user") || "{}");
@@ -465,19 +463,19 @@ function loadInboxNotif() {
         const notifText = document.getElementById("notifText");
         const sidebarBadge = document.getElementById("inbox-badge");
       
-        // 🔔 LONCENG
+        
         if (badge) {
           badge.innerText = total;
           badge.classList.toggle("hidden", total === 0);
         }
       
-        // 📩 SIDEBAR
+        
         if (sidebarBadge) {
           sidebarBadge.innerText = total;
           sidebarBadge.classList.toggle("hidden", total === 0);
         }
       
-        // 🧾 TEKS BERJALAN
+        
         if (notifInbox && notifText) {
           if (total > 0) {
             notifInbox.classList.remove("hidden");
@@ -498,7 +496,7 @@ function loadInboxNotif() {
 
   window.showToast = function (message, type = "info") {
   
-    // buat container kalau belum ada
+    
     let container = document.getElementById("toastContainer");
     if (!container) {
       container = document.createElement("div");
@@ -513,7 +511,7 @@ function loadInboxNotif() {
       document.body.appendChild(container);
     }
   
-    // buat toast
+    
     const toast = document.createElement("div");
   
     const colors = {
@@ -537,13 +535,13 @@ function loadInboxNotif() {
   
     container.appendChild(toast);
   
-    // animasi masuk
+    
     setTimeout(() => {
       toast.style.opacity = "1";
       toast.style.transform = "translateY(0)";
     }, 50);
   
-    // hilang otomatis
+    
     setTimeout(() => {
       toast.style.opacity = "0";
       toast.style.transform = "translateY(-10px)";
@@ -551,11 +549,13 @@ function loadInboxNotif() {
     }, 3000);
   };
 
+
 /* 7===============================informasi.js=============================== */
+
 
 console.log("informasi.js TERLOAD ✅");
 
-/* ================= INIT PAGE ================= */
+
 function initInformasiBerkas() {
   console.log("initInformasiBerkas() JALAN 🚀");
 
@@ -588,7 +588,7 @@ function initInformasiBerkas() {
   btnCari.onclick = cariBerkas;
   btnReset.onclick = resetForm;
 
-  /* ================= CARI BERKAS ================= */
+  
   async function cariBerkas() {
     const nomor = inputNomor.value.trim();
     const tahun = inputTahun.value.trim();
@@ -635,7 +635,7 @@ function initInformasiBerkas() {
     }
   }
 
-  /* ================= LABEL MAP ================= */
+  
   const LABEL_MAP = {
     tanggal_mulai: "Tanggal Mulai",
     nomor_berkas: "Nomor Berkas",
@@ -649,7 +649,7 @@ function initInformasiBerkas() {
     nama_petugas: "Nama Petugas"
   };
 
-  /* ================= RENDER DETAIL ================= */
+  
   function renderDetail(info) {
     detailUtama.innerHTML = "";
     detailKeterangan.textContent = "-";
@@ -673,7 +673,7 @@ function initInformasiBerkas() {
     });
   }
 
-  /* ================= RENDER RIWAYAT ================= */
+  
   function renderHistory(history) {
     riwayatBody.innerHTML = "";
 
@@ -703,7 +703,7 @@ function initInformasiBerkas() {
     });
   }
 
-  /* ================= QR ================= */
+  
   function renderQR(nomor, tahun) {
     const textQR = `${nomor}/${tahun}`;
     const qrUrl =
@@ -733,7 +733,7 @@ function initInformasiBerkas() {
     };
   }
 
-  /* ================= RESET ================= */
+  
   function resetForm() {
     inputNomor.value = "";
     inputTahun.value = "";
@@ -754,7 +754,9 @@ function initInformasiBerkas() {
   }
 }
 
+
 /* 8===============================Qr-print.js=============================== */
+
 
 console.log("qr-print.js aktif 🧩");
 
@@ -764,7 +766,7 @@ console.log("qr-print.js aktif 🧩");
     const btnCetakQR = document.getElementById("btnCetakQR");
     const qrImage = document.getElementById("qrImage");
 
-    // Tunggu sampai elemen siap
+    
     if (!btnCetakQR || !qrImage || !qrImage.src) {
       setTimeout(initAddon, 500);
       return;
@@ -772,7 +774,7 @@ console.log("qr-print.js aktif 🧩");
 
     btnCetakQR.onclick = () => {
 
-      // Ambil teks QR
+      
       const qrText = decodeURIComponent(
         new URL(qrImage.src).searchParams.get("data") || ""
       );
@@ -932,6 +934,7 @@ body {
 
 /* 9===============================entry-data-berkas.js=============================== */
 
+
 let listJenis = [];
 let listDesa = [];
 let entryInited = false;
@@ -940,11 +943,11 @@ function initEntryBerkas() {
   if (entryInited) return;
   entryInited = true;
 
-  // load master data
+  
   loadJenisPermohonan();
   loadDesaKecamatan();
 
-  // bind submit
+  
   const form = document.getElementById("form-entry-berkas");
   if (form) {
     form.removeEventListener("submit", submitEntry);
@@ -999,7 +1002,7 @@ function setupComboBox(inputId, listId, data) {
   const list = document.getElementById(listId);
   if (!input || !list) return;
 
-  // Hindari double-binding
+  
   input.onfocus = null;
   input.oninput = null;
 
@@ -1018,7 +1021,7 @@ function setupComboBox(inputId, listId, data) {
       li.className =
         "px-3 py-2 cursor-pointer hover:bg-blue-100";
 
-      // mousedown = aman dari blur
+      
       li.addEventListener("mousedown", () => {
         input.value = item;
         list.classList.add("hidden");
@@ -1030,17 +1033,17 @@ function setupComboBox(inputId, listId, data) {
     list.classList.toggle("hidden", results.length === 0);
   }
 
-  // Fokus → dropdown muncul
+  
   input.addEventListener("focus", () => {
     render(input.value);
   });
 
-  // Ketik → filter
+  
   input.addEventListener("input", () => {
     render(input.value);
   });
 
-  // Klik di luar → tutup dropdown
+  
   document.addEventListener("mousedown", e => {
     if (!input.contains(e.target) && !list.contains(e.target)) {
       list.classList.add("hidden");
@@ -1069,7 +1072,7 @@ async function submitEntry(e) {
       desa_kecamatan: document.getElementById("desa_kecamatan").value.trim()
     };
 
-    // Validasi wajib
+    
     if (
       !payload.tanggal_mulai ||
       !payload.nomor_berkas ||
@@ -1110,7 +1113,9 @@ async function submitEntry(e) {
 
 window.initEntryBerkas = initEntryBerkas;
 
+
 /* 10===============================kirim.js=============================== */
+
 
 console.log("kirim.js loaded");
 
@@ -1125,7 +1130,7 @@ window.initKirimBerkas = function () {
   const API = APP_CONFIG.API_WEB;
   let currentBerkas = null;
 
-  /* ================= DOM ================= */
+  
   const nomorBerkas = document.getElementById("nomorBerkas");
   const tahunBerkas = document.getElementById("tahunBerkas");
   const btnCari = document.getElementById("btnCari");
@@ -1149,7 +1154,7 @@ window.initKirimBerkas = function () {
 
   frameBawah.classList.add("hidden");
 
-  /* ================= LOADING ================= */
+  
   const loadingCari  = document.getElementById("loadingCari");
   const loadingKirim = document.getElementById("loadingKirim");
   const useGlobalLoading = () => window.USE_GLOBAL_LOADING === true;
@@ -1157,7 +1162,7 @@ window.initKirimBerkas = function () {
   const show = el => el?.classList.remove("hidden");
   const hide = el => el?.classList.add("hidden");
 
-  /* ================= API HELPER ================= */
+  
   async function apiGet(action, params = {}) {
     const qs = new URLSearchParams({ action, ...params }).toString();
     const res = await fetch(`${API}?${qs}`);
@@ -1182,7 +1187,7 @@ window.initKirimBerkas = function () {
     });
   }
 
-  /* ================= LOAD MASTER ================= */
+  
   async function loadDropdowns() {
     const seksiRes = await apiGet("daftarSeksi");
     if (seksiRes.success) {
@@ -1197,7 +1202,7 @@ window.initKirimBerkas = function () {
     fillSelect(selectDikirimKe, [], "-- Pilih Penerima --");
   }
 
-  /* ================= SEKSI → STAFF ================= */
+  
   selectSeksi.addEventListener("change", async () => {
     const res = await apiGet("staffSeksi");
     if (!res.success) {
@@ -1207,7 +1212,7 @@ window.initKirimBerkas = function () {
     fillSelect(selectDikirimKe, res.data, "-- Pilih Penerima --");
   });
 
-  /* ================= CARI BERKAS ================= */
+  
   btnCari.onclick = async () => {
     if (!useGlobalLoading()) show(loadingCari);
 
@@ -1258,7 +1263,7 @@ window.initKirimBerkas = function () {
     }
   };
 
-  /* ================= KIRIM BERKAS ================= */
+  
   btnKirim.onclick = async () => {
     if (!useGlobalLoading()) show(loadingKirim);
 
@@ -1305,7 +1310,7 @@ window.initKirimBerkas = function () {
     }
   };
 
-  /* ================= RESET ================= */
+  
   btnReset.onclick = () => {
     frameBawah.classList.add("hidden");
     nomorBerkas.value = "";
@@ -1317,18 +1322,18 @@ window.initKirimBerkas = function () {
     fillSelect(selectDikirimKe, [], "-- Pilih Penerima --");
   };
 };
+
+
 /* 11===============================inbox.js=============================== */
+
 
 if (!window.__INBOX_JS_LOADED__) {
     window.__INBOX_JS_LOADED__ = true;
   
-  
-    /* ================= USER LOGIN ================= */
     const userLogin = JSON.parse(localStorage.getItem("user") || "{}");
     const namaUser  = (userLogin.nama_lengkap || userLogin.nama || "").trim();
     const namaSeksi = (userLogin.seksi || "").trim();
   
-    /* ================= STATE ================= */
     let tableBody, badgeBaru, notifInbox, notifText;
     let btnPrev, btnNext;
   
@@ -1338,8 +1343,6 @@ if (!window.__INBOX_JS_LOADED__) {
   
     let currentPage = 1;
     const perPage = 5;
-  
-    /* ================= DASHBOARD INBOX ================= */
   
     window.initDashboardInbox = function () {
   
@@ -1370,11 +1373,7 @@ if (!window.__INBOX_JS_LOADED__) {
           }
     
           const total = data.length;
-    
-          // tampilkan jumlah
           countEl.innerText = total;
-    
-          // tampilkan indikator merah kalau ada inbox
           if (badgeEl) {
             if (total > 0) {
               badgeEl.classList.remove("hidden");
@@ -1383,7 +1382,6 @@ if (!window.__INBOX_JS_LOADED__) {
             }
           }
     
-          // warna dinamis
           if (total === 0) {
             countEl.className = "text-2xl font-bold text-gray-400";
           } else if (total < 5) {
@@ -1397,9 +1395,6 @@ if (!window.__INBOX_JS_LOADED__) {
           countEl.innerText = 0;
         });
     };
-    
-  
-    /* ================= INIT ================= */
     window.initInboxBerkas = function () {
       if (!window.APP_CONFIG?.API_WEB || !namaUser) return;
   
@@ -1414,14 +1409,11 @@ if (!window.__INBOX_JS_LOADED__) {
   
       loadInboxData();
     };
-  
-    /* ================= LOAD DATA ================= */
     function loadInboxData() {
       fetch(`${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`)
         .then(r => r.json())
         .then(res => {
     
-          // 🔥 TERIMA SEMUA FORMAT API
           if (Array.isArray(res)) {
             originalInboxData = res;
           } 
@@ -1446,9 +1438,6 @@ if (!window.__INBOX_JS_LOADED__) {
           renderTable();
         });
     }
-    
-  
-    /* ================= FILTER ================= */
     window.applyFilter = function () {
       const nomor = document.getElementById("filterNomor").value.trim();
       const tahun = document.getElementById("filterTahun").value.trim();
@@ -1477,8 +1466,6 @@ if (!window.__INBOX_JS_LOADED__) {
       updateNotifInbox();
       renderTable();
     };
-  
-    /* ================= RENDER ================= */
     function renderTable() {
       tableBody.innerHTML = "";
   
@@ -1518,8 +1505,6 @@ if (!window.__INBOX_JS_LOADED__) {
   
       updatePagination();
     }
-  
-    /* ================= AKSI TERIMA / TOLAK ================= */
     window.aksiInbox = function (status) {
       if (!selectedRow) {
         alert("Pilih berkas terlebih dahulu");
@@ -1527,8 +1512,6 @@ if (!window.__INBOX_JS_LOADED__) {
       }
     
       const nomor = selectedRow.dataset.nomor;
-    
-      // 🔒 LOCK tombol agar tidak double klik
       document.getElementById("btnTerima")?.setAttribute("disabled", true);
       document.getElementById("btnTolak")?.setAttribute("disabled", true);
     
@@ -1546,19 +1529,15 @@ if (!window.__INBOX_JS_LOADED__) {
       .then(res => {
         if (res.success) {
     
-          // ✅ TANDA VISUAL BARIS BERHASIL
           selectedRow.classList.remove("bg-blue-100");
           selectedRow.classList.add(
             status === "Diterima" ? "bg-green-100" : "bg-red-100"
           );
     
-          // 🔔 NOTIFIKASI
           showToast(
             `Berkas ${nomor} berhasil ${status.toLowerCase()}`,
             "success"
           );
-    
-          // 🔄 reload inbox (delay biar animasi keliatan)
           setTimeout(() => {
             selectedRow = null;
             loadInboxData();
@@ -1572,13 +1551,12 @@ if (!window.__INBOX_JS_LOADED__) {
         showToast("Gagal terhubung ke server", "error");
       })
       .finally(() => {
-        // 🔓 UNLOCK tombol
+      
         document.getElementById("btnTerima")?.removeAttribute("disabled");
         document.getElementById("btnTolak")?.removeAttribute("disabled");
       });
     };
     
-    /* ================= PAGINATION ================= */
     function updatePagination() {
       const totalPage = Math.max(1, Math.ceil(inboxData.length / perPage));
     
@@ -1606,8 +1584,6 @@ if (!window.__INBOX_JS_LOADED__) {
         renderTable();
       }
     };
-  
-    /* ================= UTIL ================= */
     function selectRow(row) {
       document.querySelectorAll("#tableBody tr")
         .forEach(tr => tr.classList.remove("bg-blue-100"));
@@ -1637,13 +1613,16 @@ if (!window.__INBOX_JS_LOADED__) {
       return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
     }
   }
+
+
 /* 12===============================history.js=============================== */
+
 
 if (!window.__HISTORY_JS_LOADED__) {
     window.__HISTORY_JS_LOADED__ = true;
   
     let historyData = [];
-    let originalHistoryData = []; // ⬅️ untuk reset filter
+    let originalHistoryData = []; 
     let currentPage = 1;
     const limit = 10;
   
@@ -1655,7 +1634,7 @@ if (!window.__HISTORY_JS_LOADED__) {
   
     async function loadHistory() {
       try {
-        currentPage = 1; // 🔥 RESET DI SINI (PENTING)
+        currentPage = 1; 
     
         const url = window.APP_CONFIG.API_WEB + "?action=history";
         const res = await fetch(url);
@@ -1676,10 +1655,6 @@ if (!window.__HISTORY_JS_LOADED__) {
       }
     }
     
-  
-    /* ======================================================
-       FILTER
-    ====================================================== */
     window.applyHistoryFilter = function () {
       const nomor = document.getElementById("filterNomor")?.value.trim();
       const tahun = document.getElementById("filterTahun")?.value.trim();
@@ -1708,9 +1683,6 @@ if (!window.__HISTORY_JS_LOADED__) {
       updatePagination();
     };
   
-    /* ======================================================
-       RENDER TABLE
-    ====================================================== */
     function renderTable() {
       const tbody = document.querySelector("#content tbody");
       if (!tbody) return;
@@ -1784,10 +1756,6 @@ if (!window.__HISTORY_JS_LOADED__) {
       }
     };
     
-  
-    /* ======================================================
-       HELPER
-    ====================================================== */
     function getStatusColor(status) {
       if (!status) return "text-gray-600";
   
@@ -1833,46 +1801,42 @@ if (!window.__HISTORY_JS_LOADED__) {
 
     function sortByTanggalDesc(data) {
       return data.sort((a, b) => {
-        const dateA = new Date(a[2]).getTime() || 0; // Tgl Dikirim
+        const dateA = new Date(a[2]).getTime() || 0; 
         const dateB = new Date(b[2]).getTime() || 0;
-        return dateB - dateA; // DESC → terbaru di atas
+        return dateB - dateA; 
        });
     }     
   }
 
+
 /* 13===============================beban-petugas.js=============================== */
+
 
 let dataBeban = [];
 let filteredData = [];
 let pieChartInstance = null;
 
-
 function initBebanPetugas() {
   loadBebanFromAPI("pieChart", "pieLegend", true);
 }
-
-
 
 function initDashboardBeban() {
   loadBebanFromAPI("dashboardPieChart", "dashboardPieLegend", false);
 }
 
-
 function loadBebanFromAPI(canvasId, legendId, withDropdown) {
-
   if (!window.APP_CONFIG?.API_WEB) return;
-
   fetch(`${APP_CONFIG.API_WEB}?action=beban`)
     .then(r => r.json())
     .then(res => {
 
       if (!res.success) return;
 
-      // 🔥 SIMPAN FULL DATA (termasuk detail)
+      
       dataBeban = res.data?.data || [];
 
       renderBebanChart(canvasId, legendId);
-      // 🔥 TAMBAHAN
+      
       if (document.getElementById("totalBerkasProses")) {
         updateDashboardUserTotal();
       }
@@ -1896,10 +1860,6 @@ function loadBebanFromAPI(canvasId, legendId, withDropdown) {
     });
 }
 
-/* ======================================================
-   UPDATE DASHBOARD TOTAL USER
-====================================================== */
-
 function updateDashboardUserTotal() {
 
   const userLogin = JSON.parse(localStorage.getItem("user") || "{}");
@@ -1916,9 +1876,6 @@ function updateDashboardUserTotal() {
   const el = document.getElementById("totalBerkasProses");
   if (el) el.innerText = totalUser;
 }
-/* ======================================================
-   UPDATE DASHBOARD TARGET HARI INI (Overdue ≥ 3 Hari)
-====================================================== */
 
 function updateDashboardTargetHariIni() {
 
@@ -1956,10 +1913,6 @@ function updateDashboardTargetHariIni() {
   const el = document.getElementById("targetHariIni");
   if (el) el.innerText = totalTarget;
 }
-
-/* ======================================================
-   RENDER PIE CHART
-====================================================== */
 
 function renderBebanChart(canvasId, legendId) {
 
@@ -2010,8 +1963,6 @@ function renderBebanChart(canvasId, legendId) {
     }
   });
 
-  /* ===== CUSTOM LEGEND ===== */
-
   legendBox.innerHTML = "";
   let total = 0;
 
@@ -2052,10 +2003,6 @@ function renderBebanChart(canvasId, legendId) {
   `;
 }
 
-/* ======================================================
-   DROPDOWN
-====================================================== */
-
 function loadDropdown() {
 
   const select = document.getElementById("selectPetugas");
@@ -2074,10 +2021,6 @@ function loadDropdown() {
     `;
   });
 }
-
-/* ======================================================
-   FILTER PETUGAS (DETAIL MODE)
-====================================================== */
 
 function filterPetugas() {
 
@@ -2102,10 +2045,6 @@ function filterPetugas() {
 
   renderBebanTable();
 }
-
-/* ======================================================
-   RENDER TABLE (DETAIL INFORMASIBERKAS)
-====================================================== */
 
 function renderBebanTable() {
 
@@ -2141,10 +2080,6 @@ function renderBebanTable() {
   document.getElementById("totalBeban").innerText = filteredData.length;
 }
 
-/* ======================================================
-   DOWNLOAD EXCEL (DETAIL MODE)
-====================================================== */
-
 function downloadExcel() {
 
   if (typeof XLSX === "undefined") {
@@ -2172,9 +2107,6 @@ function downloadExcel() {
 
   XLSX.writeFile(workbook, `beban-petugas-${new Date().toISOString().slice(0,10)}.xlsx`);
 }
-/* ======================================================
-   LIHAT TARGET HARI INI
-====================================================== */
 
 function lihatTargetHariIni() {
 
@@ -2212,10 +2144,6 @@ function lihatTargetHariIni() {
   }, 400);
 }
 
-/* ======================================================
-   LIHAT BERKAS SAYA (Klik Total Berkas Anda)
-====================================================== */
-
 function lihatBerkasSaya() {
 
   const userLogin = JSON.parse(localStorage.getItem("user") || "{}");
@@ -2229,23 +2157,19 @@ function lihatBerkasSaya() {
 
   if (!userData) return;
 
-  // ambil semua detail milik user
+  
   filteredData = userData.detail || [];
 
-  // buka halaman beban petugas
+  
   loadPage("beban-petugas.html");
 
-  // tunggu halaman render dulu
+  
   setTimeout(() => {
     renderBebanTable();
     document.getElementById("tableContainer")
       ?.classList.remove("hidden");
   }, 400);
 }
-
-/* ======================================================
-   HITUNG PRESENTASE KINERJA USER
-====================================================== */
 
 function updateDashboardKinerja() {
 
@@ -2294,15 +2218,18 @@ function updateDashboardKinerja() {
   const el = document.getElementById("presentaseKinerja");
   if (el) el.innerText = persen + "%";
 }
+
+
 /* 14===============================beban-petugas-ukur.js=============================== */
 
-let modeBebanUkur = "personal";   // personal | monitoring
-let selectedPetugas = "";         // dipakai saat monitoring
-let bebanUkurData = [];           // untuk Excel
+
+let modeBebanUkur = "personal";   
+let selectedPetugas = "";         
+let bebanUkurData = [];           
 
 
 function renderTableBebanUkur(rows) {
-  const tbody = document.getElementById("tableBody"); // ✅ HARUS INI
+  const tbody = document.getElementById("tableBody"); 
 
   if (!tbody) {
     console.error("tbody tableBody tidak ditemukan");
@@ -2340,24 +2267,16 @@ function renderTableBebanUkur(rows) {
   tbody.appendChild(fragment);
 }
 
-/* ======================================================
-   INIT HALAMAN
-====================================================== */
-
 function initBebanPetugasUkur(mode = "personal") {
 
   modeBebanUkur = mode;
 
   if (mode === "monitoring") {
-    loadDropdownPetugas(); // dropdown akan trigger load sendiri
+    loadDropdownPetugas(); 
   } else {
     loadBebanPetugasUkur();
   }
 }
-
-/* ======================================================
-   LOAD DATA DARI API
-====================================================== */
 
 function loadBebanPetugasUkur() {
 
@@ -2427,10 +2346,6 @@ function loadBebanPetugasUkur() {
     .catch(err => console.error("Beban Petugas Ukur Error:", err));
 }
 
-/* ======================================================
-   RENDER PERSONAL (5 KOLOM)
-====================================================== */
-
 function renderPersonal(tbody, row, posisi) {
 
   tbody.innerHTML += `
@@ -2447,11 +2362,6 @@ function renderPersonal(tbody, row, posisi) {
     </tr>
   `;
 }
-
-
-/* ======================================================
-   RENDER MONITORING (6 KOLOM)
-====================================================== */
 
 function renderMonitoring(tbody, row, posisi, petugasSheet) {
 
@@ -2470,11 +2380,6 @@ function renderMonitoring(tbody, row, posisi, petugasSheet) {
     </tr>
   `;
 }
-
-
-/* ======================================================
-   DOWNLOAD EXCEL
-====================================================== */
 
 function downloadExcelBebanUkur() {
 
@@ -2507,11 +2412,6 @@ function downloadExcelBebanUkur() {
   );
 }
 
-
-/* ======================================================
-   LOAD DROPDOWN (MONITORING)
-====================================================== */
-
 function loadDropdownPetugas() {
 
   fetch(`${APP_CONFIG.API_WEB}?action=petugasUkur`)
@@ -2534,11 +2434,6 @@ function loadDropdownPetugas() {
     });
 }
 
-
-/* ======================================================
-   FILTER MONITORING
-====================================================== */
-
 function filterMonitoringPetugas() {
 
   const select = document.getElementById("selectPetugasUkur");
@@ -2547,7 +2442,9 @@ function filterMonitoringPetugas() {
   loadBebanPetugasUkur();
 }
 
+
 /* 15===============================dashboard-seksi.js=============================== */
+
 
 let seksiChartInstance = null;
 let cacheBerkasPU = [];
@@ -2621,7 +2518,7 @@ function renderSeksiChart(labels, values) {
     seksiChartInstance.destroy();
   }
 
-  // ambil warna sesuai jumlah bar
+  
   const colors = labels.map(
     (_, i) => SEKSI_COLORS[i % SEKSI_COLORS.length]
   );
@@ -2767,14 +2664,14 @@ function tutupTabelSeksi() {
 
   if (!container) return;
 
-  // sembunyikan tabel
+  
   container.classList.add("hidden");
 
-  // reset data cache detail
+  
   cacheDetailSeksi = [];
   if (body) body.innerHTML = "";
 
-  // scroll balik ke chart
+  
   const chart = document.getElementById("seksiChart");
   if (chart) {
     chart.scrollIntoView({
@@ -2783,6 +2680,8 @@ function tutupTabelSeksi() {
     });
   }
 }
+
+
 /* 16===============================dashboard-rekap.js=============================== */
 
 function initDashboardRekapBerkas() {
@@ -2817,23 +2716,14 @@ function initDashboardRekapBerkas() {
       const tglMulai = row["Tanggal mulai"];
       const tglTerakhir = row["Tanggal terakhir berjalan"];
   
-      // ===============================
-      // SELESAI
-      // ===============================
       if (status === "selesai") {
         selesai++;
       }
   
-      // ===============================
-      // PROSES BERJALAN
-      // ===============================
       if (tglTerakhir && status !== "selesai") {
         prosesBerjalan++;
       }
   
-      // ===============================
-      // PROSES > 60 HARI (BELUM SELESAI)
-      // ===============================
       const hari = hitungSelisihHari(tglMulai);
       if (status !== "selesai" && hari > 60) {
         lebih60Hari++;
@@ -2849,10 +2739,7 @@ function initDashboardRekapBerkas() {
     });
   }
     
-  
-  /* ======================================================
-     HITUNG SELISIH HARI
-  ====================================================== */
+
   function hitungSelisihHari(tgl) {
     if (!tgl) return 0;
   
@@ -2872,10 +2759,7 @@ function initDashboardRekapBerkas() {
     return Math.floor((today - start) / 86400000);
   }
      
-  
-  /* ======================================================
-     RENDER KE UI
-  ====================================================== */
+
   function renderRekapDashboard({ total, proses, selesai, proses30 }) {
   
     const elTotal = document.getElementById("rekapTotal");
@@ -2886,10 +2770,7 @@ function initDashboardRekapBerkas() {
     document.getElementById("rekapSelesai").innerText = `${selesai} / ${total}`;
     document.getElementById("rekapProses30").innerText = `${proses30} / ${total}`;
   }
-  
-  /* ======================================================
-     AUTO INIT (AMAN UNTUK ROUTER SPA)
-  ====================================================== */
+
   document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("rekapTotal")) {
       initDashboardRekapBerkas();
@@ -2897,36 +2778,44 @@ function initDashboardRekapBerkas() {
   });
   
 /* 17===============================dashboard-permohonan.js=============================== */
-/* ================= GLOBAL CACHE (SHARED) ================= */
+
 window.CACHE_BERKAS = window.CACHE_BERKAS || [];
 window.CACHE_READY  = window.CACHE_READY  || false;
 
-/* ================= PARSE TANGGAL (TAMBAHKAN DI SINI) ================= */
+
 function parseTanggalIndonesia(str) {
   if (!str) return null;
 
-  const parts = str.split("/");
-  if (parts.length !== 3) return null;
+  // FORMAT 1: ISO (2026-04-01 atau 2026-04-01T00:00:00)
+  if (str.includes("-")) {
+    const d = new Date(str);
+    return isNaN(d.getTime()) ? null : d;
+  }
 
-  const [dd, mm, yyyy] = parts;
+  // FORMAT 2: dd/mm/yyyy
+  if (str.includes("/")) {
+    const parts = str.split("/");
+    if (parts.length !== 3) return null;
 
-  return new Date(`${yyyy}-${mm}-${dd}`);
+    const [dd, mm, yyyy] = parts;
+    const d = new Date(`${yyyy}-${mm}-${dd}`);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  return null;
 }
 
-/* ================= STATE ================= */
+
 let permohonanChartInstance = null;
 let cacheDetailPermohonan = [];
 //let PERMOHONAN_INITED = false;
 
-/* ================= WARNA ================= */
+
 const PERMOHONAN_COLORS = [
   "#3b82f6", "#10b981", "#f59e0b", "#ef4444",
   "#8b5cf6", "#06b6d4", "#ec4899", "#6366f1"
 ];
 
-/* ======================================================
-   LOAD CACHE (FETCH SEKALI SAJA)
-====================================================== */
 function loadCacheBerkas() {
 
   if (window.CACHE_READY) {
@@ -2948,9 +2837,6 @@ function loadCacheBerkas() {
     });
 }
 
-/* ======================================================
-   INIT DROPDOWN TAHUN (DARI TANGGAL MULAI)
-====================================================== */
 function initTahunDropdown() {
 
   const select = document.getElementById("tahunSelect");
@@ -2958,7 +2844,6 @@ function initTahunDropdown() {
 
   select.innerHTML = "";
 
-  // ✅ OPSI SEMUA TAHUN
   const optAll = document.createElement("option");
   optAll.value = "all";
   optAll.textContent = "Semua Tahun";
@@ -2968,7 +2853,7 @@ function initTahunDropdown() {
 
   window.CACHE_BERKAS.forEach(row => {
     const tgl = parseTanggalIndonesia(row["Tanggal mulai"]);
-    if (!isNaN(tgl)) {
+    if (tgl && !isNaN(tgl.getTime())) {
       tahunSet.add(tgl.getFullYear());
     }
   });
@@ -2987,14 +2872,10 @@ function initTahunDropdown() {
     select.appendChild(opt);
   });
 
-  // ✅ DEFAULT: Semua Tahun
   select.value = "all";
 }
 
 
-/* ======================================================
-   REKAP GENERIK (ANTI DUPLIKASI)
-====================================================== */
 function rekapByField({ field, tahun = null, bulan = null }) {
 
   const hasil = {};
@@ -3018,9 +2899,6 @@ function rekapByField({ field, tahun = null, bulan = null }) {
     .sort((a, b) => b.jumlah - a.jumlah);
 }
 
-/* ======================================================
-   LOAD & RENDER REKAP PERMOHONAN
-====================================================== */
 function loadRekapPermohonan() {
 
   if (!window.CACHE_READY) return;
@@ -3042,9 +2920,6 @@ function loadRekapPermohonan() {
   renderPermohonanLegend(data);
 }
 
-/* ======================================================
-   RENDER CHART (HORIZONTAL BAR)
-====================================================== */
 function renderPermohonanChart(labels, values) {
 
   const canvas = document.getElementById("permohonanChart");
@@ -3089,9 +2964,6 @@ function renderPermohonanChart(labels, values) {
   });
 }
 
-/* ======================================================
-   RENDER LEGEND (KLIK AKTIF)
-====================================================== */
 function renderPermohonanLegend(data) {
 
   const box = document.getElementById("permohonanLegend");
@@ -3121,9 +2993,6 @@ function renderPermohonanLegend(data) {
   `;
 }
 
-/* ======================================================
-   DETAIL TABEL PERMOHONAN
-====================================================== */
 function lihatDetailPermohonan(jenis) {
 
   const container = document.getElementById("permohonanDetailContainer");
@@ -3182,9 +3051,7 @@ function lihatDetailPermohonan(jenis) {
 
   container.scrollIntoView({ behavior: "smooth" });
 }
-/* ======================================================
-   DOWNLOAD EXCEL DETAIL PERMOHONAN
-====================================================== */
+
 function downloadExceljenispermohonan() {
 
   if (!cacheDetailPermohonan.length) {
@@ -3210,21 +3077,19 @@ function downloadExceljenispermohonan() {
     `berkas-jenispermohonan-${new Date().toISOString().slice(0,10)}.xlsx`
   );
 }
-/* ======================================================
-   INIT DASHBOARD (WAJIB DIPANGGIL ROUTER)
-====================================================== */
+
 function initDashboardPermohonan() {
 
   const canvas = document.getElementById("permohonanChart");
   if (!canvas) return;
 
-  // 🔥 RESET CHART JIKA ADA
+  
   if (permohonanChartInstance) {
     permohonanChartInstance.destroy();
     permohonanChartInstance = null;
   }
 
-  // 🔥 RESET DETAIL
+  
   cacheDetailPermohonan = [];
 
   loadCacheBerkas().then(() => {
@@ -3232,7 +3097,7 @@ function initDashboardPermohonan() {
     loadRekapPermohonan();
   });
 
-  // 🔥 PASANG ULANG EVENT (AMAN KARENA DOM BARU)
+  
   const tahunSelect = document.getElementById("tahunSelect");
   const bulanSelect = document.getElementById("bulanSelect");
 
@@ -3245,9 +3110,6 @@ function initDashboardPermohonan() {
   }
 }
 
-/* ======================================================
-   TUTUP DETAIL
-====================================================== */
 function tutupDetailPermohonan() {
 
   const container = document.getElementById("permohonanDetailContainer");
@@ -3263,20 +3125,14 @@ function tutupDetailPermohonan() {
     ?.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
-
 /* 18===============================daftar-petugas.js=============================== */
 /* 19===============================daftar-petugas-ukur.js=============================== */
 
-/* =====================
-   STATE
-===================== */
+
 let puTableBody, puBtnTambah, puBtnEdit, puBtnHapus;
 let puSelectedNama = null;
 let puMode = "add"; // add | edit
 
-/* ======================================================
-   INIT (DIPANGGIL ROUTER)
-====================================================== */
 function initPetugasUkur() {
   puTableBody = document.getElementById("tablePetugasUkur");
   puBtnTambah = document.getElementById("btnTambahUkur");
@@ -3295,9 +3151,6 @@ function initPetugasUkur() {
   puLoad();
 }
 
-/* ======================================================
-   LOAD DATA
-====================================================== */
 async function puLoad() {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -3326,12 +3179,9 @@ async function puLoad() {
   }
 }
 
-/* ======================================================
-   RENDER TABLE
-====================================================== */
 function puRender(data) {
   puTableBody.innerHTML = "";
-  puClearSelection(); // 🔥 WAJIB
+  puClearSelection(); 
 
   if (data.length === 0) {
     puTableBody.innerHTML = `
@@ -3351,9 +3201,6 @@ function puRender(data) {
   });
 }
 
-/* ======================================================
-   SELECTION
-====================================================== */
 function puSelectRow(row, nama) {
   puClearSelection();
 
@@ -3374,12 +3221,12 @@ function puSelectRow(row, nama) {
 function puClearSelection() {
   puSelectedNama = null;
 
-  // clear visual
+  
   document
     .querySelectorAll("#tablePetugasUkur tr")
     .forEach(r => r.classList.remove("selected"));
 
-  // disable buttons
+  
   puBtnEdit.disabled = true;
   puBtnHapus.disabled = true;
 
@@ -3390,9 +3237,6 @@ function puClearSelection() {
   puBtnHapus.classList.add("bg-red-400", "cursor-not-allowed");
 }
 
-/* ======================================================
-   MODAL
-====================================================== */
 function puOpenTambah() {
   puMode = "add";
   puNama.value = "";
@@ -3411,9 +3255,6 @@ function closeModalPetugasUkur() {
   if (modal) modal.classList.add("hidden");
 }
 
-/* ======================================================
-   SUBMIT (ADD / EDIT)
-====================================================== */
 async function submitPetugasUkur() {
   const nama = puNama.value.trim();
   if (!nama) return alert("Nama wajib diisi");
@@ -3441,9 +3282,6 @@ async function submitPetugasUkur() {
   puLoad();
 }
 
-/* ======================================================
-   DELETE
-====================================================== */
 async function puHapus() {
   if (!puSelectedNama) return;
   if (!confirm(`Hapus petugas ukur:\n${puSelectedNama}?`)) return;
@@ -3468,15 +3306,15 @@ async function puHapus() {
 
 window.initPetugasUkur = initPetugasUkur;
 
+
 /* 20===============================jenis-permohonan.js=============================== */
+
 
 let jpTableBody, jpBtnTambah, jpBtnEdit, jpBtnHapus;
 let jpSelectedNama = null;
 let jpMode = "add"; // add | edit
 
-/* ======================================================
-   INIT (DIPANGGIL ROUTER)
-====================================================== */
+
 function initJenisPermohonan() {
   jpTableBody = document.getElementById("tableJenisPermohonan");
   jpBtnTambah = document.getElementById("jpBtnTambah");
@@ -3495,9 +3333,6 @@ function initJenisPermohonan() {
   jpLoad();
 }
 
-/* ======================================================
-   LOAD DATA
-====================================================== */
 async function jpLoad() {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -3526,9 +3361,6 @@ async function jpLoad() {
   }
 }
 
-/* ======================================================
-   RENDER TABLE
-====================================================== */
 function jpRender(data) {
   jpTableBody.innerHTML = "";
   jpClearSelection();
@@ -3552,9 +3384,6 @@ function jpRender(data) {
   });
 }
 
-/* ======================================================
-   SELECTION
-====================================================== */
 function jpSelectRow(row, nama) {
   document
     .querySelectorAll("#tableJenisPermohonan tr")
@@ -3586,9 +3415,6 @@ function jpClearSelection() {
   jpBtnHapus.classList.add("cursor-not-allowed");
 }
 
-/* ======================================================
-   MODAL
-====================================================== */
 function jpOpenTambah() {
   jpMode = "add";
   jpNama.value = "";
@@ -3608,9 +3434,6 @@ function jpCloseModal() {
   modalJP.classList.add("hidden");
 }
 
-/* ======================================================
-   SUBMIT
-====================================================== */
 async function jpSubmit() {
   const nama = jpNama.value.trim();
   if (!nama) return alert("Nama wajib diisi");
@@ -3638,9 +3461,6 @@ async function jpSubmit() {
   jpLoad();
 }
 
-/* ======================================================
-   DELETE
-====================================================== */
 async function jpHapus() {
   if (!jpSelectedNama) return;
   if (!confirm(`Hapus jenis permohonan:\n${jpSelectedNama}?`)) return;
@@ -3663,18 +3483,15 @@ async function jpHapus() {
   jpLoad();
 }
 
-/* ======================================================
-   REGISTER GLOBAL
-====================================================== */
 window.initJenisPermohonan = initJenisPermohonan;
+
 
 /* 21===============================upload-berkas.js=============================== */
 
+
 let STAGING_DATA = [];
 
-// ======================================================
-// INIT
-// ======================================================
+
 function initUploadBerkas() {
   console.log("INIT Upload Berkas (LOCAL)");
 
@@ -3698,9 +3515,7 @@ function initUploadBerkas() {
   btnCancel.onclick = resetAll;
   if (btnImport) btnImport.onclick = importToServer;
 
-  // ==================================================
-  // UPLOAD & PARSE EXCEL
-  // ==================================================
+
   function handleUpload() {
     if (!fileInput.files.length) {
       alert("Pilih file Excel terlebih dahulu");
@@ -3717,9 +3532,7 @@ function initUploadBerkas() {
     reader.readAsBinaryString(fileInput.files[0]);
   }
 
-  // ==================================================
-  // VALIDASI & EKSTRAK DI302
-  // ==================================================
+
   function processRows(rows) {
     STAGING_DATA = [];
     const nomorSet = new Set();
@@ -3728,10 +3541,10 @@ function initUploadBerkas() {
     rows.slice(1).forEach(r => {
       const rawR = String(r.R || "").toLowerCase();
 
-      // ❌ selesai / selesai diserahkan
+      
       if (rawR.includes("selesai")) return;
 
-      // ambil nomor/tahun
+    
       let match = rawR.match(/\d+\/\d{4}/);
       let nomor = match
         ? match[0]
@@ -3755,9 +3568,7 @@ function initUploadBerkas() {
     renderPreview();
   }
 
-  // ==================================================
-  // PREVIEW
-  // ==================================================
+
   function renderPreview() {
     previewTbl.innerHTML = "";
 
@@ -3778,9 +3589,7 @@ function initUploadBerkas() {
     previewSec.classList.remove("hidden");
   }
 
-  // ==================================================
-  // RESET
-  // ==================================================
+
   function resetAll() {
     STAGING_DATA = [];
     previewTbl.innerHTML = "";
@@ -3790,18 +3599,14 @@ function initUploadBerkas() {
   }
 }
 
-// ======================================================
-// IMPORT DATA KE SERVER (GLOBAL)
-// ======================================================
+
 function importToServer() {
   if (!STAGING_DATA.length) {
     alert("Tidak ada data preview untuk diimport");
     return;
   }
 
-  // ===============================
-  // BUAT EXCEL DARI HASIL PREVIEW
-  // ===============================
+
   const data = [
     [
       "Tanggal Mulai",
@@ -3825,9 +3630,7 @@ function importToServer() {
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "DI302_FINAL");
 
-  // ===============================
-  // KONVERSI KE BLOB
-  // ===============================
+
   const wbout = XLSX.write(wb, {
     bookType: "xlsx",
     type: "array"
@@ -3837,9 +3640,7 @@ function importToServer() {
     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   });
 
-  // ===============================
-  // UPLOAD KE DRIVE
-  // ===============================
+
   const formData = new FormData();
   formData.append("action", "uploadDI302");
   formData.append("file", blob, `DI302_FINAL_${new Date().toISOString().slice(0,10)}.xlsx`);
@@ -3870,16 +3671,14 @@ function importToServer() {
   });
 }
 
-// ======================================================
-// DOWNLOAD PREVIEW KE EXCEL
-// ======================================================
+
 function downloadPreview() {
     if (!STAGING_DATA || !STAGING_DATA.length) {
       alert("Tidak ada data preview untuk diunduh");
       return;
     }
   
-    // Susun data dengan header
+   
     const data = [
       [
         "Tanggal Mulai",
@@ -3899,25 +3698,22 @@ function downloadPreview() {
       ])
     ];
   
-    // Buat worksheet
+    
     const ws = XLSX.utils.aoa_to_sheet(data);
   
-    // Buat workbook
+    
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Preview Import");
   
-    // Nama file
+    
     const filename = `Preview_Import_${new Date()
       .toISOString()
       .slice(0, 10)}.xlsx`;
   
-    // Download
+    
     XLSX.writeFile(wb, filename);
   }
-  
-// ======================================================
-// CURRENT USER
-// ======================================================
+
 function getCurrentUser() {
   try {
     return JSON.parse(localStorage.getItem("user"));
@@ -3926,11 +3722,11 @@ function getCurrentUser() {
   }
 }
 
+
 /* 22===============================plotting.js=============================== */
 
 (function () {
 
-    /* ================= ANTI DOUBLE LOAD ================= */
     if (window.__PLOTTING_LOADED__) return;
     window.__PLOTTING_LOADED__ = true;
   
@@ -3945,9 +3741,6 @@ function getCurrentUser() {
     let filteredData = [];
     let selectedData = null;
   
-    /* ======================================================
-       INIT (DIPANGGIL ROUTER SPA)
-    ====================================================== */
     window.initPloting = function () {
       console.log("INIT PLOTTING ✔");
       resetFormProses();   // ⬅️ WAJIB
@@ -3957,9 +3750,6 @@ function getCurrentUser() {
       loadPlotingData();
     };
   
-    /* ======================================================
-       TAB SETUP
-    ====================================================== */
     function setupTabs() {
       const tabs = document.querySelectorAll(".tab-btn");
       const contents = document.querySelectorAll(".tab-content");
@@ -3990,12 +3780,10 @@ function getCurrentUser() {
         return {};
       }
     }
-    /* ======================================================
-       EVENTS
-    ====================================================== */
+
     function setupEvents() {
   
-      /* ===== UPLOAD FILE (DISPLAY NAMA FILE) ===== */
+      
         const fileInput = document.getElementById("uploadFilePlotting");
         const labelFile = document.getElementById("namaFilePlotting");
   
@@ -4016,7 +3804,7 @@ function getCurrentUser() {
           });
         }
   
-      /* ===== PILIH DATA ===== */
+     
       document.querySelector("#tab-data")?.addEventListener("click", e => {
         if (selectedData) {
           alert("Selesaikan atau batalkan proses sebelumnya terlebih dahulu.");
@@ -4027,30 +3815,30 @@ function getCurrentUser() {
       
         const item = JSON.parse(decodeURIComponent(btn.dataset.item));
       
-        // 🔐 MINTA LOCK KE SERVER
+        
         fetch(APP_CONFIG.API_WEB, {
           method: "POST",
           body: JSON.stringify({
             action: "setProcessing",
-            row: item.id   // ID BARIS SHEET
+            row: item.id   
           })
         })
         .then(r => r.json())
         .then(res => {
       
-          // ❌ JIKA GAGAL LOCK → STOP
+          
           if (!res.success) {
             alert(res.message || "Data sedang diproses petugas lain");
             return;
           }
       
-          // ✅ BARU BOLEH SET DATA
+          
           selectedData = item;
       
-          // 🔄 REFRESH DATA (AGAR STATUS UPDATE GLOBAL)
+          
           loadPlotingData();
       
-          /* ===== ISI TAB PROSES ===== */
+          
           setText("info-Nama", item.nama_pemilik);
           document.getElementById("edit-NoHak").value = item.nomor_hak || "";
           document.getElementById("edit-NIB").value  = item.nib || "";
@@ -4060,7 +3848,7 @@ function getCurrentUser() {
           setLink("info-Lokasi", item.link_lokasi);
           setLink("info-Lampiran", item.lampiran);
       
-          // ➡️ PINDAH TAB SETELAH SERVER OK
+          
           showFormProses();
           document.querySelector('[data-tab="tab-proses"]')?.click();
         })
@@ -4070,7 +3858,7 @@ function getCurrentUser() {
         });
       });
       
-      /* ===== CARI ===== */
+      
       document.getElementById("btnCari")?.addEventListener("click", () => {
         const noHak = getVal("filterNoHak");
         const desa  = getVal("filterDesa");
@@ -4082,7 +3870,7 @@ function getCurrentUser() {
         renderTable();
       });
   
-      /* ===== RESET ===== */
+     
       document.getElementById("btnReset")?.addEventListener("click", () => {
         setVal("filterNoHak", "");
         setVal("filterDesa", "");
@@ -4090,7 +3878,7 @@ function getCurrentUser() {
         renderTable();
       });
   
-      /* ===== BATAL PROSES PLOTTING ===== */
+      
       document.getElementById("btnBatal")?.addEventListener("click", () => {
   
         if (!selectedData) {
@@ -4114,14 +3902,14 @@ function getCurrentUser() {
             return;
           }
   
-          // reset state frontend
+          
           resetFormProses();
           showEmptyProses();
   
-          // reload tabel
+          
           loadPlotingData();
   
-          // kembali ke tab data
+         
           document.querySelector('[data-tab="tab-data"]')?.click();
         })
         .catch(err => {
@@ -4129,7 +3917,7 @@ function getCurrentUser() {
           alert("Gagal terhubung ke server");
         });
       });
-      /* ===== SIMPAN PLOTTING ===== */
+      
       document.getElementById("btnSimpan")?.addEventListener("click", () => {
   
         if (!selectedData) {
@@ -4137,12 +3925,12 @@ function getCurrentUser() {
           return;
         }
         const user = getLoginUser();
-          // 🔥 AMBIL NILAI INPUT
+        
         const nomorHak  = document.getElementById("edit-NoHak").value.trim();
         const nib       = document.getElementById("edit-NIB").value.trim();
         const suratUkur = document.getElementById("edit-SU").value.trim();
   
-        // 🔒 VALIDASI WAJIB ISI
+        
         if (!nomorHak || !nib || !suratUkur) {
           alert("Nomor Hak, Nomor NIB, dan Nomor Surat Ukur wajib diisi.");
           return;
@@ -4152,12 +3940,12 @@ function getCurrentUser() {
           action: "simpanPlotting",
           row: selectedData.id,
   
-            // 🔥 NILAI HASIL EDIT
+            
           nomor_hak: document.getElementById("edit-NoHak").value.trim(),
           nib: document.getElementById("edit-NIB").value.trim(),
           surat_ukur: document.getElementById("edit-SU").value.trim(),
         
-          // 🔥 SAMA PERSIS DENGAN KIRIM.JS
+          
           petugas: user.nama_lengkap || user.nama || user.username || "UNKNOWN",
         
           plotting_peta: document.getElementById("cekPlotting")?.checked || false,
@@ -4166,7 +3954,7 @@ function getCurrentUser() {
         
           keterangan: document.getElementById("keteranganProses")?.value || ""
         };
-        console.log("KIRIM SIMPAN:", payload); // 🔍 DEBUG PENTING
+        console.log("KIRIM SIMPAN:", payload); 
   
         fetch(APP_CONFIG.API_WEB, {
           method: "POST",
@@ -4185,10 +3973,10 @@ function getCurrentUser() {
             const fileInput = document.getElementById("uploadFilePlotting");
             const file = fileInput?.files?.[0] || null;
   
-            // 🔄 Convert gambar (jika ada)
+            
             const imageBase64 = await fileToBase64(file);
   
-            // 🔥 GENERATE PDF
+            
             fetch(APP_CONFIG.API_WEB, {
               method: "POST",
               body: JSON.stringify({
@@ -4206,16 +3994,16 @@ function getCurrentUser() {
                 return;
               }
             
-              // ================= TAMPILKAN LINK PDF (AMAN) =================
+              
             
-              // hapus link lama (anti dobel)
+              
               document.querySelectorAll(".link-pdf-plotting")
                 .forEach(el => el.remove());
             
               const container =
                 document.getElementById("tab-proses") || document.body;
             
-              // LINK PDF
+              
               const link = document.createElement("a");
               link.href = pdfRes.data.pdf_url;
               link.target = "_blank";
@@ -4226,7 +4014,7 @@ function getCurrentUser() {
             
               container.appendChild(link);
             
-              // TOMBOL SELESAI (USER YANG MEMUTUSKAN)
+              
               const btnDone = document.createElement("button");
               btnDone.innerText = "✔ Selesai & Kembali ke Data";
               btnDone.className =
@@ -4256,10 +4044,6 @@ function getCurrentUser() {
       });
     }
   
-  
-    /* ======================================================
-       LOAD DATA PLOTTING
-    ====================================================== */
     function loadPlotingData() {
       fetch(`${API_URL}?action=plotting`)
         .then(r => r.json())
@@ -4285,9 +4069,6 @@ function getCurrentUser() {
         });
     }
   
-    /* ======================================================
-       RENDER TABLE
-    ====================================================== */
     function renderTable() {
   
       const tbody = document.querySelector("#tab-data tbody");
@@ -4346,10 +4127,7 @@ function getCurrentUser() {
         `);
       });
     }
-  
-    /* ======================================================
-       HELPERS
-    ====================================================== */
+
     function makeLink(v) {
       return v
         ? `<a href="${v}" target="_blank" class="text-blue-600 underline">Buka</a>`
@@ -4409,9 +4187,7 @@ function getCurrentUser() {
       document.getElementById("emptyProses")?.classList.add("hidden");
       document.getElementById("formProses")?.classList.remove("hidden");
     }
-      /* ======================================================
-       RESET FORM PROSES (WAJIB ADA)
-    ====================================================== */
+
     function resetFormProses() {
       selectedData = null;
     
@@ -4443,37 +4219,25 @@ function getCurrentUser() {
         labelFile.classList.add("text-gray-500");
       }
     
-      // 🔥 hapus link PDF
+     
       document.querySelectorAll(".link-pdf-plotting")
         .forEach(el => el.remove());
     
-      // 🔥 hapus tombol DONE
+     
       document.querySelectorAll(".btn-done-plotting")
         .forEach(el => el.remove());
     }
   
   })();
 
+
 /* 23===============================daftar-plotting.js=============================== */
 
-/* ======================================================
-   DAFTAR PLOTING - FRONTEND (FINAL PRODUKSI)
-   - SPA ROUTER
-   - API ROUTER APPS SCRIPT
-   - APP_CONFIG GLOBAL
-====================================================== */
-
-/* ===============================
-   API CONFIG (GLOBAL)
-=============================== */
 const API_URL = window.APP_CONFIG?.API_WEB;
 if (!API_URL) {
   console.error("❌ APP_CONFIG.API_WEB belum diset");
 }
 
-/* ======================================================
-   INIT (DIPANGGIL DARI ROUTER SPA)
-====================================================== */
 function initDaftarPloting() {
   console.log("INIT: Daftar Ploting 📊");
 
@@ -4486,9 +4250,6 @@ function initDaftarPloting() {
   loadDaftarEmail();
 }
 
-/* ======================================================
-   TAB SWITCHING
-====================================================== */
 function initTabDaftarPloting() {
   const tabs = document.querySelectorAll(".tab-btn");
   const contents = document.querySelectorAll(".tab-content");
@@ -4506,9 +4267,6 @@ function initTabDaftarPloting() {
   });
 }
 
-/* ======================================================
-   TAB 1 : LOAD DATA PLOTING (API)
-====================================================== */
 function loadDaftarPloting() {
   const url = `${API_URL}?action=daftarPlot_getPlot`;
   console.log("FETCH:", url);
@@ -4521,7 +4279,7 @@ function loadDaftarPloting() {
 
       let data = [];
 
-      // 🔥 HANDLE SEMUA FORMAT API
+     
       if (Array.isArray(res)) {
         data = res;
       } 
@@ -4540,10 +4298,10 @@ function loadDaftarPloting() {
       console.log("DATA FINAL:", data);
       console.log("JUMLAH DATA:", data.length);
 
-      // ✅ SIMPAN KE GLOBAL
+    
       GLOBAL_DATA_PLOTING = data;
 
-      // ✅ TAMPILKAN KE TABEL
+    
       renderTablePloting(GLOBAL_DATA_PLOTING);
     })
     .catch(err => {
@@ -4552,9 +4310,6 @@ function loadDaftarPloting() {
     });
 }
 
-/* ======================================================
-   RENDER TABLE PLOTING
-====================================================== */
 function formatTanggal(value){
 
   if(!value) return "";
@@ -4582,7 +4337,7 @@ function renderTablePloting(data) {
   const tbody = document.querySelector("#tab-plot tbody");
   tbody.innerHTML = "";
 
-  // DATA KOSONG
+ 
   if (!Array.isArray(data) || data.length === 0) {
     tbody.innerHTML = `
       <tr>
@@ -4600,7 +4355,7 @@ function renderTablePloting(data) {
       <td class="border px-1 py-1 text-center">${i + 1}</td>
       ${row.map((col, idx) => {
 
-        // kolom tanggal proses (ubah index sesuai posisi)
+        
         if (idx === 14) {
           col = formatTanggal(col);
         }
@@ -4615,9 +4370,6 @@ function renderTablePloting(data) {
   });
 }
 
-/* ======================================================
-   TAB 1 : FILTER (SERVER SIDE)
-====================================================== */
 let GLOBAL_DATA_PLOTING = [];
 
 function initFilterDaftarPloting() {
@@ -4633,20 +4385,20 @@ function initFilterDaftarPloting() {
 
     const hasil = GLOBAL_DATA_PLOTING.filter(row => {
 
-      // ✅ KOLOM J (No Hak)
+     
       const rawNoHak = (row[9] || "").toString().toLowerCase();
 
-      // 🔥 NORMALISASI (BUANG HURUF, AMBIL ANGKA SAJA)
+      
       const cleanNoHak = rawNoHak.replace(/[^\d]/g, "");
       const cleanInput = inputNoHak.replace(/[^\d]/g, "");
 
-      // ✅ KOLOM DESA
+     
       const desa = (row[12] || "").toString().toLowerCase();
 
-      // 🔍 LOGIKA MATCH
+     
       const cocokNoHak =
-        rawNoHak.includes(inputNoHak) ||     // cocok asli
-        cleanNoHak.includes(cleanInput);     // cocok angka
+        rawNoHak.includes(inputNoHak) ||  
+        cleanNoHak.includes(cleanInput);    
 
       const cocokDesa = desa.includes(inputDesa);
 
@@ -4663,12 +4415,6 @@ function initFilterDaftarPloting() {
   });
 }
 
-/* ======================================================
-   TAB 1 : DOWNLOAD EXCEL (CSV CLIENT SIDE)
-====================================================== */
-/* ======================================================
-   TAB 1 : DOWNLOAD EXCEL (.XLSX) - FINAL
-====================================================== */
 function initDownloadExcelDaftarPloting() {
   const btn = [...document.querySelectorAll("button")]
     .find(b => b.innerText.includes("Download Excel"));
@@ -4682,38 +4428,36 @@ function initDownloadExcelDaftarPloting() {
       return;
     }
 
-    // 1️⃣ Ambil data dari table HTML
+    
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.table_to_sheet(table, {
       raw: true
     });
 
-    // 2️⃣ Nama sheet
+  
     XLSX.utils.book_append_sheet(
       workbook,
       worksheet,
       "Daftar_Ploting"
     );
 
-    // 3️⃣ Nama file
+    
     const filename = `Daftar_Ploting_${new Date()
       .toISOString()
       .slice(0, 10)}.xlsx`;
 
-    // 4️⃣ Download
+   
     XLSX.writeFile(workbook, filename);
   });
 }
-/* ======================================================
-   TAB 2 : LOAD DAFTAR EMAIL (API)
-====================================================== */
+
 function loadDaftarEmail() {
   fetch(`${API_URL}?action=daftarPlot_getEmail`)
     .then(res => res.json())
     .then(res => {
       console.log("RESP EMAIL:", res);
 
-      // ✅ FORMAT YANG BENAR
+      
       if (!res.success || !Array.isArray(res.data)) {
         alert("Format data daftar email tidak valid");
         return;
@@ -4722,7 +4466,7 @@ function loadDaftarEmail() {
       const tbody = document.querySelector("#tab-email tbody");
       tbody.innerHTML = "";
 
-      // DATA KOSONG
+      
       if (res.data.length === 0) {
         tbody.innerHTML = `
           <tr>
@@ -4760,7 +4504,7 @@ function initSearchEmail(){
   const input = document.getElementById("searchEmail");
   if(!input) return;
 
-  // mencegah event terpasang berulang
+  
   if(input.dataset.searchReady) return;
   input.dataset.searchReady = "1";
 
@@ -4782,9 +4526,7 @@ function initSearchEmail(){
   });
 
 }
-/* ======================================================
-   TAB 2 : CRUD DAFTAR EMAIL (API) - FINAL & AMAN
-====================================================== */
+
 function initDaftarEmailTab() {
   const tableBody = document.querySelector("#tab-email tbody");
   const btnTambah = [...document.querySelectorAll("button")]
@@ -4792,9 +4534,7 @@ function initDaftarEmailTab() {
 
   if (!tableBody || !btnTambah) return;
 
-  // ===============================
-  // TAMBAH EMAIL
-  // ===============================
+
   btnTambah.addEventListener("click", () => {
     const email = prompt("Alamat Email:");
     if (!email) return;
@@ -4816,18 +4556,14 @@ function initDaftarEmailTab() {
     );
   });
 
-  // ===============================
-  // EDIT & HAPUS EMAIL
-  // ===============================
+
   tableBody.addEventListener("click", e => {
     const tr = e.target.closest("tr");
     if (!tr) return;
 
-    // 🔑 KONVERSI YANG BENAR
-    // HTML rowIndex → Sheet row (skip header)
+
     const sheetRow = tr.rowIndex + 1;
 
-    // ===== EDIT =====
     if (e.target.classList.contains("edit-email")) {
       const email = prompt("Alamat Email:", tr.cells[1].innerText);
       const nama  = prompt("Nama Notaris:", tr.cells[2].innerText);
@@ -4838,7 +4574,7 @@ function initDaftarEmailTab() {
       postAPI(
         {
           action: "daftarPlot_updateEmail",
-          row: sheetRow,   // ✅ BENAR
+          row: sheetRow,   
           email,
           nama,
           telp
@@ -4847,14 +4583,14 @@ function initDaftarEmailTab() {
       );
     }
 
-    // ===== DELETE =====
+ 
     if (e.target.classList.contains("delete-email")) {
       if (!confirm("Yakin ingin menghapus email ini?")) return;
 
       postAPI(
         {
           action: "daftarPlot_deleteEmail",
-          row: sheetRow    // ✅ BENAR
+          row: sheetRow  
         },
         loadDaftarEmail
       );
@@ -4862,9 +4598,7 @@ function initDaftarEmailTab() {
   });
 }
 
-/* ======================================================
-   UTIL : POST API
-====================================================== */
+
 function postAPI(payload, callback) {
   fetch(API_URL, {
     method: "POST",
