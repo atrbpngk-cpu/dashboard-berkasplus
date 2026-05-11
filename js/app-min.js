@@ -1816,27 +1816,33 @@ let dataBeban = [];
 let filteredData = [];
 let pieChartInstance = null;
 
+
 function initBebanPetugas() {
   loadBebanFromAPI("pieChart", "pieLegend", true);
 }
+
+
 
 function initDashboardBeban() {
   loadBebanFromAPI("dashboardPieChart", "dashboardPieLegend", false);
 }
 
+
 function loadBebanFromAPI(canvasId, legendId, withDropdown) {
+
   if (!window.APP_CONFIG?.API_WEB) return;
+
   fetch(`${APP_CONFIG.API_WEB}?action=beban`)
     .then(r => r.json())
     .then(res => {
 
       if (!res.success) return;
 
-      
+      // 🔥 SIMPAN FULL DATA (termasuk detail)
       dataBeban = res.data?.data || [];
 
       renderBebanChart(canvasId, legendId);
-      
+      // 🔥 TAMBAHAN
       if (document.getElementById("totalBerkasProses")) {
         updateDashboardUserTotal();
       }
@@ -1860,6 +1866,10 @@ function loadBebanFromAPI(canvasId, legendId, withDropdown) {
     });
 }
 
+/* ======================================================
+   UPDATE DASHBOARD TOTAL USER
+====================================================== */
+
 function updateDashboardUserTotal() {
 
   const userLogin = JSON.parse(localStorage.getItem("user") || "{}");
@@ -1876,6 +1886,9 @@ function updateDashboardUserTotal() {
   const el = document.getElementById("totalBerkasProses");
   if (el) el.innerText = totalUser;
 }
+/* ======================================================
+   UPDATE DASHBOARD TARGET HARI INI (Overdue ≥ 3 Hari)
+====================================================== */
 
 function updateDashboardTargetHariIni() {
 
@@ -1913,6 +1926,10 @@ function updateDashboardTargetHariIni() {
   const el = document.getElementById("targetHariIni");
   if (el) el.innerText = totalTarget;
 }
+
+/* ======================================================
+   RENDER PIE CHART
+====================================================== */
 
 function renderBebanChart(canvasId, legendId) {
 
@@ -1963,6 +1980,8 @@ function renderBebanChart(canvasId, legendId) {
     }
   });
 
+  /* ===== CUSTOM LEGEND ===== */
+
   legendBox.innerHTML = "";
   let total = 0;
 
@@ -2003,6 +2022,10 @@ function renderBebanChart(canvasId, legendId) {
   `;
 }
 
+/* ======================================================
+   DROPDOWN
+====================================================== */
+
 function loadDropdown() {
 
   const select = document.getElementById("selectPetugas");
@@ -2021,6 +2044,10 @@ function loadDropdown() {
     `;
   });
 }
+
+/* ======================================================
+   FILTER PETUGAS (DETAIL MODE)
+====================================================== */
 
 function filterPetugas() {
 
@@ -2046,6 +2073,10 @@ function filterPetugas() {
   renderBebanTable();
 }
 
+/* ======================================================
+   RENDER TABLE (DETAIL INFORMASIBERKAS)
+====================================================== */
+
 function renderBebanTable() {
 
   const tbody = document.getElementById("tableBody");
@@ -2055,7 +2086,7 @@ function renderBebanTable() {
 
     tbody.innerHTML = `
       <tr>
-        <td colspan="5" class="text-center py-4 text-gray-400">
+        <td colspan="6" class="text-center py-4 text-gray-400">
           Tidak ada data
         </td>
       </tr>
@@ -2073,12 +2104,17 @@ function renderBebanTable() {
         <td class="px-3 py-2 border-b">${row.jenis}</td>
         <td class="px-3 py-2 border-b">${row.desa}</td>
         <td class="px-3 py-2 border-b">${row.petugas}</td>
+        <td class="px-3 py-2 border-b">${row.keterangan}</td>
       </tr>
     `;
   });
 
   document.getElementById("totalBeban").innerText = filteredData.length;
 }
+
+/* ======================================================
+   DOWNLOAD EXCEL (DETAIL MODE)
+====================================================== */
 
 function downloadExcel() {
 
@@ -2097,7 +2133,8 @@ function downloadExcel() {
     "Nama Pemohon": row.pemohon,
     "Jenis Permohonan": row.jenis,
     "Desa / Kecamatan": row.desa,
-    "Petugas": row.petugas
+    "Petugas": row.petugas,
+    "Keterangan": row.keterangan
   }));
 
   const worksheet = XLSX.utils.json_to_sheet(excelData);
@@ -2107,6 +2144,9 @@ function downloadExcel() {
 
   XLSX.writeFile(workbook, `beban-petugas-${new Date().toISOString().slice(0,10)}.xlsx`);
 }
+/* ======================================================
+   LIHAT TARGET HARI INI
+====================================================== */
 
 function lihatTargetHariIni() {
 
@@ -2144,6 +2184,10 @@ function lihatTargetHariIni() {
   }, 400);
 }
 
+/* ======================================================
+   LIHAT BERKAS SAYA (Klik Total Berkas Anda)
+====================================================== */
+
 function lihatBerkasSaya() {
 
   const userLogin = JSON.parse(localStorage.getItem("user") || "{}");
@@ -2157,19 +2201,23 @@ function lihatBerkasSaya() {
 
   if (!userData) return;
 
-  
+  // ambil semua detail milik user
   filteredData = userData.detail || [];
 
-  
+  // buka halaman beban petugas
   loadPage("beban-petugas.html");
 
-  
+  // tunggu halaman render dulu
   setTimeout(() => {
     renderBebanTable();
     document.getElementById("tableContainer")
       ?.classList.remove("hidden");
   }, 400);
 }
+
+/* ======================================================
+   HITUNG PRESENTASE KINERJA USER
+====================================================== */
 
 function updateDashboardKinerja() {
 
