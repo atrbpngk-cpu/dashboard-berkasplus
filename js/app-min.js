@@ -3438,8 +3438,35 @@ function getCurrentUser() {
      
       document.getElementById("btnReset")?.addEventListener("click", () => {
         setVal("filterNoHak", "");
-        setVal("filterDesa", "");
-        filteredData = [...plottingData];
+        setVal("filterDesa", "");     
+        const status = getVal("filterStatus");      
+        if (status === "done") {      
+          filteredData = plottingData.filter(
+            d => d.status_proses === "DONE"
+          );     
+        } else if (status === "progress") {     
+          filteredData = plottingData.filter(
+            d => d.status_proses !== "DONE"
+          );     
+        } else {      
+          filteredData = [...plottingData];      
+        }      
+        renderTable();     
+      });
+
+      document.getElementById("filterStatus")?.addEventListener("change", function () {
+        const status = this.value;
+        if (status === "all") {
+          filteredData = [...plottingData];
+        } else if (status === "done") {
+          filteredData = plottingData.filter(
+            d => d.status_proses === "DONE"
+          );
+        } else if (status === "progress") {
+          filteredData = plottingData.filter(
+            d => d.status_proses !== "DONE"
+          );
+        }
         renderTable();
       });
   
@@ -3626,12 +3653,38 @@ function getCurrentUser() {
           );
   
           filteredData = [...plottingData];
-          renderTable();
+          applyStatusFilter();
         })
         .catch(err => {
           console.error("API plotting error:", err);
           alert("API plotting error");
         });
+    }
+
+    function applyStatusFilter() {
+
+      const status = getVal("filterStatus");
+    
+      if (status === "done") {
+    
+        filteredData = plottingData.filter(
+          d => d.status_proses === "DONE"
+        );
+    
+      } else if (status === "progress") {
+    
+        filteredData = plottingData.filter(
+          d => d.status_proses !== "DONE"
+        );
+    
+      } else {
+    
+        filteredData = [...plottingData];
+    
+      }
+    
+      renderTable();
+    
     }
   
     function renderTable() {
@@ -3803,6 +3856,7 @@ if (!API_URL) {
   console.error("❌ APP_CONFIG.API_WEB belum diset");
 }
 
+
 function initDaftarPloting() {
   console.log("INIT: Daftar Ploting 📊");
 
@@ -3814,6 +3868,7 @@ function initDaftarPloting() {
   loadDaftarPloting();
   loadDaftarEmail();
 }
+
 
 function initTabDaftarPloting() {
   const tabs = document.querySelectorAll(".tab-btn");
@@ -3832,6 +3887,7 @@ function initTabDaftarPloting() {
   });
 }
 
+
 function loadDaftarPloting() {
   const url = `${API_URL}?action=daftarPlot_getPlot`;
   console.log("FETCH:", url);
@@ -3844,7 +3900,7 @@ function loadDaftarPloting() {
 
       let data = [];
 
-     
+    
       if (Array.isArray(res)) {
         data = res;
       } 
@@ -3865,9 +3921,11 @@ function loadDaftarPloting() {
 
     
       GLOBAL_DATA_PLOTING = data;
+      FILTERED_DATA_PLOTING = data;
 
     
       renderTablePloting(GLOBAL_DATA_PLOTING);
+      initFilterTanggalPloting();
     })
     .catch(err => {
       console.error("ERROR:", err);
@@ -3920,7 +3978,7 @@ function renderTablePloting(data) {
       <td class="border px-1 py-1 text-center">${i + 1}</td>
       ${row.map((col, idx) => {
 
-        
+       
         if (idx === 14) {
           col = formatTanggal(col);
         }
@@ -3936,6 +3994,135 @@ function renderTablePloting(data) {
 }
 
 let GLOBAL_DATA_PLOTING = [];
+let FILTERED_DATA_PLOTING = [];
+
+function initFilterTanggalPloting() {
+
+  const filterBulan =
+    document.getElementById("filterBulan");
+
+  const filterTahun =
+    document.getElementById("filterTahun");
+
+  if (!filterBulan || !filterTahun) return;
+
+  const bulanSet = new Set();
+  const tahunSet = new Set();
+
+  GLOBAL_DATA_PLOTING.forEach(row => {
+
+    const tanggal = formatTanggal(row[14]);
+
+    if (!tanggal) return;
+
+    const tanggalOnly = tanggal.split(" ")[0];
+
+    const parts = tanggalOnly.split("/");
+
+    if (parts.length < 3) return;
+
+    bulanSet.add(parts[1]);
+    tahunSet.add(parts[2]);
+
+  });
+
+  const namaBulan = {
+    "01":"Januari",
+    "02":"Februari",
+    "03":"Maret",
+    "04":"April",
+    "05":"Mei",
+    "06":"Juni",
+    "07":"Juli",
+    "08":"Agustus",
+    "09":"September",
+    "10":"Oktober",
+    "11":"November",
+    "12":"Desember"
+  };
+
+  filterBulan.innerHTML =
+    `<option value="">Semua Bulan</option>`;
+
+  filterTahun.innerHTML =
+    `<option value="">Semua Tahun</option>`;
+
+  [...bulanSet]
+    .sort()
+    .forEach(bulan => {
+
+      filterBulan.innerHTML += `
+        <option value="${bulan}">
+          ${namaBulan[bulan]}
+        </option>
+      `;
+
+    });
+
+  [...tahunSet]
+    .sort()
+    .reverse()
+    .forEach(tahun => {
+
+      filterTahun.innerHTML += `
+        <option value="${tahun}">
+          ${tahun}
+        </option>
+      `;
+
+    });
+
+  function applyFilterTanggal() {
+
+    const bulan = filterBulan.value;
+    const tahun = filterTahun.value;
+
+    const hasil = GLOBAL_DATA_PLOTING.filter(row => {
+
+      const tanggal = formatTanggal(row[14]);
+
+      if (!tanggal) return false;
+
+      const tanggalOnly =
+        tanggal.split(" ")[0];
+
+      const parts =
+        tanggalOnly.split("/");
+
+      if (parts.length < 3)
+        return false;
+
+      const bln = parts[1];
+      const thn = parts[2];
+
+      const cocokBulan =
+        !bulan || bln === bulan;
+
+      const cocokTahun =
+        !tahun || thn === tahun;
+
+      return cocokBulan && cocokTahun;
+
+    });
+
+    FILTERED_DATA_PLOTING = hasil;
+
+    renderTablePloting(hasil);
+
+  }
+
+  filterBulan.addEventListener(
+    "change",
+    applyFilterTanggal
+  );
+
+  filterTahun.addEventListener(
+    "change",
+    applyFilterTanggal
+  );
+
+}
+
 
 function initFilterDaftarPloting() {
   const btnCari = document.getElementById("btnCari");
@@ -3950,20 +4137,20 @@ function initFilterDaftarPloting() {
 
     const hasil = GLOBAL_DATA_PLOTING.filter(row => {
 
-     
+      
       const rawNoHak = (row[9] || "").toString().toLowerCase();
 
       
       const cleanNoHak = rawNoHak.replace(/[^\d]/g, "");
       const cleanInput = inputNoHak.replace(/[^\d]/g, "");
 
-     
+      
       const desa = (row[12] || "").toString().toLowerCase();
 
-     
+      
       const cocokNoHak =
-        rawNoHak.includes(inputNoHak) ||  
-        cleanNoHak.includes(cleanInput);    
+        rawNoHak.includes(inputNoHak) || 
+        cleanNoHak.includes(cleanInput); 
 
       const cocokDesa = desa.includes(inputDesa);
 
@@ -3987,32 +4174,73 @@ function initDownloadExcelDaftarPloting() {
   if (!btn) return;
 
   btn.addEventListener("click", () => {
-    const table = document.querySelector("#tab-plot table");
-    if (!table) {
-      alert("Tabel tidak ditemukan");
-      return;
-    }
 
-    
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.table_to_sheet(table, {
-      raw: true
+    const dataExport =
+      FILTERED_DATA_PLOTING.length
+        ? FILTERED_DATA_PLOTING
+        : GLOBAL_DATA_PLOTING;
+  
+    const headers = [
+      "No Plotting",
+      "Email Address",
+      "Link Lokasi Tanah",
+      "Lampiran Kepemilikan",
+      "Nama Pemilik",
+      "Tanggal Lahir",
+      "No Telepon",
+      "Jenis Permohonan",
+      "Jenis Kepemilikan",
+      "No HM / HGB / Wakaf",
+      "NIB",
+      "Surat Ukur",
+      "Desa / Kecamatan",
+      "Petugas Plotting",
+      "Tanggal Proses",
+      "Validasi SU",
+      "Validasi NIB",
+      "Plotting Pemetaan",
+      "Keterangan"
+    ];
+  
+    // FORMAT DATA AGAR SAMA DENGAN TABEL WEB
+    const rows = dataExport.map(row => {
+  
+      const newRow = [...row];
+  
+      // FORMAT TANGGAL PROSES
+      newRow[14] = formatTanggal(newRow[14]);
+  
+      // FORMAT NIB AGAR TIDAK MENJADI SCIENTIFIC
+      newRow[10] = "'" + (newRow[10] ?? "");
+  
+      return newRow;
+  
     });
-
+  
+    const finalData = [
+      headers,
+      ...rows
+    ];
+  
+    const workbook =
+      XLSX.utils.book_new();
+  
+    const worksheet =
+      XLSX.utils.aoa_to_sheet(finalData);
   
     XLSX.utils.book_append_sheet(
       workbook,
       worksheet,
       "Daftar_Ploting"
     );
-
-    
-    const filename = `Daftar_Ploting_${new Date()
-      .toISOString()
-      .slice(0, 10)}.xlsx`;
-
-   
+  
+    const filename =
+      `Daftar_Ploting_${new Date()
+        .toISOString()
+        .slice(0,10)}.xlsx`;
+  
     XLSX.writeFile(workbook, filename);
+  
   });
 }
 
@@ -4022,7 +4250,6 @@ function loadDaftarEmail() {
     .then(res => {
       console.log("RESP EMAIL:", res);
 
-      
       if (!res.success || !Array.isArray(res.data)) {
         alert("Format data daftar email tidak valid");
         return;
@@ -4031,7 +4258,7 @@ function loadDaftarEmail() {
       const tbody = document.querySelector("#tab-email tbody");
       tbody.innerHTML = "";
 
-      
+
       if (res.data.length === 0) {
         tbody.innerHTML = `
           <tr>
@@ -4069,7 +4296,7 @@ function initSearchEmail(){
   const input = document.getElementById("searchEmail");
   if(!input) return;
 
-  
+
   if(input.dataset.searchReady) return;
   input.dataset.searchReady = "1";
 
@@ -4129,6 +4356,7 @@ function initDaftarEmailTab() {
 
     const sheetRow = tr.rowIndex + 1;
 
+    
     if (e.target.classList.contains("edit-email")) {
       const email = prompt("Alamat Email:", tr.cells[1].innerText);
       const nama  = prompt("Nama Notaris:", tr.cells[2].innerText);
@@ -4148,7 +4376,6 @@ function initDaftarEmailTab() {
       );
     }
 
- 
     if (e.target.classList.contains("delete-email")) {
       if (!confirm("Yakin ingin menghapus email ini?")) return;
 
