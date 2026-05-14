@@ -58,32 +58,54 @@
       <div id="tab-data" class="tab-content space-y-3">
 
         
-        <div class="flex flex-wrap gap-2 items-center text-xs">
-          <input
-            id="filterNoHak"
-            type="text"
-            placeholder="Nomor HM / HGB / Wakaf"
-            class="border rounded px-2 py-1 w-48"
-          >
+        <div class="flex items-center justify-between flex-wrap gap-3">
 
-          <input
-            id="filterDesa"
-            type="text"
-            placeholder="Desa / Kecamatan"
-            class="border rounded px-2 py-1 w-40"
-          >
-
-          <button
-            id="btnCari"
-            class="bg-blue-600 text-white px-3 py-1 rounded">
-            🔍 Cari
-          </button>
-
-          <button
-            id="btnReset"
-            class="bg-red-500 text-white px-3 py-1 rounded">
-            Reset
-          </button>
+          
+          <div class="flex flex-wrap gap-2 items-center text-xs">
+        
+            <input
+              id="filterNoHak"
+              type="text"
+              placeholder="Nomor HM / HGB / Wakaf"
+              class="border rounded px-2 py-1 w-48"
+            >
+        
+            <input
+              id="filterDesa"
+              type="text"
+              placeholder="Desa / Kecamatan"
+              class="border rounded px-2 py-1 w-40"
+            >
+        
+            <button
+              id="btnCari"
+              class="bg-blue-600 text-white px-3 py-1 rounded">
+              🔍 Cari
+            </button>
+        
+            <button
+              id="btnReset"
+              class="bg-red-500 text-white px-3 py-1 rounded">
+              Reset
+            </button>
+        
+          </div>
+        
+          
+          <div>
+        
+            <select
+              id="filterStatus"
+              class="border rounded px-3 py-1 text-xs bg-white shadow-sm">
+        
+              <option value="all">Semua Data</option>
+              <option value="progress">Data Proses</option>
+              <option value="done">Data Done</option>
+        
+            </select>
+        
+          </div>
+        
         </div>
 
         
