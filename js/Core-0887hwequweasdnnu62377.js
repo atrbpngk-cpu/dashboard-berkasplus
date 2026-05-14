@@ -1,88 +1,135 @@
 /* =====================================================
-   STORAGE HELPER GLOBAL
-   BERKAS+ SECURITY LAYER
+   BERKAS+ STORAGE 
 ===================================================== */
 
 (function () {
 
   const TARGET_KEY = "user";
 
-  // ===============================
-  // ENCODE
-  // ===============================
-  function encode(data) {
+
+  const originalSetItem =
+    Storage.prototype.setItem;
+
+  const originalGetItem =
+    Storage.prototype.getItem;
+
+
+  function encode(str) {
 
     try {
 
       return btoa(
-        encodeURIComponent(data)
+        unescape(
+          encodeURIComponent(str)
+        )
       );
 
     } catch (err) {
 
-      console.warn("Encode gagal", err);
-
-      return data;
+      return str;
     }
   }
 
-  // ===============================
-  // DECODE
-  // ===============================
-  function decode(data) {
+
+  function decode(str) {
 
     try {
 
       return decodeURIComponent(
-        atob(data)
+        escape(
+          atob(str)
+        )
       );
 
     } catch (err) {
 
-      return data;
+      return str;
     }
   }
 
-  // ===============================
-  // OVERRIDE LOCALSTORAGE
-  // ===============================
 
-  const originalSetItem =
-    localStorage.setItem.bind(localStorage);
+  Storage.prototype.setItem =
+    function (key, value) {
 
-  const originalGetItem =
-    localStorage.getItem.bind(localStorage);
+      
+      if (key === TARGET_KEY) {
 
-  // ===============================
-  // SET ITEM
-  // ===============================
-  localStorage.setItem = function (key, value) {
+       
+        if (typeof value === "string") {
 
-    // encode khusus user
-    if (key === TARGET_KEY) {
+         
+          try {
 
-      value = encode(value);
-    }
+            JSON.parse(value);
 
-    originalSetItem(key, value);
-  };
+            value = "x" + encode(value);
 
-  // ===============================
-  // GET ITEM
-  // ===============================
-  localStorage.getItem = function (key) {
+          } catch (e) {}
+        }
+      }
 
-    const value = originalGetItem(key);
+      return originalSetItem.call(
+        this,
+        key,
+        value
+      );
+    };
 
-    if (!value) return value;
 
-    // decode khusus user
-    if (key === TARGET_KEY) {
+  Storage.prototype.getItem =
+    function (key) {
 
-      return decode(value);
-    }
+      let value =
+        originalGetItem.call(this, key);
 
-    return value;
-  };
+      if (!value) return value;
+
+
+      if (
+        key === TARGET_KEY &&
+        typeof value === "string" &&
+        value.startsWith("x")
+      ) {
+
+        value =
+          value.replace("x", "");
+
+        return decode(value);
+      }
+
+      return value;
+    };
+
+
+
+  setInterval(() => {
+
+    try {
+
+      const raw =
+        originalGetItem.call(
+          localStorage,
+          TARGET_KEY
+        );
+
+      if (
+        raw &&
+        !raw.startsWith("x")
+      ) {
+
+        const encoded =
+          "x" + encode(raw);
+
+        originalSetItem.call(
+          localStorage,
+          TARGET_KEY,
+          encoded
+        );
+      }
+
+    } catch (err) {}
+
+  }, 500);
+
 
 })();
