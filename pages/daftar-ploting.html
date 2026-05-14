@@ -49,35 +49,59 @@
 
       <div id="tab-plot" class="tab-content space-y-3">
 
-        <div class="flex flex-wrap gap-2 items-center text-xs">
-          <input
-            id="filterNoHak"
-            type="text"
-            placeholder="Nomor HM / HGB / Wakaf "
-            class="border rounded px-2 py-1 w-48">
+        <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
 
-          <input
-            id="filterDesa"
-            type="text"
-            placeholder="Desa / Kecamatan"
-            class="border rounded px-2 py-1 w-40">
-
-          <button
-            id="btnCari"
-            class="bg-blue-600 text-white px-3 py-1 rounded">
-            🔍 Cari
-          </button>
-
-          <button
-            id="btnReset"
-            class="bg-red-500 text-white px-3 py-1 rounded">
-            Reset
-          </button>
-
-          <button
-            class="bg-green-600 text-white px-3 py-1 rounded ml-auto">
-            Download Excel
-          </button>
+          
+          <div class="flex flex-wrap gap-2 items-center">
+        
+            <input
+              id="filterNoHak"
+              type="text"
+              placeholder="Nomor HM / HGB / Wakaf "
+              class="border rounded px-2 py-1 w-48">
+        
+            <input
+              id="filterDesa"
+              type="text"
+              placeholder="Desa / Kecamatan"
+              class="border rounded px-2 py-1 w-40">
+        
+            <button
+              id="btnCari"
+              class="bg-blue-600 text-white px-3 py-1 rounded">
+              Cari
+            </button>
+        
+            <button
+              id="btnReset"
+              class="bg-red-500 text-white px-3 py-1 rounded">
+              Reset
+            </button>
+        
+          </div>
+        
+          
+          <div class="flex flex-wrap gap-2 items-center">
+        
+            <select
+              id="filterBulan"
+              class="border rounded px-2 py-1 text-xs">
+              <option value="">Semua Bulan</option>
+            </select>
+        
+            <select
+              id="filterTahun"
+              class="border rounded px-2 py-1 text-xs">
+              <option value="">Semua Tahun</option>
+            </select>
+        
+            <button
+              class="bg-green-600 text-white px-3 py-1 rounded">
+              Download Excel
+            </button>
+        
+          </div>
+        
         </div>
 
 
