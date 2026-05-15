@@ -1,12 +1,12 @@
 /* ======================================================
-HELPER
+   BERKAS+ HELPER
 ====================================================== */
 
 window.API_CACHE = new Map();
 window.API_PENDING = new Map();
-
 window.PREFETCH_DATA = {};
 window.PREFETCH_LOADING = {};
+window.SEARCH_CACHE = new Map();
 window.REALTIME_ACTIONS = [
   "inbox",
   "notif",
@@ -22,20 +22,63 @@ window.smartFetch = async function (
   const method =
     (options.method || "GET")
       .toUpperCase();
+
   if (method !== "GET") {
 
     return fetch(url, options)
+
       .then(async r => {
 
         const data =
           await r.json();
+
         clearApiCache("inbox");
         clearApiCache("notif");
         clearApiCache("dashboard");
         clearApiCache("beban");
         clearApiCache("bebanPU");
 
+        window.SEARCH_CACHE.clear();
+
+        setTimeout(() => {
+
+          if (window.username) {
+
+            prefetchData(
+              "inbox",
+              `${APP_CONFIG.API_WEB}?action=inbox&user=${window.username}&realtime=1`,
+              1000
+            );
+
+            prefetchData(
+              "notif",
+              `${APP_CONFIG.API_WEB}?action=notif&user=${window.username}&realtime=1`,
+              1000
+            );
+
+            prefetchData(
+              "dashboard",
+              `${APP_CONFIG.API_WEB}?action=dashboard&realtime=1`,
+              2000
+            );
+          }
+
+        }, 300);
+
         return data;
+      })
+
+      .catch(err => {
+
+        console.error(
+          "POST Error:",
+          err
+        );
+
+        return {
+          success: false,
+          message: err.toString()
+        };
       });
   }
 
@@ -45,9 +88,12 @@ window.smartFetch = async function (
     );
 
   const cacheKey = url;
+
   if (isRealtime) {
+
     ttl = 1000;
   }
+
   const now = Date.now();
 
   if (window.API_CACHE.has(cacheKey)) {
@@ -62,6 +108,7 @@ window.smartFetch = async function (
       return cached.data;
     }
   }
+
   if (
     window.API_PENDING.has(cacheKey)
   ) {
@@ -74,41 +121,41 @@ window.smartFetch = async function (
   const requestPromise =
     fetch(url, options)
 
-    .then(async r => {
+      .then(async r => {
 
-      const data =
-        await r.json();
+        const data =
+          await r.json();
 
-      window.API_CACHE.set(
-        cacheKey,
-        {
-          data,
-          time: Date.now()
-        }
-      );
+        window.API_CACHE.set(
+          cacheKey,
+          {
+            data,
+            time: Date.now()
+          }
+        );
 
-      return data;
-    })
+        return data;
+      })
 
-    .catch(err => {
+      .catch(err => {
 
-      console.error(
-        "smartFetch Error:",
-        err
-      );
+        console.error(
+          "smartFetch Error:",
+          err
+        );
 
-      return {
-        success: false,
-        message: err.toString()
-      };
-    })
+        return {
+          success: false,
+          message: err.toString()
+        };
+      })
 
-    .finally(() => {
+      .finally(() => {
 
-      window.API_PENDING.delete(
-        cacheKey
-      );
-    });
+        window.API_PENDING.delete(
+          cacheKey
+        );
+      });
 
   window.API_PENDING.set(
     cacheKey,
@@ -213,6 +260,17 @@ setInterval(() => {
       }
     });
 
+  [...window.SEARCH_CACHE.entries()]
+    .forEach(([key, val]) => {
+
+      if (
+        now - val.time > 300000
+      ) {
+
+        window.SEARCH_CACHE.delete(key);
+      }
+    });
+
 }, 30000);
 
 window.startRealtimeBackground =
@@ -224,12 +282,13 @@ function(username = "") {
 
   window.__REALTIME_STARTED = true;
 
+  window.username = username;
+
   setInterval(() => {
 
     if (document.hidden) {
       return;
     }
-
     prefetchData(
       "inbox",
       `${APP_CONFIG.API_WEB}?action=inbox&user=${username}&realtime=1`,
@@ -241,11 +300,13 @@ function(username = "") {
       `${APP_CONFIG.API_WEB}?action=notif&user=${username}&realtime=1`,
       1000
     );
+
     prefetchData(
       "dashboard",
       `${APP_CONFIG.API_WEB}?action=dashboard&realtime=1`,
       2000
     );
+
     prefetchData(
       "beban",
       `${APP_CONFIG.API_WEB}?action=beban`,
@@ -274,8 +335,6 @@ document.addEventListener(
   }
 );
 
-
-
 window.renderFromPrefetch =
 async function(
   key,
@@ -298,4 +357,56 @@ async function(
   }
 
   renderFn(data);
+};
+
+window.searchCache =
+async function(
+  keyword,
+  fetcher
+){
+
+  const key =
+    keyword.toLowerCase();
+
+  if (
+    window.SEARCH_CACHE.has(key)
+  ) {
+
+    const cached =
+      window.SEARCH_CACHE.get(key);
+
+    return cached.data;
+  }
+
+  const data =
+    await fetcher();
+
+  window.SEARCH_CACHE.set(
+    key,
+    {
+      data,
+      time: Date.now()
+    }
+  );
+
+  return data;
+};
+
+window.debounce = function(
+  fn,
+  delay = 400
+){
+
+  let t;
+
+  return (...args)=>{
+
+    clearTimeout(t);
+
+    t = setTimeout(()=>{
+
+      fn(...args);
+
+    }, delay);
+  };
 };
