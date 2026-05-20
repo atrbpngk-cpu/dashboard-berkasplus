@@ -1,322 +1,629 @@
 /* ======================================================
-   INBOX.JS — FINAL PRODUKSI (FULL FIX)
+   INBOX.JS
 ====================================================== */
 
 if (!window.__INBOX_JS_LOADED__) {
-  window.__INBOX_JS_LOADED__ = true;
+
+window.__INBOX_JS_LOADED__ = true;
+
+const userLogin =
+JSON.parse(
+localStorage.getItem("user") || "{}"
+);
+
+const namaUser =
+(
+userLogin.nama_lengkap ||
+userLogin.nama ||
+""
+).trim();
+
+let tableBody;
+let badgeBaru;
+let notifInbox;
+let notifText;
+
+let inboxBtnPrev;
+let inboxBtnNext;
+
+let originalInboxData = [];
+let inboxData = [];
+
+let selectedRow = null;
+
+/* PAGINATION KHUSUS INBOX */
+let inboxCurrentPage = 1;
+
+const INBOX_PER_PAGE = 10;
 
 
-  /* ================= USER LOGIN ================= */
-  const userLogin = JSON.parse(localStorage.getItem("user") || "{}");
-  const namaUser  = (userLogin.nama_lengkap || userLogin.nama || "").trim();
-  const namaSeksi = (userLogin.seksi || "").trim();
+/* ======================================================
+DASHBOARD BADGE
+====================================================== */
 
-  /* ================= STATE ================= */
-  let tableBody, badgeBaru, notifInbox, notifText;
-  let btnPrev, btnNext;
+window.initDashboardInbox =
+function(){
 
-  let originalInboxData = [];
-  let inboxData = [];
-  let selectedRow = null;
+const countEl=
+document.getElementById(
+"dashboardInboxCount"
+);
 
-  let currentPage = 1;
-  const perPage = 5;
+const badgeEl=
+document.getElementById(
+"dashboardInboxBadge"
+);
 
-  /* ================= DASHBOARD INBOX ================= */
+if(!countEl) return;
 
-  window.initDashboardInbox = function () {
+fetch(
+`${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`
+)
 
-    const countEl = document.getElementById("dashboardInboxCount");
-    const badgeEl = document.getElementById("dashboardInboxBadge");
-  
-    if (!countEl) return;
-  
-    const userLogin = JSON.parse(localStorage.getItem("user") || "{}");
-    const namaUser  = (userLogin.nama_lengkap || userLogin.nama || "").trim();
-  
-    if (!window.APP_CONFIG?.API_WEB || !namaUser) {
-      countEl.innerText = 0;
-      return;
-    }
-  
-    fetch(`${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`)
-      .then(r => r.json())
-      .then(res => {
-  
-        let data = [];
-  
-        if (Array.isArray(res)) {
-          data = res;
-        } 
-        else if (res && res.success === true && Array.isArray(res.data)) {
-          data = res.data;
-        }
-  
-        const total = data.length;
-  
-        // tampilkan jumlah
-        countEl.innerText = total;
-  
-        // tampilkan indikator merah kalau ada inbox
-        if (badgeEl) {
-          if (total > 0) {
-            badgeEl.classList.remove("hidden");
-          } else {
-            badgeEl.classList.add("hidden");
-          }
-        }
-  
-        // warna dinamis
-        if (total === 0) {
-          countEl.className = "text-2xl font-bold text-gray-400";
-        } else if (total < 5) {
-          countEl.className = "text-2xl font-bold text-yellow-600";
-        } else {
-          countEl.className = "text-2xl font-bold text-red-600";
-        }
-  
-      })
-      .catch(() => {
-        countEl.innerText = 0;
-      });
-  };
-  
+.then(r=>r.json())
 
-  /* ================= INIT ================= */
-  window.initInboxBerkas = function () {
-    if (!window.APP_CONFIG?.API_WEB || !namaUser) return;
+.then(res=>{
 
-    tableBody   = document.getElementById("tableBody");
-    badgeBaru   = document.getElementById("badgeBaru");
-    notifInbox = document.getElementById("notifInbox");
-    notifText  = document.getElementById("notifText");
-    btnPrev    = document.getElementById("btnPrev");
-    btnNext    = document.getElementById("btnNext");
+let data=[];
 
-    if (!tableBody) return;
+if(Array.isArray(res)){
 
-    loadInboxData();
-  };
+data=res;
 
-  /* ================= LOAD DATA ================= */
-  function loadInboxData() {
-    fetch(`${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`)
-      .then(r => r.json())
-      .then(res => {
-  
-        // 🔥 TERIMA SEMUA FORMAT API
-        if (Array.isArray(res)) {
-          originalInboxData = res;
-        } 
-        else if (res && res.success === true && Array.isArray(res.data)) {
-          originalInboxData = res.data;
-        } 
-        else {
-          originalInboxData = [];
-        }
-  
-        inboxData = [...originalInboxData];
-        currentPage = 1;
-  
-        updateBadge(inboxData.length);
-        updateNotifInbox();
-        renderTable();
-      })
-      .catch(err => {
-        console.error("Inbox API error:", err);
-        inboxData = [];
-        updateBadge(0);
-        renderTable();
-      });
-  }
-  
+}
 
-  /* ================= FILTER ================= */
-  window.applyFilter = function () {
-    const nomor = document.getElementById("filterNomor").value.trim();
-    const tahun = document.getElementById("filterTahun").value.trim();
+else if(
 
-    inboxData = originalInboxData.filter(r => {
-      const nt = String(r[0] || "");
-      if (nomor && !nt.includes(nomor)) return false;
-      if (tahun && !nt.includes(tahun)) return false;
-      return true;
-    });
+res &&
+res.success===true &&
+Array.isArray(res.data)
 
-    currentPage = 1;
-    updateBadge(inboxData.length);
-    updateNotifInbox();
-    renderTable();
-  };
+){
 
-  window.resetFilter = function () {
-    document.getElementById("filterNomor").value = "";
-    document.getElementById("filterTahun").value = "";
+data=res.data;
 
-    inboxData = [...originalInboxData];
-    currentPage = 1;
+}
 
-    updateBadge(inboxData.length);
-    updateNotifInbox();
-    renderTable();
-  };
+countEl.innerText=data.length;
 
-  /* ================= RENDER ================= */
-  function renderTable() {
-    tableBody.innerHTML = "";
+if(badgeEl){
 
-    if (inboxData.length === 0) {
-      tableBody.innerHTML = `
-        <tr>
-          <td colspan="10" class="text-center text-gray-500 py-6">
-            Tidak ada inbox masuk
-          </td>
-        </tr>`;
-      updatePagination();
-      return;
-    }
+badgeEl.classList.toggle(
+"hidden",
+data.length===0
+);
 
-    const start = (currentPage - 1) * perPage;
-    const pageData = inboxData.slice(start, start + perPage);
+}
 
-    pageData.forEach((r, i) => {
-      const tr = document.createElement("tr");
-      tr.dataset.nomor = r[0];
-      tr.onclick = () => selectRow(tr);
+})
 
-      tr.innerHTML = `
-        <td>${start + i + 1}</td>
-        <td>${r[0]}</td>
-        <td>${r[1]}</td>
-        <td>${formatTanggal(r[2])}</td>
-        <td>${r[3]}</td>
-        <td>${r[4]}</td>
-        <td>${r[5] || "-"}</td>
-        <td>${formatTanggal(r[6])}</td>
-        <td class="font-semibold text-green-600">${r[7]}</td>
-        <td>${r[8] || "-"}</td>
-      `;
-      tableBody.appendChild(tr);
-    });
+.catch(()=>{
 
-    updatePagination();
-  }
+countEl.innerText=0;
 
-  /* ================= AKSI TERIMA / TOLAK ================= */
-  window.aksiInbox = function (status) {
-    if (!selectedRow) {
-      alert("Pilih berkas terlebih dahulu");
-      return;
-    }
-  
-    const nomor = selectedRow.dataset.nomor;
-  
-    // 🔒 LOCK tombol agar tidak double klik
-    document.getElementById("btnTerima")?.setAttribute("disabled", true);
-    document.getElementById("btnTolak")?.setAttribute("disabled", true);
-  
-    fetch(APP_CONFIG.API_WEB, {
-      method: "POST",
-      body: JSON.stringify({
-        action: "inboxAction",
-        nomor,
-        status,
-        user: namaUser,
-        seksi: namaSeksi
-      })
-    })
-    .then(r => r.json())
-    .then(res => {
-      if (res.success) {
-  
-        // ✅ TANDA VISUAL BARIS BERHASIL
-        selectedRow.classList.remove("bg-blue-100");
-        selectedRow.classList.add(
-          status === "Diterima" ? "bg-green-100" : "bg-red-100"
-        );
-  
-        // 🔔 NOTIFIKASI
-        showToast(
-          `Berkas ${nomor} berhasil ${status.toLowerCase()}`,
-          "success"
-        );
-  
-        // 🔄 reload inbox (delay biar animasi keliatan)
-        setTimeout(() => {
-          selectedRow = null;
-          loadInboxData();
-        }, 800);
-  
-      } else {
-        showToast(res.message || "Gagal memproses berkas", "error");
-      }
-    })
-    .catch(() => {
-      showToast("Gagal terhubung ke server", "error");
-    })
-    .finally(() => {
-      // 🔓 UNLOCK tombol
-      document.getElementById("btnTerima")?.removeAttribute("disabled");
-      document.getElementById("btnTolak")?.removeAttribute("disabled");
-    });
-  };
-  
-  /* ================= PAGINATION ================= */
-  function updatePagination() {
-    const totalPage = Math.max(1, Math.ceil(inboxData.length / perPage));
-  
-    const elCurrent = document.getElementById("currentPage");
-    const elTotal   = document.getElementById("totalPage");
-  
-    if (elCurrent) elCurrent.innerText = currentPage;
-    if (elTotal)   elTotal.innerText   = totalPage;
-  
-    if (btnPrev) btnPrev.disabled = currentPage === 1;
-    if (btnNext) btnNext.disabled = currentPage >= totalPage;
-  }
-  
+});
 
-  window.nextPage = () => {
-    if (currentPage * perPage < inboxData.length) {
-      currentPage++;
-      renderTable();
-    }
-  };
+};
 
-  window.prevPage = () => {
-    if (currentPage > 1) {
-      currentPage--;
-      renderTable();
-    }
-  };
 
-  /* ================= UTIL ================= */
-  function selectRow(row) {
-    document.querySelectorAll("#tableBody tr")
-      .forEach(tr => tr.classList.remove("bg-blue-100"));
-    row.classList.add("bg-blue-100");
-    selectedRow = row;
-  }
+/* ======================================================
+INIT
+====================================================== */
 
-  function updateBadge(n) {
-    if (badgeBaru) badgeBaru.innerText = n;
-  }
+window.initInboxBerkas=
+function(){
 
-  function updateNotifInbox() {
-    if (!notifInbox || !notifText) return;
-    if (inboxData.length > 0) {
-      notifInbox.classList.remove("hidden");
-      notifText.innerText = `📥 ${inboxData.length} inbox baru masuk`;
-    } else {
-      notifInbox.classList.add("hidden");
-    }
-  }
+tableBody=
+document.getElementById(
+"tableBody"
+);
 
-  function formatTanggal(v) {
-    if (!v) return "-";
-    const d = new Date(v);
-    if (isNaN(d)) return v;
-    const p = n => String(n).padStart(2, "0");
-    return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
-  }
+badgeBaru=
+document.getElementById(
+"badgeBaru"
+);
+
+notifInbox=
+document.getElementById(
+"notifInbox"
+);
+
+notifText=
+document.getElementById(
+"notifText"
+);
+
+inboxBtnPrev=
+document.getElementById(
+"inboxBtnPrev"
+);
+
+inboxBtnNext=
+document.getElementById(
+"inboxBtnNext"
+);
+
+loadInboxData();
+
+};
+
+
+/* ======================================================
+LOAD
+====================================================== */
+
+function loadInboxData(){
+
+fetch(
+`${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`
+)
+
+.then(r=>r.json())
+
+.then(res=>{
+
+if(Array.isArray(res)){
+
+originalInboxData=res;
+
+}
+
+else if(
+
+res &&
+res.success===true &&
+Array.isArray(res.data)
+
+){
+
+originalInboxData=
+res.data;
+
+}
+
+else{
+
+originalInboxData=[];
+
+}
+
+inboxData=[
+...originalInboxData
+];
+
+inboxCurrentPage=1;
+
+updateBadge(
+inboxData.length
+);
+
+updateNotifInbox();
+
+renderInboxTable();
+
+})
+
+.catch(err=>{
+
+console.error(err);
+
+inboxData=[];
+
+renderInboxTable();
+
+});
+
+}
+
+
+/* ======================================================
+FILTER
+====================================================== */
+
+window.applyFilter=
+function(){
+
+const nomor=
+
+document.getElementById(
+"filterNomor"
+).value.trim();
+
+const tahun=
+
+document.getElementById(
+"filterTahun"
+).value.trim();
+
+inboxData=
+
+originalInboxData.filter(
+r=>{
+
+const nt=
+String(
+r[0]||""
+);
+
+if(
+nomor &&
+!nt.includes(nomor)
+){
+
+return false;
+
+}
+
+if(
+tahun &&
+!nt.includes(tahun)
+){
+
+return false;
+
+}
+
+return true;
+
+});
+
+inboxCurrentPage=1;
+
+renderInboxTable();
+
+};
+
+
+window.resetFilter=
+function(){
+
+document.getElementById(
+"filterNomor"
+).value="";
+
+document.getElementById(
+"filterTahun"
+).value="";
+
+inboxData=[
+...originalInboxData
+];
+
+inboxCurrentPage=1;
+
+renderInboxTable();
+
+};
+
+
+/* ======================================================
+RENDER
+====================================================== */
+
+function renderInboxTable(){
+
+tableBody.innerHTML="";
+
+const totalPage=
+
+Math.max(
+1,
+Math.ceil(
+inboxData.length/
+INBOX_PER_PAGE
+)
+);
+
+const start=
+
+(
+inboxCurrentPage-1
+)
+
+*
+INBOX_PER_PAGE;
+
+const end=
+
+start+
+INBOX_PER_PAGE;
+
+const rows=
+
+inboxData.slice(
+start,
+end
+);
+
+if(rows.length===0){
+
+tableBody.innerHTML=
+
+`
+<tr>
+
+<td colspan="10"
+class="text-center py-4">
+
+Tidak ada inbox
+
+</td>
+
+</tr>
+`;
+
+updateInboxPagination();
+
+return;
+
+}
+
+rows.forEach(
+
+(r,i)=>{
+
+const tr=
+document.createElement(
+"tr"
+);
+
+tr.dataset.nomor=
+r[0];
+
+tr.onclick=
+()=>selectRow(tr);
+
+tr.innerHTML=`
+
+<td>
+
+${start+i+1}
+
+</td>
+
+<td>${r[0]}</td>
+
+<td>${r[1]}</td>
+
+<td>
+
+${formatTanggal(r[2])}
+
+</td>
+
+<td>${r[3]}</td>
+
+<td>${r[4]}</td>
+
+<td>
+
+${r[5]||"-"}
+
+</td>
+
+<td>
+
+${formatTanggal(r[6])}
+
+</td>
+
+<td>${r[7]}</td>
+
+<td>
+
+${r[8]||"-"}
+
+</td>
+
+`;
+
+tableBody.appendChild(
+tr
+);
+
+});
+
+updateInboxPagination();
+
+}
+
+
+/* ======================================================
+PAGINATION
+====================================================== */
+
+function updateInboxPagination(){
+
+const totalPage=
+
+Math.max(
+1,
+Math.ceil(
+inboxData.length/
+INBOX_PER_PAGE
+)
+);
+
+document.getElementById(
+"inboxCurrentPage"
+).innerText=
+inboxCurrentPage;
+
+document.getElementById(
+"inboxTotalPage"
+).innerText=
+totalPage;
+
+if(inboxBtnPrev){
+
+inboxBtnPrev.disabled=
+
+inboxCurrentPage<=1;
+
+}
+
+if(inboxBtnNext){
+
+inboxBtnNext.disabled=
+
+inboxCurrentPage>=
+totalPage;
+
+}
+
+}
+
+
+window.inboxNextPage=
+function(){
+
+const totalPage=
+
+Math.ceil(
+inboxData.length/
+INBOX_PER_PAGE
+);
+
+if(
+
+inboxCurrentPage<
+totalPage
+
+){
+
+inboxCurrentPage++;
+
+renderInboxTable();
+
+}
+
+};
+
+
+window.inboxPrevPage=
+function(){
+
+if(
+
+inboxCurrentPage>1
+
+){
+
+inboxCurrentPage--;
+
+renderInboxTable();
+
+}
+
+};
+
+
+/* ======================================================
+SELECT
+====================================================== */
+
+function selectRow(row){
+
+document
+
+.querySelectorAll(
+"#tableBody tr"
+)
+
+.forEach(
+
+x=>
+
+x.classList.remove(
+"bg-blue-100"
+)
+
+);
+
+row.classList.add(
+"bg-blue-100"
+);
+
+selectedRow=row;
+
+}
+
+
+/* ======================================================
+UTIL
+====================================================== */
+
+function updateBadge(n){
+
+if(badgeBaru){
+
+badgeBaru.innerText=n;
+
+}
+
+}
+
+
+function updateNotifInbox(){
+
+if(
+!notifInbox
+||
+!notifText
+){
+
+return;
+
+}
+
+if(
+inboxData.length>0
+){
+
+notifInbox.classList.remove(
+"hidden"
+);
+
+notifText.innerText=
+
+`📥 ${inboxData.length} inbox baru`;
+
+}
+
+else{
+
+notifInbox.classList.add(
+"hidden"
+);
+
+}
+
+}
+
+
+function formatTanggal(v){
+
+if(!v)
+return "-";
+
+const d=
+new Date(v);
+
+if(isNaN(d))
+return v;
+
+const p=
+n=>
+
+String(n)
+
+.padStart(
+2,
+"0"
+);
+
+return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
+
+}
+
 }
