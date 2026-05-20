@@ -431,247 +431,121 @@ window.isAdmin = isAdmin;
   
 
 /* 6===============================notif.js=============================== */
-
-/* ======================================================
-   NOTIF.JS FINAL SMART
-====================================================== */
-
-// ==============================================
-// GLOBAL
-// ==============================================
-
 let lastInboxCount = -1;
-
 window.__NOTIF_TIMER__ =
 window.__NOTIF_TIMER__ || null;
 
-
-// ==============================================
-// LOAD NOTIF
-// ==============================================
-
 function loadInboxNotif() {
-
 const userLogin =
 JSON.parse(
 localStorage.getItem(
 "user"
 ) || "{}"
 );
-
 const namaUser = (
-
 userLogin.nama_lengkap ||
-
 userLogin.nama ||
-
 userLogin.username ||
-
 ""
-
 ).trim();
-
-
 if(
-
 !namaUser ||
-
 !window.APP_CONFIG?.API_WEB
-
 ){
-
 return;
-
 }
-
-
-// ==============================================
-// FETCH INBOX
-// ==============================================
-
 fetch(
-
 `${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`
-
 )
-
 .then(
 r=>r.json()
 )
-
 .then(
 res=>{
-
 let inbox=[];
-
-
-// ARRAY DIRECT
-
 if(
 Array.isArray(res)
 ){
-
 inbox=res;
-
 }
-
-
-// RESPONSE SUCCESS
-
 else if(
-
 res &&
-
 res.success===true &&
-
 Array.isArray(
 res.data
 )
-
 ){
-
 inbox=res.data;
-
 }
-
-
 const total=
 inbox.length;
-
-
-// ==============================================
-// TIDAK ADA PERUBAHAN
-// STOP UPDATE UI
-// ==============================================
-
 if(
 total===
 lastInboxCount
 ){
-
 return;
-
 }
-
 lastInboxCount=
 total;
-
-
-// ==============================================
-// ELEMENT
-// ==============================================
-
 const badge =
 document.getElementById(
 "notifBadge"
 );
-
 const notifInbox =
 document.getElementById(
 "notifInbox"
 );
-
 const notifText =
 document.getElementById(
 "notifText"
 );
-
 const sidebarBadge =
 document.getElementById(
 "inbox-badge"
 );
-
-
-// ==============================================
-// HEADER BADGE
-// ==============================================
-
 if(badge){
-
 badge.innerText=
 total;
-
 badge.classList.toggle(
-
 "hidden",
-
 total===0
-
 );
-
 }
-
-
-// ==============================================
-// SIDEBAR BADGE
-// ==============================================
-
 if(
 sidebarBadge
 ){
-
 sidebarBadge.innerText=
 total;
-
 sidebarBadge.classList.toggle(
-
 "hidden",
-
 total===0
-
 );
-
 }
-
-
-// ==============================================
-// NOTIF TEXT
-// ==============================================
-
 if(
 notifInbox &&
 notifText
 ){
-
 if(
 total>0
 ){
-
 notifInbox.classList.remove(
 "hidden"
 );
-
 notifText.innerText =
-
 `📥 ${total} inbox baru masuk untuk Anda`;
-
 }
-
 else{
-
 notifInbox.classList.add(
 "hidden"
 );
-
 }
-
 }
-
 }
-
 )
-
 .catch(
 ()=>{}
 );
-
 }
-
-
-
-// ==============================================
-// START POLLING
-// ==============================================
 function startNotifPolling(){
 stopNotifPolling();
 // load sekali
