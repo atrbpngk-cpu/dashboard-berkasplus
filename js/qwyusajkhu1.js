@@ -594,22 +594,20 @@ return d.toLocaleString(
 
 }
 
+// auto register
+document.addEventListener(
+"DOMContentLoaded",
+()=>{
 
-/* ======================================================
-GLOBAL EXPORT
-====================================================== */
+window.inboxNextPage = inboxNextPage;
 
-window.initInboxBerkas =
-initInboxBerkas;
+window.inboxPrevPage = inboxPrevPage;
 
-window.applyFilter =
-applyFilter;
+window.applyFilter = applyFilter;
 
-window.resetFilter =
-resetFilter;
+window.resetFilter = resetFilter;
 
-window.inboxNextPage =
-inboxNextPage;
+window.initInboxBerkas = initInboxBerkas;
 
-window.inboxPrevPage =
-inboxPrevPage;
+}
+);
