@@ -31,114 +31,43 @@ let inboxData = [];
 
 let selectedRow = null;
 
-/* PAGINATION KHUSUS INBOX */
 let inboxCurrentPage = 1;
 
 const INBOX_PER_PAGE = 10;
 
 
 /* ======================================================
-DASHBOARD BADGE
-====================================================== */
-
-window.initDashboardInbox =
-function(){
-
-const countEl=
-document.getElementById(
-"dashboardInboxCount"
-);
-
-const badgeEl=
-document.getElementById(
-"dashboardInboxBadge"
-);
-
-if(!countEl) return;
-
-fetch(
-`${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`
-)
-
-.then(r=>r.json())
-
-.then(res=>{
-
-let data=[];
-
-if(Array.isArray(res)){
-
-data=res;
-
-}
-
-else if(
-
-res &&
-res.success===true &&
-Array.isArray(res.data)
-
-){
-
-data=res.data;
-
-}
-
-countEl.innerText=data.length;
-
-if(badgeEl){
-
-badgeEl.classList.toggle(
-"hidden",
-data.length===0
-);
-
-}
-
-})
-
-.catch(()=>{
-
-countEl.innerText=0;
-
-});
-
-};
-
-
-/* ======================================================
 INIT
 ====================================================== */
 
-window.initInboxBerkas=
-function(){
+window.initInboxBerkas = function(){
 
-tableBody=
+tableBody =
 document.getElementById(
 "tableBody"
 );
 
-badgeBaru=
+badgeBaru =
 document.getElementById(
 "badgeBaru"
 );
 
-notifInbox=
+notifInbox =
 document.getElementById(
 "notifInbox"
 );
 
-notifText=
+notifText =
 document.getElementById(
 "notifText"
 );
 
-inboxBtnPrev=
+inboxBtnPrev =
 document.getElementById(
 "inboxBtnPrev"
 );
 
-inboxBtnNext=
+inboxBtnNext =
 document.getElementById(
 "inboxBtnNext"
 );
@@ -148,8 +77,9 @@ loadInboxData();
 };
 
 
+
 /* ======================================================
-LOAD
+LOAD DATA
 ====================================================== */
 
 function loadInboxData(){
@@ -162,36 +92,44 @@ fetch(
 
 .then(res=>{
 
+console.log(
+"RAW API INBOX:",
+res
+);
+
 if(Array.isArray(res)){
 
-originalInboxData=res;
+originalInboxData =
+res;
 
 }
-
 else if(
 
 res &&
-res.success===true &&
+res.success &&
 Array.isArray(res.data)
 
 ){
 
-originalInboxData=
+originalInboxData =
 res.data;
 
 }
-
 else{
 
 originalInboxData=[];
 
 }
 
-inboxData=[
-...originalInboxData
-];
+console.log(
+"TOTAL INBOX:",
+originalInboxData.length
+);
 
-inboxCurrentPage=1;
+inboxData =
+[...originalInboxData];
+
+inboxCurrentPage = 1;
 
 updateBadge(
 inboxData.length
@@ -205,7 +143,12 @@ renderInboxTable();
 
 .catch(err=>{
 
-console.error(err);
+console.error(
+"INBOX ERROR",
+err
+);
+
+originalInboxData=[];
 
 inboxData=[];
 
@@ -216,66 +159,64 @@ renderInboxTable();
 }
 
 
+
 /* ======================================================
 FILTER
 ====================================================== */
 
-window.applyFilter=
-function(){
+window.applyFilter = function(){
 
-const nomor=
-
+const nomor =
 document.getElementById(
 "filterNomor"
 ).value.trim();
 
-const tahun=
-
+const tahun =
 document.getElementById(
 "filterTahun"
 ).value.trim();
 
-inboxData=
+inboxData =
 
 originalInboxData.filter(
 r=>{
 
-const nt=
+const nt =
 String(
-r[0]||""
+r[0] || ""
 );
 
 if(
 nomor &&
-!nt.includes(nomor)
+!nt.includes(
+nomor
+)
 ){
-
 return false;
-
 }
 
 if(
 tahun &&
-!nt.includes(tahun)
+!nt.includes(
+tahun
+)
 ){
-
 return false;
-
 }
 
 return true;
 
 });
 
-inboxCurrentPage=1;
+inboxCurrentPage = 1;
 
 renderInboxTable();
 
 };
 
 
-window.resetFilter=
-function(){
+
+window.resetFilter = function(){
 
 document.getElementById(
 "filterNomor"
@@ -285,15 +226,15 @@ document.getElementById(
 "filterTahun"
 ).value="";
 
-inboxData=[
-...originalInboxData
-];
+inboxData =
+[...originalInboxData];
 
 inboxCurrentPage=1;
 
 renderInboxTable();
 
 };
+
 
 
 /* ======================================================
@@ -304,31 +245,39 @@ function renderInboxTable(){
 
 tableBody.innerHTML="";
 
-const totalPage=
+const totalPage =
 
 Math.max(
 1,
 Math.ceil(
-inboxData.length/
+inboxData.length /
 INBOX_PER_PAGE
 )
 );
 
-const start=
+if(
+inboxCurrentPage >
+totalPage
+){
+
+inboxCurrentPage =
+totalPage;
+
+}
+
+const start =
 
 (
 inboxCurrentPage-1
 )
-
 *
 INBOX_PER_PAGE;
 
-const end=
-
-start+
+const end =
+start +
 INBOX_PER_PAGE;
 
-const rows=
+const rows =
 
 inboxData.slice(
 start,
@@ -341,14 +290,10 @@ tableBody.innerHTML=
 
 `
 <tr>
-
 <td colspan="10"
 class="text-center py-4">
-
 Tidak ada inbox
-
 </td>
-
 </tr>
 `;
 
@@ -359,61 +304,44 @@ return;
 }
 
 rows.forEach(
-
 (r,i)=>{
 
-const tr=
+const tr =
 document.createElement(
 "tr"
 );
 
-tr.dataset.nomor=
+tr.dataset.nomor =
 r[0];
 
-tr.onclick=
+tr.onclick =
 ()=>selectRow(tr);
 
 tr.innerHTML=`
 
-<td>
+<td>${start+i+1}</td>
 
-${start+i+1}
+<td>${r[0]||"-"}</td>
 
-</td>
-
-<td>${r[0]}</td>
-
-<td>${r[1]}</td>
+<td>${r[1]||"-"}</td>
 
 <td>
-
 ${formatTanggal(r[2])}
-
 </td>
 
-<td>${r[3]}</td>
+<td>${r[3]||"-"}</td>
 
-<td>${r[4]}</td>
+<td>${r[4]||"-"}</td>
 
-<td>
-
-${r[5]||"-"}
-
-</td>
+<td>${r[5]||"-"}</td>
 
 <td>
-
 ${formatTanggal(r[6])}
-
 </td>
 
-<td>${r[7]}</td>
+<td>${r[7]||"-"}</td>
 
-<td>
-
-${r[8]||"-"}
-
-</td>
+<td>${r[8]||"-"}</td>
 
 `;
 
@@ -428,44 +356,43 @@ updateInboxPagination();
 }
 
 
+
 /* ======================================================
 PAGINATION
 ====================================================== */
 
 function updateInboxPagination(){
 
-const totalPage=
+const totalPage =
 
 Math.max(
 1,
 Math.ceil(
-inboxData.length/
+inboxData.length /
 INBOX_PER_PAGE
 )
 );
 
 document.getElementById(
 "inboxCurrentPage"
-).innerText=
+).innerText =
 inboxCurrentPage;
 
 document.getElementById(
 "inboxTotalPage"
-).innerText=
+).innerText =
 totalPage;
 
 if(inboxBtnPrev){
 
-inboxBtnPrev.disabled=
-
+inboxBtnPrev.disabled =
 inboxCurrentPage<=1;
 
 }
 
 if(inboxBtnNext){
 
-inboxBtnNext.disabled=
-
+inboxBtnNext.disabled =
 inboxCurrentPage>=
 totalPage;
 
@@ -474,21 +401,22 @@ totalPage;
 }
 
 
-window.inboxNextPage=
-function(){
 
-const totalPage=
+window.inboxNextPage=function(){
 
+const totalPage =
+
+Math.max(
+1,
 Math.ceil(
-inboxData.length/
+inboxData.length /
 INBOX_PER_PAGE
+)
 );
 
 if(
-
-inboxCurrentPage<
+inboxCurrentPage <
 totalPage
-
 ){
 
 inboxCurrentPage++;
@@ -500,13 +428,11 @@ renderInboxTable();
 };
 
 
-window.inboxPrevPage=
-function(){
+
+window.inboxPrevPage=function(){
 
 if(
-
 inboxCurrentPage>1
-
 ){
 
 inboxCurrentPage--;
@@ -518,6 +444,7 @@ renderInboxTable();
 };
 
 
+
 /* ======================================================
 SELECT
 ====================================================== */
@@ -525,19 +452,14 @@ SELECT
 function selectRow(row){
 
 document
-
 .querySelectorAll(
 "#tableBody tr"
 )
-
 .forEach(
-
 x=>
-
 x.classList.remove(
 "bg-blue-100"
 )
-
 );
 
 row.classList.add(
@@ -547,6 +469,7 @@ row.classList.add(
 selectedRow=row;
 
 }
+
 
 
 /* ======================================================
@@ -564,16 +487,14 @@ badgeBaru.innerText=n;
 }
 
 
+
 function updateNotifInbox(){
 
 if(
-!notifInbox
-||
+!notifInbox ||
 !notifText
 ){
-
 return;
-
 }
 
 if(
@@ -584,12 +505,11 @@ notifInbox.classList.remove(
 "hidden"
 );
 
-notifText.innerText=
+notifText.innerText =
 
 `📥 ${inboxData.length} inbox baru`;
 
 }
-
 else{
 
 notifInbox.classList.add(
@@ -601,22 +521,21 @@ notifInbox.classList.add(
 }
 
 
+
 function formatTanggal(v){
 
 if(!v)
 return "-";
 
-const d=
+const d =
 new Date(v);
 
 if(isNaN(d))
 return v;
 
-const p=
+const p =
 n=>
-
 String(n)
-
 .padStart(
 2,
 "0"
