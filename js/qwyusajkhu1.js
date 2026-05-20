@@ -61,7 +61,7 @@ if (!window.__INBOX_JS_LOADED__) {
   
         if (total === 0) {
           countEl.className = "text-2xl font-bold text-gray-400";
-        } else if (total < 5) {
+        } else if (total < 10) {
           countEl.className = "text-2xl font-bold text-yellow-600";
         } else {
           countEl.className = "text-2xl font-bold text-red-600";
