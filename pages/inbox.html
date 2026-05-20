@@ -1,125 +1,272 @@
-
 <script src="../js/auth.js"></script>
 <script src="../js/auth-guard.js"></script>
 
 <div class="bg-white rounded-lg shadow">
 
- 
-  <div class="px-6 py-3 border-b flex items-center gap-4 overflow-hidden">
+    <!-- HEADER -->
+    <div class="px-6 py-3 border-b flex items-center gap-4 overflow-hidden">
 
-    <img src="icons/inbox.svg" class="w-4 h-4">
+        <img
+            src="icons/inbox.svg"
+            class="w-4 h-4">
 
-    <h2 class="text-sm font-semibold text-blue-600 whitespace-nowrap">
-      Inbox Berkas
-    </h2>
+        <h2 class="text-sm font-semibold text-blue-600 whitespace-nowrap">
 
-    
-    <div id="notifInbox"
-         class="hidden flex-1 overflow-hidden whitespace-nowrap cursor-pointer"
-         onclick="loadPage('inbox.html')">
-      <div id="notifText"
-           class="inline-block text-sm text-red-600 font-semibold">
-        📥 Inbox baru masuk
-      </div>
+            Inbox Berkas
+
+        </h2>
+
+        <!-- NOTIF -->
+        <div
+            id="notifInbox"
+            class="hidden flex-1 overflow-hidden whitespace-nowrap cursor-pointer"
+            onclick="loadPage('inbox.html')">
+
+            <div
+                id="notifText"
+                class="inline-block text-sm text-red-600 font-semibold">
+
+                📥 Inbox baru masuk
+
+            </div>
+
+        </div>
+
+        <!-- BADGE -->
+        <span
+            class="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded whitespace-nowrap">
+
+            <span id="badgeBaru">
+
+                0
+
+            </span>
+
+            baru
+
+        </span>
+
     </div>
 
-    <span class="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded whitespace-nowrap">
-      <span id="badgeBaru">0</span> baru
-    </span>
 
-  </div>
+    <!-- FILTER -->
+    <div
+        class="px-6 py-4 flex flex-wrap items-center gap-4 text-sm">
 
-  
-  <div class="px-6 py-4 flex flex-wrap items-center gap-4 text-sm">
-    <div class="flex items-center gap-2">
-      <label class="text-gray-600">Nomor:</label>
-      <input id="filterNomor" type="text"
-             class="border rounded px-3 py-1.5 w-32"
-             placeholder="Nomor">
+        <div class="flex items-center gap-2">
+
+            <label class="text-gray-600">
+
+                Nomor:
+
+            </label>
+
+            <input
+                id="filterNomor"
+                type="text"
+                placeholder="Nomor"
+                class="border rounded px-3 py-1.5 w-32">
+
+        </div>
+
+        <div class="flex items-center gap-2">
+
+            <label class="text-gray-600">
+
+                Tahun:
+
+            </label>
+
+            <input
+                id="filterTahun"
+                type="text"
+                placeholder="Tahun"
+                class="border rounded px-3 py-1.5 w-24">
+
+        </div>
+
+        <button
+            onclick="applyFilter()"
+            class="bg-blue-600 text-white px-4 py-1.5 rounded hover:bg-blue-700">
+
+            🔍 Cari
+
+        </button>
+
+        <button
+            onclick="resetFilter()"
+            class="bg-gray-200 text-gray-700 px-4 py-1.5 rounded hover:bg-gray-300">
+
+            Reset
+
+        </button>
+
     </div>
 
-    <div class="flex items-center gap-2">
-      <label class="text-gray-600">Tahun:</label>
-      <input id="filterTahun" type="text"
-             class="border rounded px-3 py-1.5 w-24"
-             placeholder="Tahun">
+
+    <!-- TABLE -->
+    <div
+        class="px-6 pb-4 overflow-x-auto">
+
+        <table
+            class="w-full border text-sm">
+
+            <thead class="bg-gray-100">
+
+                <tr>
+
+                    <th class="border px-2 py-2 w-8 text-center">
+
+                        #
+
+                    </th>
+
+                    <th class="border px-2 py-2">
+
+                        Nomor/Tahun
+
+                    </th>
+
+                    <th class="border px-2 py-2">
+
+                        Pengirim
+
+                    </th>
+
+                    <th class="border px-2 py-2">
+
+                        Tgl Dikirim
+
+                    </th>
+
+                    <th class="border px-2 py-2">
+
+                        Nama Seksi
+
+                    </th>
+
+                    <th class="border px-2 py-2">
+
+                        Dikirim Ke
+
+                    </th>
+
+                    <th class="border px-2 py-2">
+
+                        Penerima
+
+                    </th>
+
+                    <th class="border px-2 py-2">
+
+                        Tgl Diterima
+
+                    </th>
+
+                    <th class="border px-2 py-2">
+
+                        Status
+
+                    </th>
+
+                    <th class="border px-2 py-2">
+
+                        Keterangan
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="tableBody">
+
+            </tbody>
+
+        </table>
+
+
+        <!-- FOOTER -->
+        <div
+            class="mt-4 flex justify-between items-center flex-wrap gap-4 text-sm">
+
+
+            <!-- ACTION -->
+            <div class="flex gap-2">
+
+                <button
+                    id="btnTerima"
+                    onclick="aksiInbox('Diterima')"
+                    class="bg-green-600 text-white px-4 py-1.5 rounded hover:bg-green-700">
+
+                    Terima
+
+                </button>
+
+                <button
+                    id="btnTolak"
+                    onclick="aksiInbox('Ditolak')"
+                    class="bg-red-600 text-white px-4 py-1.5 rounded hover:bg-red-700">
+
+                    Tolak
+
+                </button>
+
+            </div>
+
+
+            <!-- PAGINATION -->
+            <div
+                id="inboxPagination"
+                class="flex items-center gap-3 text-xs">
+
+                <button
+                    id="inboxBtnPrev"
+                    onclick="inboxPrevPage()"
+                    class="bg-purple-600 text-white px-3 py-1 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled>
+
+                    ◀ Prev
+
+                </button>
+
+                <span class="text-gray-500">
+
+                    Hal
+
+                    <span
+                        id="inboxCurrentPage"
+                        class="font-semibold text-black">
+
+                        1
+
+                    </span>
+
+                    /
+
+                    <span
+                        id="inboxTotalPage"
+                        class="font-semibold text-black">
+
+                        1
+
+                    </span>
+
+                </span>
+
+                <button
+                    id="inboxBtnNext"
+                    onclick="inboxNextPage()"
+                    class="bg-purple-600 text-white px-3 py-1 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+
+                    Next ▶
+
+                </button>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <button onclick="applyFilter()"
-      class="bg-blue-600 text-white px-4 py-1.5 rounded hover:bg-blue-700">
-      🔍 Cari
-    </button>
-
-    <button onclick="resetFilter()"
-      class="bg-gray-200 text-gray-700 px-4 py-1.5 rounded hover:bg-gray-300">
-      Reset
-    </button>
-  </div>
-
-  
-  <div class="px-6 pb-4 overflow-x-auto">
-
-    <table class="w-full border text-sm">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="border px-2 py-2 w-8 text-center">#</th>
-          <th class="border px-2 py-2">Nomor/Tahun</th>
-          <th class="border px-2 py-2">Pengirim</th>
-          <th class="border px-2 py-2">Tgl Dikirim</th>
-          <th class="border px-2 py-2">Nama Seksi</th>
-          <th class="border px-2 py-2">Dikirim Ke</th>
-          <th class="border px-2 py-2">Penerima</th>
-          <th class="border px-2 py-2">Tgl Diterima</th>
-          <th class="border px-2 py-2">Status</th>
-          <th class="border px-2 py-2">Keterangan</th>
-        </tr>
-      </thead>
-
-      <tbody id="tableBody"></tbody>
-    </table>
-
-    
-    <div class="mt-4 flex justify-between items-center text-sm">
-        <div class="flex gap-2">   
-            <button
-                id="btnTerima"
-                onclick="aksiInbox('Diterima')"
-                class="bg-green-600 text-white px-4 py-1.5 rounded hover:bg-green-700">    
-                Terima    
-            </button>    
-            <button
-                id="btnTolak"
-                onclick="aksiInbox('Ditolak')"
-                class="bg-red-600 text-white px-4 py-1.5 rounded hover:bg-red-700">    
-                Tolak    
-            </button>    
-        </div>    
-        <div class="flex items-center gap-2 text-xs">    
-            <button
-                id="inboxBtnPrev"
-                onclick="inboxPrevPage()"
-                class="bg-purple-600 text-white px-2 py-1.5 rounded disabled:opacity-50"
-                disabled>    
-                ◀ Prev    
-            </button>    
-            <span class="text-gray-500">    
-                Hal    
-                <span id="inboxCurrentPage">    
-                    1    
-                </span>    
-                /    
-                <span id="inboxTotalPage">    
-                    1    
-                </span>    
-            </span>    
-            <button
-                id="inboxBtnNext"
-                onclick="inboxNextPage()"
-                class="bg-purple-600 text-white px-2 py-1.5 rounded">   
-                Next ▶    
-            </button>   
-        </div>    
-    </div>
-  </div>
 </div>
-
