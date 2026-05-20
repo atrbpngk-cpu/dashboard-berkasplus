@@ -26,7 +26,7 @@ const GlobalLoading = (() => {
   }, true);
 
   function isUserAction() {
-    return Date.now() - lastUserAction < 10000; // 0.8 detik
+    return Date.now() - lastUserAction < 15000; // 0.8 detik
   }
 
   /* ================= CORE ================= */
