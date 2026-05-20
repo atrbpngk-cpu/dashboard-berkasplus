@@ -2,19 +2,19 @@
    INBOX.JS
 ====================================================== */
 
-if (!window.__INBOX_JS_LOADED__) {
+if(!window.__INBOX_JS_LOADED__){
 
-window.__INBOX_JS_LOADED__ = true;
+window.__INBOX_JS_LOADED__=true;
 
-const userLogin =
+const userLogin=
 JSON.parse(
-localStorage.getItem("user") || "{}"
+localStorage.getItem("user")||"{}"
 );
 
-const namaUser =
+const namaUser=
 (
-userLogin.nama_lengkap ||
-userLogin.nama ||
+userLogin.nama_lengkap||
+userLogin.nama||
 ""
 ).trim();
 
@@ -26,22 +26,22 @@ let notifText;
 let inboxBtnPrev;
 let inboxBtnNext;
 
-let originalInboxData = [];
-let inboxData = [];
+let originalInboxData=[];
+let inboxData=[];
 
-let selectedRow = null;
+let selectedRow=null;
 
-/* PAGINATION KHUSUS INBOX */
-let inboxCurrentPage = 1;
+/* PAGINATION KHUSUS */
+let inboxCurrentPage=1;
 
-const INBOX_PER_PAGE = 10;
+const INBOX_PER_PAGE=10;
 
 
 /* ======================================================
 DASHBOARD BADGE
 ====================================================== */
 
-window.initDashboardInbox =
+window.initDashboardInbox=
 function(){
 
 const countEl=
@@ -84,7 +84,8 @@ data=res.data;
 
 }
 
-countEl.innerText=data.length;
+countEl.innerText=
+data.length;
 
 if(badgeEl){
 
@@ -104,6 +105,7 @@ countEl.innerText=0;
 });
 
 };
+
 
 
 /* ======================================================
@@ -143,13 +145,16 @@ document.getElementById(
 "inboxBtnNext"
 );
 
+if(!tableBody) return;
+
 loadInboxData();
 
 };
 
 
+
 /* ======================================================
-LOAD
+LOAD DATA
 ====================================================== */
 
 function loadInboxData(){
@@ -187,9 +192,8 @@ originalInboxData=[];
 
 }
 
-inboxData=[
-...originalInboxData
-];
+inboxData=
+[...originalInboxData];
 
 inboxCurrentPage=1;
 
@@ -205,7 +209,10 @@ renderInboxTable();
 
 .catch(err=>{
 
-console.error(err);
+console.error(
+"INBOX ERROR",
+err
+);
 
 inboxData=[];
 
@@ -216,6 +223,7 @@ renderInboxTable();
 }
 
 
+
 /* ======================================================
 FILTER
 ====================================================== */
@@ -224,13 +232,11 @@ window.applyFilter=
 function(){
 
 const nomor=
-
 document.getElementById(
 "filterNomor"
 ).value.trim();
 
 const tahun=
-
 document.getElementById(
 "filterTahun"
 ).value.trim();
@@ -247,7 +253,9 @@ r[0]||""
 
 if(
 nomor &&
-!nt.includes(nomor)
+!nt.includes(
+nomor
+)
 ){
 
 return false;
@@ -256,7 +264,9 @@ return false;
 
 if(
 tahun &&
-!nt.includes(tahun)
+!nt.includes(
+tahun
+)
 ){
 
 return false;
@@ -274,6 +284,7 @@ renderInboxTable();
 };
 
 
+
 window.resetFilter=
 function(){
 
@@ -285,15 +296,15 @@ document.getElementById(
 "filterTahun"
 ).value="";
 
-inboxData=[
-...originalInboxData
-];
+inboxData=
+[...originalInboxData];
 
 inboxCurrentPage=1;
 
 renderInboxTable();
 
 };
+
 
 
 /* ======================================================
@@ -313,6 +324,16 @@ inboxData.length/
 INBOX_PER_PAGE
 )
 );
+
+if(
+inboxCurrentPage>
+totalPage
+){
+
+inboxCurrentPage=
+totalPage;
+
+}
 
 const start=
 
@@ -342,7 +363,8 @@ tableBody.innerHTML=
 `
 <tr>
 
-<td colspan="10"
+<td
+colspan="10"
 class="text-center py-4">
 
 Tidak ada inbox
@@ -350,6 +372,7 @@ Tidak ada inbox
 </td>
 
 </tr>
+
 `;
 
 updateInboxPagination();
@@ -357,6 +380,7 @@ updateInboxPagination();
 return;
 
 }
+
 
 rows.forEach(
 
@@ -428,6 +452,7 @@ updateInboxPagination();
 }
 
 
+
 /* ======================================================
 PAGINATION
 ====================================================== */
@@ -454,15 +479,9 @@ document.getElementById(
 ).innerText=
 totalPage;
 
-if(inboxBtnPrev){
-
 inboxBtnPrev.disabled=
 
 inboxCurrentPage<=1;
-
-}
-
-if(inboxBtnNext){
 
 inboxBtnNext.disabled=
 
@@ -471,7 +490,6 @@ totalPage;
 
 }
 
-}
 
 
 window.inboxNextPage=
@@ -500,13 +518,12 @@ renderInboxTable();
 };
 
 
+
 window.inboxPrevPage=
 function(){
 
 if(
-
 inboxCurrentPage>1
-
 ){
 
 inboxCurrentPage--;
@@ -516,6 +533,7 @@ renderInboxTable();
 }
 
 };
+
 
 
 /* ======================================================
@@ -549,6 +567,7 @@ selectedRow=row;
 }
 
 
+
 /* ======================================================
 UTIL
 ====================================================== */
@@ -564,12 +583,15 @@ badgeBaru.innerText=n;
 }
 
 
+
 function updateNotifInbox(){
 
 if(
-!notifInbox
-||
+
+!notifInbox ||
+
 !notifText
+
 ){
 
 return;
@@ -599,6 +621,7 @@ notifInbox.classList.add(
 }
 
 }
+
 
 
 function formatTanggal(v){
