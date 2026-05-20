@@ -4,13 +4,15 @@
 <div class="bg-white rounded-lg shadow">
 
     <!-- HEADER -->
-    <div class="px-6 py-3 border-b flex items-center gap-4 overflow-hidden">
+    <div
+        class="px-6 py-3 border-b flex items-center gap-4 overflow-hidden">
 
         <img
             src="icons/inbox.svg"
             class="w-4 h-4">
 
-        <h2 class="text-sm font-semibold text-blue-600 whitespace-nowrap">
+        <h2
+            class="text-sm font-semibold text-blue-600 whitespace-nowrap">
 
             Inbox Berkas
 
@@ -53,9 +55,11 @@
     <div
         class="px-6 py-4 flex flex-wrap items-center gap-4 text-sm">
 
-        <div class="flex items-center gap-2">
+        <div
+            class="flex items-center gap-2">
 
-            <label class="text-gray-600">
+            <label
+                class="text-gray-600">
 
                 Nomor:
 
@@ -69,9 +73,12 @@
 
         </div>
 
-        <div class="flex items-center gap-2">
 
-            <label class="text-gray-600">
+        <div
+            class="flex items-center gap-2">
+
+            <label
+                class="text-gray-600">
 
                 Tahun:
 
@@ -85,6 +92,7 @@
 
         </div>
 
+
         <button
             onclick="applyFilter()"
             class="bg-blue-600 text-white px-4 py-1.5 rounded hover:bg-blue-700">
@@ -92,6 +100,7 @@
             🔍 Cari
 
         </button>
+
 
         <button
             onclick="resetFilter()"
@@ -111,7 +120,8 @@
         <table
             class="w-full border text-sm">
 
-            <thead class="bg-gray-100">
+            <thead
+                class="bg-gray-100">
 
                 <tr>
 
@@ -123,7 +133,7 @@
 
                     <th class="border px-2 py-2">
 
-                        Nomor/Tahun
+                        Nomor / Tahun
 
                     </th>
 
@@ -179,7 +189,8 @@
 
             </thead>
 
-            <tbody id="tableBody">
+            <tbody
+                id="tableBody">
 
             </tbody>
 
@@ -189,74 +200,85 @@
         <!-- FOOTER -->
         <div
             class="mt-4 flex justify-between items-center flex-wrap gap-4 text-sm">
-            
-            <div class="flex gap-2">
-            
-            <button
-            id="btnTerima"
-            onclick="aksiInbox('Diterima')"
-            class="bg-green-600 text-white px-4 py-1.5 rounded hover:bg-green-700">
-            
-            Terima
-            
-            </button>
-            
-            <button
-            id="btnTolak"
-            onclick="aksiInbox('Ditolak')"
-            class="bg-red-600 text-white px-4 py-1.5 rounded hover:bg-red-700">
-            
-            Tolak
-            
-            </button>
-            
-            </div>
-            
-            
+
+            <!-- ACTION -->
             <div
-            class="flex items-center gap-3 text-xs">
-            
-            <button
-            id="inboxBtnPrev"
-            onclick="inboxPrevPage()"
-            class="bg-purple-600 text-white px-3 py-1 rounded disabled:opacity-50"
-            disabled>
-            
-            ◀ Prev
-            
-            </button>
-            
-            <span>
-            
-            Hal
-            
-            <b id="inboxCurrentPage">
-            
-            1
-            
-            </b>
-            
-            /
-            
-            <b id="inboxTotalPage">
-            
-            1
-            
-            </b>
-            
-            </span>
-            
-            <button
-            id="inboxBtnNext"
-            onclick="inboxNextPage()"
-            class="bg-purple-600 text-white px-3 py-1 rounded">
-            
-            Next ▶
-            
-            </button>
-            
+                class="flex gap-2">
+
+                <button
+                    id="btnTerima"
+                    onclick="aksiInbox('Diterima')"
+                    class="bg-green-600 text-white px-4 py-1.5 rounded hover:bg-green-700">
+
+                    Terima
+
+                </button>
+
+                <button
+                    id="btnTolak"
+                    onclick="aksiInbox('Ditolak')"
+                    class="bg-red-600 text-white px-4 py-1.5 rounded hover:bg-red-700">
+
+                    Tolak
+
+                </button>
+
             </div>
-        
+
+
+            <!-- PAGINATION -->
+            <div
+                id="inboxPagination"
+                class="flex items-center gap-3 text-xs">
+
+                <button
+                    id="inboxBtnPrev"
+                    onclick="inboxPrevPage()"
+                    class="bg-purple-600 text-white px-3 py-1 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled>
+
+                    ◀ Prev
+
+                </button>
+
+
+                <span
+                    class="text-gray-600">
+
+                    Hal
+
+                    <span
+                        id="inboxCurrentPage"
+                        class="font-semibold text-black">
+
+                        1
+
+                    </span>
+
+                    /
+
+                    <span
+                        id="inboxTotalPage"
+                        class="font-semibold text-black">
+
+                        1
+
+                    </span>
+
+                </span>
+
+
+                <button
+                    id="inboxBtnNext"
+                    onclick="inboxNextPage()"
+                    class="bg-purple-600 text-white px-3 py-1 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+
+                    Next ▶
+
+                </button>
+
+            </div>
+
         </div>
 
     </div>
