@@ -80,44 +80,46 @@
 
     
     <div class="mt-4 flex justify-between items-center text-sm">
-
-      <div class="flex gap-2">
-        <button id="btnTerima"
-          onclick="aksiInbox('Diterima')"
-          class="bg-green-600 text-white px-4 py-1.5 rounded hover:bg-green-700">
-          Terima
-        </button>
-
-        <button id="btnTolak"
-          onclick="aksiInbox('Ditolak')"
-          class="bg-red-600 text-white px-4 py-1.5 rounded hover:bg-red-700">
-          Tolak
-        </button>
-      </div>
-
-      <div class="flex items-center gap-2 text-xs">
-        <button id="btnPrev"
-          onclick="prevPage()"
-          class="bg-purple-600 text-white px-2 py-1.5 rounded disabled:opacity-50"
-          disabled>
-          ◀ Prev
-        </button>
-
-        <span class="text-gray-500">
-          Hal <span id="currentPage">1</span> /
-          <span id="totalPage">1</span>
-        </span>
-
-        <button id="btnNext"
-          onclick="nextPage()"
-          class="bg-purple-600 text-white px-2 py-1.5 rounded">
-          Next ▶
-        </button>
-      </div>
-
+        <div class="flex gap-2">   
+            <button
+                id="btnTerima"
+                onclick="aksiInbox('Diterima')"
+                class="bg-green-600 text-white px-4 py-1.5 rounded hover:bg-green-700">    
+                Terima    
+            </button>    
+            <button
+                id="btnTolak"
+                onclick="aksiInbox('Ditolak')"
+                class="bg-red-600 text-white px-4 py-1.5 rounded hover:bg-red-700">    
+                Tolak    
+            </button>    
+        </div>    
+        <div class="flex items-center gap-2 text-xs">    
+            <button
+                id="inboxBtnPrev"
+                onclick="inboxPrevPage()"
+                class="bg-purple-600 text-white px-2 py-1.5 rounded disabled:opacity-50"
+                disabled>    
+                ◀ Prev    
+            </button>    
+            <span class="text-gray-500">    
+                Hal    
+                <span id="inboxCurrentPage">    
+                    1    
+                </span>    
+                /    
+                <span id="inboxTotalPage">    
+                    1    
+                </span>    
+            </span>    
+            <button
+                id="inboxBtnNext"
+                onclick="inboxNextPage()"
+                class="bg-purple-600 text-white px-2 py-1.5 rounded">   
+                Next ▶    
+            </button>   
+        </div>    
     </div>
-
   </div>
-
 </div>
 
