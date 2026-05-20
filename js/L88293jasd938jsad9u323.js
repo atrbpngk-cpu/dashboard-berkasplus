@@ -1,8 +1,4 @@
-// ======================================================
-// GLOBAL LOADING SMART FINAL
 // js/loading.js
-// ======================================================
-
 window.USE_GLOBAL_LOADING = true;
 
 const GlobalLoading = (() => {
@@ -18,34 +14,30 @@ const GlobalLoading = (() => {
     );
 
     if(!el){
-
-        console.warn(
-            "[GlobalLoading] tidak ditemukan"
-        );
-
         return {};
     }
 
-    let counter = 0;
+    let active = false;
 
-    let renderWait = false;
+    let timer = null;
 
-    // ==================================================
-    // SHOW
-    // ==================================================
+    // ==========================================
+    // SHOW MANUAL ONLY
+    // ==========================================
 
     function show(
-        text="Sedang memproses data..."
+        text=
+        "Sedang memproses data..."
     ){
 
-        counter++;
+        clearTimeout(
+            timer
+        );
 
-        if(textEl){
+        active=true;
 
-            textEl.textContent =
-            text;
-
-        }
+        textEl.textContent =
+        text;
 
         el.classList.remove(
             "hidden"
@@ -57,23 +49,19 @@ const GlobalLoading = (() => {
 
     }
 
-    // ==================================================
+    // ==========================================
     // HIDE
-    // ==================================================
+    // ==========================================
 
     function hide(){
 
-        counter =
-        Math.max(
-            0,
-            counter-1
-        );
+        active=false;
 
-        if(
-            counter===0
-            &&
-            !renderWait
-        ){
+        timer=
+        setTimeout(()=>{
+
+            if(active)
+            return;
 
             el.classList.add(
                 "hidden"
@@ -83,19 +71,21 @@ const GlobalLoading = (() => {
                 "flex"
             );
 
-        }
+        },200);
 
     }
 
-    // ==================================================
+    // ==========================================
     // FORCE
-    // ==================================================
+    // ==========================================
 
     function forceHide(){
 
-        counter=0;
+        active=false;
 
-        renderWait=false;
+        clearTimeout(
+            timer
+        );
 
         el.classList.add(
             "hidden"
@@ -107,40 +97,9 @@ const GlobalLoading = (() => {
 
     }
 
-    // ==================================================
-    // WAIT DOM RENDER
-    // ==================================================
-
-    async function waitRender(){
-
-        renderWait=true;
-
-        await new Promise(
-            r=>
-            requestAnimationFrame(
-                ()=>{
-
-                    requestAnimationFrame(
-                        r
-                    );
-
-                }
-            )
-        );
-
-        renderWait=false;
-
-        if(counter===0){
-
-            forceHide();
-
-        }
-
-    }
-
-    // ==================================================
+    // ==========================================
     // TRACK PROMISE
-    // ==================================================
+    // ==========================================
 
     async function trackPromise(
         promise,
@@ -169,30 +128,44 @@ const GlobalLoading = (() => {
 
     }
 
-    // ==================================================
-    // FETCH WRAPPER
-    // TIDAK AUTO LOADING
-    // ==================================================
+    // ==========================================
+    // WAIT DOM
+    // ==========================================
 
-    const originalFetch =
-    window.fetch;
+    async function waitRender(){
+
+        await new Promise(
+            r=>
+            requestAnimationFrame(
+                ()=>{
+
+                    requestAnimationFrame(
+                        r
+                    );
+
+                }
+            )
+        );
+
+    }
+
+    // ==========================================
+    // NONAKTIF AUTO FETCH
+    // ==========================================
 
     window.fetch =
-    (...args)=>
-    originalFetch(
-        ...args
+    window.fetch.bind(
+        window
     );
 
     return {
 
         show,
-
         hide,
-
         forceHide,
+        trackPromise,
+        waitRender
 
-        waitRender,
-
-        trackPromise
     };
+
 })();
