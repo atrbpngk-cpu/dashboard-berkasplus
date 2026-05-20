@@ -2,10 +2,6 @@
    INBOX.JS
 ====================================================== */
 
-if (!window.__INBOX_JS_LOADED__) {
-
-window.__INBOX_JS_LOADED__ = true;
-
 const userLogin =
 JSON.parse(
 localStorage.getItem("user") || "{}"
@@ -40,7 +36,7 @@ const INBOX_PER_PAGE = 10;
 INIT
 ====================================================== */
 
-window.initInboxBerkas = function(){
+function initInboxBerkas(){
 
 tableBody =
 document.getElementById(
@@ -74,8 +70,7 @@ document.getElementById(
 
 loadInboxData();
 
-};
-
+}
 
 
 /* ======================================================
@@ -93,7 +88,7 @@ fetch(
 .then(res=>{
 
 console.log(
-"RAW API INBOX:",
+"RAW API:",
 res
 );
 
@@ -127,7 +122,9 @@ originalInboxData.length
 );
 
 inboxData =
-[...originalInboxData];
+[
+...originalInboxData
+];
 
 inboxCurrentPage = 1;
 
@@ -144,7 +141,7 @@ renderInboxTable();
 .catch(err=>{
 
 console.error(
-"INBOX ERROR",
+"INBOX ERROR:",
 err
 );
 
@@ -159,12 +156,11 @@ renderInboxTable();
 }
 
 
-
 /* ======================================================
 FILTER
 ====================================================== */
 
-window.applyFilter = function(){
+function applyFilter(){
 
 const nomor =
 document.getElementById(
@@ -212,11 +208,11 @@ inboxCurrentPage = 1;
 
 renderInboxTable();
 
-};
+}
 
 
 
-window.resetFilter = function(){
+function resetFilter(){
 
 document.getElementById(
 "filterNomor"
@@ -227,21 +223,25 @@ document.getElementById(
 ).value="";
 
 inboxData =
-[...originalInboxData];
+[
+...originalInboxData
+];
 
-inboxCurrentPage=1;
+inboxCurrentPage = 1;
 
 renderInboxTable();
 
-};
-
+}
 
 
 /* ======================================================
-RENDER
+RENDER TABLE
 ====================================================== */
 
 function renderInboxTable(){
+
+if(!tableBody)
+return;
 
 tableBody.innerHTML="";
 
@@ -270,6 +270,7 @@ const start =
 (
 inboxCurrentPage-1
 )
+
 *
 INBOX_PER_PAGE;
 
@@ -290,10 +291,14 @@ tableBody.innerHTML=
 
 `
 <tr>
+
 <td colspan="10"
 class="text-center py-4">
+
 Tidak ada inbox
+
 </td>
+
 </tr>
 `;
 
@@ -317,31 +322,69 @@ r[0];
 tr.onclick =
 ()=>selectRow(tr);
 
-tr.innerHTML=`
+tr.innerHTML =
 
-<td>${start+i+1}</td>
-
-<td>${r[0]||"-"}</td>
-
-<td>${r[1]||"-"}</td>
+`
 
 <td>
+
+${start+i+1}
+
+</td>
+
+<td>
+
+${r[0]||"-"}
+
+</td>
+
+<td>
+
+${r[1]||"-"}
+
+</td>
+
+<td>
+
 ${formatTanggal(r[2])}
+
 </td>
-
-<td>${r[3]||"-"}</td>
-
-<td>${r[4]||"-"}</td>
-
-<td>${r[5]||"-"}</td>
 
 <td>
-${formatTanggal(r[6])}
+
+${r[3]||"-"}
+
 </td>
 
-<td>${r[7]||"-"}</td>
+<td>
 
-<td>${r[8]||"-"}</td>
+${r[4]||"-"}
+
+</td>
+
+<td>
+
+${r[5]||"-"}
+
+</td>
+
+<td>
+
+${formatTanggal(r[6])}
+
+</td>
+
+<td>
+
+${r[7]||"-"}
+
+</td>
+
+<td>
+
+${r[8]||"-"}
+
+</td>
 
 `;
 
@@ -354,7 +397,6 @@ tr
 updateInboxPagination();
 
 }
-
 
 
 /* ======================================================
@@ -386,6 +428,7 @@ totalPage;
 if(inboxBtnPrev){
 
 inboxBtnPrev.disabled =
+
 inboxCurrentPage<=1;
 
 }
@@ -393,6 +436,7 @@ inboxCurrentPage<=1;
 if(inboxBtnNext){
 
 inboxBtnNext.disabled =
+
 inboxCurrentPage>=
 totalPage;
 
@@ -402,7 +446,7 @@ totalPage;
 
 
 
-window.inboxNextPage=function(){
+function inboxNextPage(){
 
 const totalPage =
 
@@ -425,11 +469,11 @@ renderInboxTable();
 
 }
 
-};
+}
 
 
 
-window.inboxPrevPage=function(){
+function inboxPrevPage(){
 
 if(
 inboxCurrentPage>1
@@ -441,12 +485,11 @@ renderInboxTable();
 
 }
 
-};
-
+}
 
 
 /* ======================================================
-SELECT
+SELECT ROW
 ====================================================== */
 
 function selectRow(row){
@@ -455,11 +498,14 @@ document
 .querySelectorAll(
 "#tableBody tr"
 )
+
 .forEach(
 x=>
+
 x.classList.remove(
 "bg-blue-100"
 )
+
 );
 
 row.classList.add(
@@ -471,14 +517,15 @@ selectedRow=row;
 }
 
 
-
 /* ======================================================
-UTIL
+BADGE
 ====================================================== */
 
 function updateBadge(n){
 
-if(badgeBaru){
+if(
+badgeBaru
+){
 
 badgeBaru.innerText=n;
 
@@ -487,6 +534,9 @@ badgeBaru.innerText=n;
 }
 
 
+/* ======================================================
+NOTIF
+====================================================== */
 
 function updateNotifInbox(){
 
@@ -521,6 +571,9 @@ notifInbox.classList.add(
 }
 
 
+/* ======================================================
+FORMAT TANGGAL
+====================================================== */
 
 function formatTanggal(v){
 
@@ -530,19 +583,33 @@ return "-";
 const d =
 new Date(v);
 
-if(isNaN(d))
+if(
+isNaN(d)
+)
 return v;
 
-const p =
-n=>
-String(n)
-.padStart(
-2,
-"0"
+return d.toLocaleString(
+"id-ID"
 );
 
-return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
-
 }
 
-}
+
+/* ======================================================
+GLOBAL EXPORT
+====================================================== */
+
+window.initInboxBerkas =
+initInboxBerkas;
+
+window.applyFilter =
+applyFilter;
+
+window.resetFilter =
+resetFilter;
+
+window.inboxNextPage =
+inboxNextPage;
+
+window.inboxPrevPage =
+inboxPrevPage;
