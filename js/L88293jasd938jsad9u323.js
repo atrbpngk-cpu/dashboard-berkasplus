@@ -2,170 +2,67 @@
 window.USE_GLOBAL_LOADING = true;
 
 const GlobalLoading = (() => {
+  const el = document.getElementById("globalLoading");
+  const textEl = document.getElementById("globalLoadingText");
 
-    const el =
-    document.getElementById(
-        "globalLoading"
-    );
+  if (!el) {
+    console.warn("[GlobalLoading] #globalLoading tidak ditemukan");
+    return {};
+  }
 
-    const textEl =
-    document.getElementById(
-        "globalLoadingText"
-    );
+  let counter = 0;
+  let lastUserAction = 0;
+    
+  document.addEventListener("click", e => {
+    const btn = e.target.closest("button, a, input[type=submit]");
+    if (!btn) return;
+    lastUserAction = Date.now();
+  }, true);
 
-    if(!el){
-        return {};
+  document.addEventListener("submit", () => {
+    lastUserAction = Date.now();
+  }, true);
+
+  function isUserAction() {
+    return Date.now() - lastUserAction < 10000; // 0.8 detik
+  }
+
+
+  function show(text = "Sedang memproses data...") {
+    counter++;
+    if (textEl) textEl.textContent = text;
+    el.classList.remove("hidden");
+    el.classList.add("flex");
+  }
+
+  function hide() {
+    counter = Math.max(0, counter - 1);
+    if (counter === 0) {
+      el.classList.add("hidden");
+      el.classList.remove("flex");
     }
+  }
 
-    let active = false;
+  function forceHide() {
+    counter = 0;
+    el.classList.add("hidden");
+    el.classList.remove("flex");
+  }
 
-    let timer = null;
-
-    // ==========================================
-    // SHOW MANUAL ONLY
-    // ==========================================
-
-    function show(
-        text=
-        "Sedang memproses data..."
-    ){
-
-        clearTimeout(
-            timer
-        );
-
-        active=true;
-
-        textEl.textContent =
-        text;
-
-        el.classList.remove(
-            "hidden"
-        );
-
-        el.classList.add(
-            "flex"
-        );
-
+  const originalFetch = window.fetch;
+  window.fetch = async (...args) => {
+    const useLoading = isUserAction();
+    if (useLoading) {
+      show();
     }
-
-    // ==========================================
-    // HIDE
-    // ==========================================
-
-    function hide(){
-
-        active=false;
-
-        timer=
-        setTimeout(()=>{
-
-            if(active)
-            return;
-
-            el.classList.add(
-                "hidden"
-            );
-
-            el.classList.remove(
-                "flex"
-            );
-
-        },200);
-
+    try {
+      return await originalFetch(...args);
+    } finally {
+      if (useLoading) {
+        hide();
+      }
     }
+  };
 
-    // ==========================================
-    // FORCE
-    // ==========================================
-
-    function forceHide(){
-
-        active=false;
-
-        clearTimeout(
-            timer
-        );
-
-        el.classList.add(
-            "hidden"
-        );
-
-        el.classList.remove(
-            "flex"
-        );
-
-    }
-
-    // ==========================================
-    // TRACK PROMISE
-    // ==========================================
-
-    async function trackPromise(
-        promise,
-        text=
-        "Sedang memproses data..."
-    ){
-
-        show(text);
-
-        try{
-
-            const result =
-            await promise;
-
-            await waitRender();
-
-            return result;
-
-        }
-
-        finally{
-
-            hide();
-
-        }
-
-    }
-
-    // ==========================================
-    // WAIT DOM
-    // ==========================================
-
-    async function waitRender(){
-
-        await new Promise(
-            r=>
-            requestAnimationFrame(
-                ()=>{
-
-                    requestAnimationFrame(
-                        r
-                    );
-
-                }
-            )
-        );
-
-    }
-
-    // ==========================================
-    // NONAKTIF AUTO FETCH
-    // ==========================================
-
-    window.fetch =
-    window.fetch.bind(
-        window
-    );
-
-    return {
-
-        show,
-        hide,
-        forceHide,
-        trackPromise,
-        waitRender
-
-    };
-
+  return { show, hide, forceHide };
 })();
