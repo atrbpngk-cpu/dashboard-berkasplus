@@ -1390,725 +1390,208 @@ window.initEntryBerkas = initEntryBerkas;
 console.log("kirim.js loaded");
 
 window.initKirimBerkas = function () {
-
   console.log("INIT KIRIM BERKAS");
 
   if (!window.APP_CONFIG?.API_WEB) {
-    console.error(
-      "Maaf layanan sedang tidak tersedia"
-    );
+    console.error(" Maaf Layanan sedang tidak tersedia");
     return;
   }
 
   const API = APP_CONFIG.API_WEB;
-
   let currentBerkas = null;
 
-  // cache dropdown
-  let dropdownLoaded = false;
+  /* ================= DOM ================= */
+  const nomorBerkas = document.getElementById("nomorBerkas");
+  const tahunBerkas = document.getElementById("tahunBerkas");
+  const btnCari = document.getElementById("btnCari");
+  const btnReset = document.getElementById("btnReset");
+  const btnKirim = document.getElementById("btnKirim");
 
-  /* =====================================
-     ELEMENT
-  ===================================== */
+  const frameBawah = document.getElementById("frameBawah");
 
-  const nomorBerkas =
-    document.getElementById(
-      "nomorBerkas"
-    );
+  const hasilTanggal = document.getElementById("hasilTanggal");
+  const hasilNomor   = document.getElementById("hasilNomor");
+  const hasilNama    = document.getElementById("hasilNama");
+  const hasilJenis   = document.getElementById("hasilJenis");
+  const hasilDesa    = document.getElementById("hasilDesa");
+  const hasilPetugas = document.getElementById("hasilPetugas");
 
-  const tahunBerkas =
-    document.getElementById(
-      "tahunBerkas"
-    );
+  const selectSeksi       = document.getElementById("selectSeksi");
+  const selectPetugasUkur = document.getElementById("selectPetugasUkur");
+  const selectDikirimKe   = document.getElementById("selectDikirimKe");
 
-  const btnCari =
-    document.getElementById(
-      "btnCari"
-    );
+  const keterangan = document.getElementById("keterangan");
 
-  const btnReset =
-    document.getElementById(
-      "btnReset"
-    );
+  frameBawah.classList.add("hidden");
 
-  const btnKirim =
-    document.getElementById(
-      "btnKirim"
-    );
+  /* ================= LOADING ================= */
+  const loadingCari  = document.getElementById("loadingCari");
+  const loadingKirim = document.getElementById("loadingKirim");
+  const useGlobalLoading = () => window.USE_GLOBAL_LOADING === true;
 
-  const frameBawah =
-    document.getElementById(
-      "frameBawah"
-    );
+  const show = el => el?.classList.remove("hidden");
+  const hide = el => el?.classList.add("hidden");
 
-  const hasilTanggal =
-    document.getElementById(
-      "hasilTanggal"
-    );
-
-  const hasilNomor =
-    document.getElementById(
-      "hasilNomor"
-    );
-
-  const hasilNama =
-    document.getElementById(
-      "hasilNama"
-    );
-
-  const hasilJenis =
-    document.getElementById(
-      "hasilJenis"
-    );
-
-  const hasilDesa =
-    document.getElementById(
-      "hasilDesa"
-    );
-
-  const hasilPetugas =
-    document.getElementById(
-      "hasilPetugas"
-    );
-
-  const selectSeksi =
-    document.getElementById(
-      "selectSeksi"
-    );
-
-  const selectPetugasUkur =
-    document.getElementById(
-      "selectPetugasUkur"
-    );
-
-  const selectDikirimKe =
-    document.getElementById(
-      "selectDikirimKe"
-    );
-
-  const keterangan =
-    document.getElementById(
-      "keterangan"
-    );
-
-  frameBawah.classList.add(
-    "hidden"
-  );
-
-  /* =====================================
-     LOADING
-  ===================================== */
-
-  const loadingCari =
-    document.getElementById(
-      "loadingCari"
-    );
-
-  const loadingKirim =
-    document.getElementById(
-      "loadingKirim"
-    );
-
-  const useGlobalLoading =
-    () =>
-      window.USE_GLOBAL_LOADING === true;
-
-  const show = el =>
-    el?.classList.remove(
-      "hidden"
-    );
-
-  const hide = el =>
-    el?.classList.add(
-      "hidden"
-    );
-
-  /* =====================================
-     API
-  ===================================== */
-
-  async function apiGet(
-    action,
-    params = {}
-  ) {
-
-    const qs =
-      new URLSearchParams({
-
-        action,
-
-        ...params
-
-      }).toString();
-
-    const res =
-      await fetch(
-        `${API}?${qs}`
-      );
-
+  /* ================= API HELPER ================= */
+  async function apiGet(action, params = {}) {
+    const qs = new URLSearchParams({ action, ...params }).toString();
+    const res = await fetch(`${API}?${qs}`);
     return res.json();
   }
 
-  async function apiPost(
-    payload
-  ) {
-
-    const res =
-      await fetch(
-        API,
-        {
-
-          method:
-            "POST",
-
-          headers:{
-            "Content-Type":
-            "application/json"
-          },
-
-          body:
-            JSON.stringify(
-              payload
-            )
-
-        }
-      );
-
-    return res.json();
-  }
-
-  /* =====================================
-     SELECT
-  ===================================== */
-
-  function fillSelect(
-    el,
-    data=[],
-    placeholder
-  ){
-
-    el.innerHTML =
-      `<option value="">
-        ${placeholder}
-      </option>`;
-
-    data.forEach(v=>{
-
-      const opt =
-        document.createElement(
-          "option"
-        );
-
-      opt.value=v;
-
-      opt.textContent=v;
-
-      el.appendChild(
-        opt
-      );
-
+  async function apiPost(payload) {
+    const res = await fetch(API, {
+      method: "POST",
+      body: JSON.stringify(payload)
     });
-
+    return res.json();
   }
 
-  /* =====================================
-     LOAD DROPDOWN SEKALI
-  ===================================== */
+  function fillSelect(el, data = [], placeholder) {
+    el.innerHTML = `<option value="">${placeholder}</option>`;
+    data.forEach(v => {
+      const opt = document.createElement("option");
+      opt.value = v;
+      opt.textContent = v;
+      el.appendChild(opt);
+    });
+  }
 
-  async function loadDropdowns(){
+  /* ================= LOAD MASTER ================= */
+  async function loadDropdowns() {
+    const seksiRes = await apiGet("daftarSeksi");
+    if (seksiRes.success) {
+      fillSelect(selectSeksi, seksiRes.data, "-- Pilih Seksi --");
+    }
 
-    if(
-      dropdownLoaded
-    ){
+    const ukurRes = await apiGet("petugasUkur");
+    if (ukurRes.success) {
+      fillSelect(selectPetugasUkur, ukurRes.data, "-- Pilih Petugas Ukur --");
+    }
 
+    fillSelect(selectDikirimKe, [], "-- Pilih Penerima --");
+  }
+
+  /* ================= SEKSI → STAFF ================= */
+  selectSeksi.addEventListener("change", async () => {
+    const res = await apiGet("staffSeksi");
+    if (!res.success) {
+      alert("Gagal memuat staff seksi");
       return;
-
     }
-
-    try{
-
-      const [
-
-        seksiRes,
-
-        ukurRes
-
-      ] =
-
-      await Promise.all([
-
-        apiGet(
-          "daftarSeksi"
-        ),
-
-        apiGet(
-          "petugasUkur"
-        )
-
-      ]);
-
-      if(
-        seksiRes.success
-      ){
-
-        fillSelect(
-
-          selectSeksi,
-
-          seksiRes.data,
-
-          "-- Pilih Seksi --"
-
-        );
-
-      }
-
-      if(
-        ukurRes.success
-      ){
-
-        fillSelect(
-
-          selectPetugasUkur,
-
-          ukurRes.data,
-
-          "-- Pilih Petugas Ukur --"
-
-        );
-
-      }
-
-      fillSelect(
-
-        selectDikirimKe,
-
-        [],
-
-        "-- Pilih Penerima --"
-
-      );
-
-      dropdownLoaded=true;
-
-    }
-
-    catch(err){
-
-      console.error(
-        err
-      );
-
-    }
-
-  }
-
-  // preload background
-  loadDropdowns();
-
-  /* =====================================
-     STAFF SEKSI
-  ===================================== */
-
-  selectSeksi.addEventListener(
-
-    "change",
-
-    async()=>{
-
-      try{
-
-        const res =
-          await apiGet(
-            "staffSeksi"
-          );
-
-        if(
-          !res.success
-        ){
-
-          alert(
-            "Gagal memuat staff seksi"
-          );
-
-          return;
-
-        }
-
-        fillSelect(
-
-          selectDikirimKe,
-
-          res.data,
-
-          "-- Pilih Penerima --"
-
-        );
-
-      }
-
-      catch(err){
-
-        console.error(
-          err
-        );
-
-      }
-
-    }
-
-  );
-
-  /* =====================================
-     CARI BERKAS
-  ===================================== */
-
-  btnCari.onclick =
-    async()=>{
-
-    if(
-      !useGlobalLoading()
-    ){
-
-      show(
-        loadingCari
-      );
-
-    }
-
-    try{
-
-      const nomor =
-        nomorBerkas.value.trim();
-
-      const tahun =
-        tahunBerkas.value.trim();
-
-      if(
-        !nomor ||
-        !tahun
-      ){
-
-        alert(
-          "Nomor dan Tahun wajib diisi"
-        );
-
+    fillSelect(selectDikirimKe, res.data, "-- Pilih Penerima --");
+  });
+
+  /* ================= CARI BERKAS ================= */
+  btnCari.onclick = async () => {
+    if (!useGlobalLoading()) show(loadingCari);
+
+    try {
+      const nomor = nomorBerkas.value.trim();
+      const tahun = tahunBerkas.value.trim();
+
+      if (!nomor || !tahun) {
+        alert("Nomor dan Tahun wajib diisi");
         return;
-
       }
 
-      const res =
-        await apiGet(
+      const res = await apiGet("informasi", { nomor, tahun });
 
-          "informasi",
-
-          {
-
-            nomor,
-
-            tahun
-
-          }
-
-        );
-
-      if(
-
-        !res.success ||
-
-        !res.data?.info
-
-      ){
-
-        alert(
-          "Berkas tidak ditemukan"
-        );
-
+      if (!res.success || !res.data?.info) {
+        alert("Berkas tidak ditemukan");
         return;
-
       }
 
-      const info =
-        res.data.info;
+      const info = res.data.info;
 
-      hasilTanggal.innerText =
-        info.tanggal_mulai || "-";
+      hasilTanggal.innerText = info.tanggal_mulai || "-";
+      hasilNomor.innerText   = info.nomor_berkas || "-";
+      hasilNama.innerText    = info.nama_pemohon || "-";
+      hasilJenis.innerText   = info.jenis_permohonan || "-";
+      hasilDesa.innerText    = info.desa_kecamatan || "-";
+      hasilPetugas.innerText = info.petugas_ukur || "-";
 
-      hasilNomor.innerText =
-        info.nomor_berkas || "-";
+      currentBerkas = { nomor: info.nomor_berkas };
 
-      hasilNama.innerText =
-        info.nama_pemohon || "-";
+      await loadDropdowns();
 
-      hasilJenis.innerText =
-        info.jenis_permohonan || "-";
-
-      hasilDesa.innerText =
-        info.desa_kecamatan || "-";
-
-      hasilPetugas.innerText =
-        info.petugas_ukur || "-";
-
-      currentBerkas = {
-
-        nomor:
-          info.nomor_berkas
-
-      };
-
-      if(
-        info.petugas_ukur
-      ){
-
-        selectPetugasUkur.value =
-          info.petugas_ukur;
-
-        selectPetugasUkur.disabled =
-          true;
-
+      if (info.petugas_ukur) {
+        selectPetugasUkur.value = info.petugas_ukur;
+        selectPetugasUkur.disabled = true;
+      } else {
+        selectPetugasUkur.disabled = false;
+        selectPetugasUkur.value = "";
       }
 
-      else{
+      frameBawah.classList.remove("hidden");
 
-        selectPetugasUkur.disabled =
-          false;
-
-        selectPetugasUkur.value="";
-
-      }
-
-      frameBawah.classList.remove(
-        "hidden"
-      );
-
+    } catch (err) {
+      console.error(err);
+      alert("Terjadi kesalahan saat mencari berkas");
+    } finally {
+      if (!useGlobalLoading()) hide(loadingCari);
     }
-
-    catch(err){
-
-      console.error(
-        err
-      );
-
-      alert(
-        "Terjadi kesalahan saat mencari berkas"
-      );
-
-    }
-
-    finally{
-
-      if(
-        !useGlobalLoading()
-      ){
-
-        hide(
-          loadingCari
-        );
-
-      }
-
-    }
-
   };
 
-  /* =====================================
-     KIRIM
-  ===================================== */
+  /* ================= KIRIM BERKAS ================= */
+  btnKirim.onclick = async () => {
+    if (!useGlobalLoading()) show(loadingKirim);
 
-  btnKirim.onclick =
-    async()=>{
-
-    if(
-      !useGlobalLoading()
-    ){
-
-      show(
-        loadingKirim
-      );
-
-    }
-
-    try{
-
-      if(
-        !currentBerkas
-      ){
-
-        alert(
-          "Cari berkas terlebih dahulu"
-        );
-
+    try {
+      if (!currentBerkas) {
+        alert("Cari berkas terlebih dahulu");
         return;
-
       }
 
-      if(
-        !selectSeksi.value
-      ){
-
-        alert(
-          "Seksi wajib dipilih"
-        );
-
+      if (!selectSeksi.value) {
+        alert("Seksi wajib dipilih");
         return;
-
       }
 
-      const user =
-
-        JSON.parse(
-
-          localStorage.getItem(
-            "user"
-          )
-
-          ||
-
-          "{}"
-
-        );
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
 
       const payload = {
-
-        action:
-          "kirimBerkas",
-
-        nomor_berkas:
-          currentBerkas.nomor,
-
-        pengirim:
-
-          user.nama_lengkap ||
-
-          user.nama ||
-
-          user.username ||
-
-          "",
-
-        nama_seksi:
-          selectSeksi.value,
-
-        dikirim_ke:
-          selectDikirimKe.value || "",
-
-        petugas_ukur:
-
-          selectPetugasUkur.disabled
-
-          ?
-
-          hasilPetugas.innerText
-
-          :
-
-          selectPetugasUkur.value,
-
-        keterangan:
-          keterangan.value || ""
-
+        action: "kirimBerkas",
+        nomor_berkas: currentBerkas.nomor,
+        pengirim: user.nama_lengkap || user.nama || user.username,
+        nama_seksi: selectSeksi.value,
+        dikirim_ke: selectDikirimKe.value || "",
+        petugas_ukur: selectPetugasUkur.disabled
+          ? hasilPetugas.innerText
+          : selectPetugasUkur.value,
+        keterangan: keterangan.value || ""
       };
 
-      const res =
-        await apiPost(
-          payload
-        );
+      const res = await apiPost(payload);
 
-      if(
-        !res.success
-      ){
-
-        alert(
-
-          res.message ||
-
-          "Gagal mengirim"
-
-        );
-
+      if (!res.success) {
+        alert(res.message || "Gagal mengirim");
         return;
-
       }
 
-      alert(
+      alert(res.data || "Berkas berhasil dikirim");
+      frameBawah.classList.add("hidden");
 
-        res.data ||
-
-        "Berkas berhasil dikirim"
-
-      );
-
-      frameBawah.classList.add(
-        "hidden"
-      );
-
+    } catch (err) {
+      console.error(err);
+      alert("Terjadi kesalahan saat mengirim berkas");
+    } finally {
+      if (!useGlobalLoading()) hide(loadingKirim);
     }
-
-    catch(err){
-
-      console.error(
-        err
-      );
-
-      alert(
-        "Terjadi kesalahan saat mengirim"
-      );
-
-    }
-
-    finally{
-
-      if(
-        !useGlobalLoading()
-      ){
-
-        hide(
-          loadingKirim
-        );
-
-      }
-
-    }
-
   };
 
-  /* =====================================
-     RESET
-  ===================================== */
+  /* ================= RESET ================= */
+  btnReset.onclick = () => {
+    frameBawah.classList.add("hidden");
+    nomorBerkas.value = "";
+    tahunBerkas.value = "";
+    currentBerkas = null;
 
-  btnReset.onclick=()=>{
-
-    frameBawah.classList.add(
-      "hidden"
-    );
-
-    nomorBerkas.value="";
-
-    tahunBerkas.value="";
-
-    currentBerkas=null;
-
-    selectPetugasUkur.disabled=
-      false;
-
-    selectPetugasUkur.value="";
-
-    keterangan.value="";
-
-    fillSelect(
-
-      selectDikirimKe,
-
-      [],
-
-      "-- Pilih Penerima --"
-
-    );
-
+    selectPetugasUkur.disabled = false;
+    selectPetugasUkur.value = "";
+    fillSelect(selectDikirimKe, [], "-- Pilih Penerima --");
   };
-
 };
-
 /* 11===============================inbox.js=============================== */
 /* 12===============================history.js=============================== */
 /* 13===============================beban-petugas.js=============================== */
