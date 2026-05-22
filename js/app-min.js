@@ -1171,20 +1171,27 @@ window.initKirimBerkas = function () {
         return;
       }
 
-      const info = res.data.info;
-      const master =
-        res.data.master || {};   
-        fillSelect(  
-        selectSeksi,master.seksi || [],     
-        "-- Pilih Seksi --" 
+       const info = res.data.info;  
+       const master =
+       res.data.master || {};
+        
+       fillSelect(
+       selectSeksi,master.seksi || [],
+       "-- Pilih Seksi --"
         );
-        fillSelect(selectPetugasUkur,master.petugas || [],        
-        "-- Pilih Petugas Ukur --"        
-        );        
-        cacheStaff =master.staff || [];        
-        fillSelect(      
-        selectDikirimKe,     
-        "-- Pilih Penerima --" 
+        
+        fillSelect(
+        selectPetugasUkur,master.petugas || [],
+        "-- Pilih Petugas Ukur --"
+        );
+        
+        cacheStaff =
+        master.staff || [];
+        
+        fillSelect(
+        selectDikirimKe,
+        [],
+        "-- Pilih Penerima --"
         );
 
       hasilTanggal.innerText = info.tanggal_mulai || "-";
