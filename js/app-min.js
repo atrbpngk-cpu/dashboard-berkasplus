@@ -1144,18 +1144,23 @@ window.initKirimBerkas = function () {
 
   /* ================= LOAD MASTER ================= */
   async function loadDropdowns() {
-    const seksiRes = await apiGet("daftarSeksi");
-    if (seksiRes.success) {
-      fillSelect(selectSeksi, seksiRes.data, "-- Pilih Seksi --");
+    const [seksiRes,ukurRes] = await Promise.all([
+    apiGet("daftarSeksi"),
+    apiGet("petugasUkur")]);
+    if(
+    seksiRes.success)
+    {fillSelect(selectSeksi,seksiRes.data,
+    "-- Pilih Seksi --");
     }
-
-    const ukurRes = await apiGet("petugasUkur");
-    if (ukurRes.success) {
-      fillSelect(selectPetugasUkur, ukurRes.data, "-- Pilih Petugas Ukur --");
+    if(ukurRes.success
+    ){
+    fillSelect(selectPetugasUkur,ukurRes.data,
+    "-- Pilih Petugas Ukur --");
     }
-
-    fillSelect(selectDikirimKe, [], "-- Pilih Penerima --");
-  }
+    fillSelect(selectDikirimKe,[],
+    "-- Pilih Penerima --"
+    );
+    }
 
   /* ================= SEKSI → STAFF ================= */
   selectSeksi.addEventListener("change", async () => {
@@ -1198,7 +1203,7 @@ window.initKirimBerkas = function () {
 
       currentBerkas = { nomor: info.nomor_berkas };
 
-      await loadDropdowns();
+      loadDropdowns();
 
       if (info.petugas_ukur) {
         selectPetugasUkur.value = info.petugas_ukur;
