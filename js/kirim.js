@@ -4,6 +4,8 @@
  * =====================================================
  */
 
+
+
 console.log("kirim.js loaded");
 
 window.initKirimBerkas = function () {
@@ -74,31 +76,15 @@ window.initKirimBerkas = function () {
     });
   }
 
-  /* ================= LOAD MASTER ================= */
-  async function loadDropdowns() {
-    const seksiRes = await apiGet("daftarSeksi");
-    if (seksiRes.success) {
-      fillSelect(selectSeksi, seksiRes.data, "-- Pilih Seksi --");
-    }
-
-    const ukurRes = await apiGet("petugasUkur");
-    if (ukurRes.success) {
-      fillSelect(selectPetugasUkur, ukurRes.data, "-- Pilih Petugas Ukur --");
-    }
-
-    fillSelect(selectDikirimKe, [], "-- Pilih Penerima --");
-  }
-
   /* ================= SEKSI → STAFF ================= */
-  selectSeksi.addEventListener("change", async () => {
-    const res = await apiGet("staffSeksi");
-    if (!res.success) {
-      alert("Gagal memuat staff seksi");
-      return;
-    }
-    fillSelect(selectDikirimKe, res.data, "-- Pilih Penerima --");
-  });
-
+    let cacheStaff = [];
+    selectSeksi.addEventListener(
+    "change",
+    ()=>{   
+    fillSelect(    selectDikirimKe,cacheStaff,    
+    "-- Pilih Penerima --"    
+    );    
+    });
   /* ================= CARI BERKAS ================= */
   btnCari.onclick = async () => {
     if (!useGlobalLoading()) show(loadingCari);
@@ -120,6 +106,20 @@ window.initKirimBerkas = function () {
       }
 
       const info = res.data.info;
+      const master =
+        res.data.master || {};   
+        fillSelect(  
+        selectSeksi,master.seksi || [],     
+        "-- Pilih Seksi --" 
+        );
+        fillSelect(selectPetugasUkur,master.petugas || [],        
+        "-- Pilih Petugas Ukur --"        
+        );        
+        cacheStaff =master.staff || [];        
+        fillSelect(      
+        selectDikirimKe,     
+        "-- Pilih Penerima --" 
+        );
 
       hasilTanggal.innerText = info.tanggal_mulai || "-";
       hasilNomor.innerText   = info.nomor_berkas || "-";
@@ -129,8 +129,6 @@ window.initKirimBerkas = function () {
       hasilPetugas.innerText = info.petugas_ukur || "-";
 
       currentBerkas = { nomor: info.nomor_berkas };
-
-      await loadDropdowns();
 
       if (info.petugas_ukur) {
         selectPetugasUkur.value = info.petugas_ukur;
