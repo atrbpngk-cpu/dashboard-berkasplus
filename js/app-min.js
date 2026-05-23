@@ -1073,7 +1073,22 @@ window.initEntryBerkas = initEntryBerkas;
 /* 10===============================kirim.js=============================== */
 
 console.log("kirim.js loaded");
-
+/*==========*/
+let MASTER_KIRIM = null;
+async function loadMasterKirim(API){
+  if(MASTER_KIRIM)
+    return MASTER_KIRIM;
+  const res =
+    await fetch(
+      `${API}?action=informasiMaster`
+    );
+  const json =
+    await res.json();
+  MASTER_KIRIM =
+    json.data || {};
+  return MASTER_KIRIM;
+}
+/*==========*/
 window.initKirimBerkas = function () {
   console.log("INIT KIRIM BERKAS");
 
@@ -1171,22 +1186,25 @@ window.initKirimBerkas = function () {
         return;
       }
 
-       const info = res.data.info;  
-       const master =
-       res.data.master || {};
-        
-       fillSelect(
-       selectSeksi,master.seksi || [],
-       "-- Pilih Seksi --"
+        const master =
+        await loadMasterKirim(
+          API
         );
         
         fillSelect(
-        selectPetugasUkur,master.petugas || [],
-        "-- Pilih Petugas Ukur --"
+          selectSeksi,
+          master.seksi || [],
+          "-- Pilih Seksi --"
+        );
+        
+        fillSelect(
+          selectPetugasUkur,
+          master.petugas || [],
+          "-- Pilih Petugas Ukur --"
         );
         
         cacheStaff =
-        master.staff || [];
+          master.staff || [];
         
         fillSelect(
         selectDikirimKe,
