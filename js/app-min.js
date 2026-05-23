@@ -103,40 +103,48 @@ window.isAdmin = isAdmin;
 
 
 /* 4===============================auth-guard.js=============================== */
-
-
-(function authGuard() {
-    const publicPages = ["login.html", "register.html"];
-    const currentPage = location.pathname
-      .split("/")
-      .pop()
-      .toLowerCase();
-    if (publicPages.includes(currentPage)) {
-      return;
-    }
-
-    const loginStatus = localStorage.getItem("login");
-    const userRaw = localStorage.getItem("user");
-  
-    if (loginStatus !== "true" || !userRaw) {
-      clearSessionAndRedirect();
-      return;
-    }
-  
-    let user;
-    try {
-      user = JSON.parse(userRaw);
-    } catch (e) {
-      clearSessionAndRedirect();
-      return;
-    }
-  
-    if (!user.username) {
-      clearSessionAndRedirect();
-      return;
-    }
-
-  })();
+    (function authGuard() {
+        const publicPages = [
+          "login.html",
+          "register.html"
+        ];
+        const currentPage =
+          (
+            location.pathname
+              .split("/")
+              .pop()
+            || "index.html"
+          ).toLowerCase();
+        if (publicPages.includes(currentPage)) {
+          return;
+        }
+        const loginStatus =
+          localStorage.getItem("login");
+        const userRaw =
+          localStorage.getItem("user");
+        if (
+          loginStatus !== "true" ||
+          !userRaw
+        ) {
+          clearSessionAndRedirect();
+          return;
+        }
+        let user;
+        try {
+          user = JSON.parse(userRaw);
+        } catch {
+          clearSessionAndRedirect();
+          return;
+        }
+        const username =
+          user.username ||
+          user.Username ||
+          "";
+        if (!username) {
+          clearSessionAndRedirect();
+          return;
+        }
+    })();
 
   function clearSessionAndRedirect() {
     localStorage.clear();
@@ -148,11 +156,20 @@ window.isAdmin = isAdmin;
 /* 5===============================router.js=============================== */
 
 
-(function checkAuth() {
-    if (localStorage.getItem("login") !== "true") {
-      window.location.href = "login.html";
-    }
-  })();
+    (function checkAuth() {   
+        const login =
+          localStorage.getItem("login");   
+        const user =
+          localStorage.getItem("user");   
+        if (
+          login !== "true" ||
+          !user
+        ) {  
+          window.location.replace(
+            "login.html"
+          );   
+        }  
+    })();
 
   document.addEventListener("DOMContentLoaded", () => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
