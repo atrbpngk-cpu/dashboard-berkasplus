@@ -1142,15 +1142,22 @@ window.initKirimBerkas = function () {
     });
   }
 
-  /* ================= SEKSI → STAFF ================= */
+    /* ================= SEKSI → STAFF ================= */
+    
     let cacheStaff = [];
+    
     selectSeksi.addEventListener(
-    "change",
-    ()=>{   
-    fillSelect(    selectDikirimKe,cacheStaff,    
-    "-- Pilih Penerima --"    
-    );    
-    });
+      "change",
+      () => {
+    
+        fillSelect(
+          selectDikirimKe,
+          cacheStaff,
+          "-- Pilih Penerima --"
+        );
+    
+      }
+    );
   /* ================= CARI BERKAS ================= */
   btnCari.onclick = async () => {
     if (!useGlobalLoading()) show(loadingCari);
@@ -1171,30 +1178,26 @@ window.initKirimBerkas = function () {
         return;
       }
 
-        const[
-        seksiRes,
-        puRes,
-        staffRes
-        ]=await Promise.all([
-        apiGet("daftarSeksi"),
-        apiGet("petugasUkur"),
-        apiGet("staffSeksi")
-        ]);
+        const info=
+        res.data.info;
+        
+        const master=
+        res.data.master||{};
         
         fillSelect(
         selectSeksi,
-        seksiRes.data||[],
+        master.seksi||[],
         "-- Pilih Seksi --"
         );
         
         fillSelect(
         selectPetugasUkur,
-        puRes.data||[],
+        master.petugas||[],
         "-- Pilih Petugas Ukur --"
         );
         
         cacheStaff=
-        staffRes.data||[];
+        master.staff||[];
         
         fillSelect(
         selectDikirimKe,
