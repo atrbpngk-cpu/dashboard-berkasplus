@@ -34,7 +34,13 @@ if (!window.__QWYUSAJKHU1_JS_LOADED__) {
       return;
     }
   
-    fetch(`${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`)
+    fetch(
+   `${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`,
+   {
+      headers:{
+         "X-SILENT":"1"
+      }
+   })
       .then(r => r.json())
       .then(res => {
   
@@ -88,7 +94,13 @@ if (!window.__QWYUSAJKHU1_JS_LOADED__) {
   };
 
   function loadInboxData() {
-    fetch(`${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`)
+    fetch(
+   `${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`,
+   {
+      headers:{
+         "X-SILENT":"1"
+      }
+   })
       .then(r => r.json())
       .then(res => {
   
