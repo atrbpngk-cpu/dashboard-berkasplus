@@ -78,57 +78,94 @@ if (!window.__QWYUSAJKHU1_JS_LOADED__) {
       });
   };
   
-  window.initInboxBerkas = function () {
-    if (!window.APP_CONFIG?.API_WEB || !namaUser) return;
-
-    tableBody   = document.getElementById("tableBody");
-    badgeBaru   = document.getElementById("badgeBaru");
-    notifInbox = document.getElementById("notifInbox");
-    notifText  = document.getElementById("notifText");
-    btnPrev    = document.getElementById("btnPrev");
-    btnNext    = document.getElementById("btnNext");
-
-    if (!tableBody) return;
-
-    loadInboxData();
-  };
+   window.initInboxBerkas = function () {  
+       if (
+         !window.APP_CONFIG?.API_WEB ||
+         !namaUser
+       ) return;
+       GlobalLoading?.show?.(
+         "Memuat inbox..."
+       ); 
+       tableBody =
+         document.getElementById(
+           "tableBody"
+         ); 
+       badgeBaru =
+         document.getElementById(
+           "badgeBaru"
+         );  
+       notifInbox =
+         document.getElementById(
+           "notifInbox"
+         ); 
+       notifText =
+         document.getElementById(
+           "notifText"
+         );  
+       btnPrev =
+         document.getElementById(
+           "btnPrev"
+         );  
+       btnNext =
+         document.getElementById(
+           "btnNext"
+         );  
+       if (!tableBody){  
+         GlobalLoading
+         ?.hide?.();  
+         return;  
+       }  
+       loadInboxData();  
+   };
 
   function loadInboxData() {
-    fetch(
-   `${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`,
-   {
-      headers:{
-         "X-SILENT":"1"
-      }
-   })
-      .then(r => r.json())
-      .then(res => {
-  
-        if (Array.isArray(res)) {
-          originalInboxData = res;
-        } 
-        else if (res && res.success === true && Array.isArray(res.data)) {
-          originalInboxData = res.data;
-        } 
-        else {
-          originalInboxData = [];
-        }
-  
-        inboxData = [...originalInboxData];
-        currentPage = 1;
-  
-        updateBadge(inboxData.length);
-        updateNotifInbox();
-        renderTable();
-      })
-      .catch(err => {
-        console.error("Inbox API error:", err);
-        inboxData = [];
-        updateBadge(0);
-        renderTable();
+      fetch(
+         `${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`,
+         {
+            headers:{
+               "X-SILENT":"1"
+            }
+         }
+      )     
+      .then(r => r.json())      
+      .then(res => {      
+         if (Array.isArray(res)) {     
+            originalInboxData = res;    
+         }      
+         else if (
+            res &&
+            res.success === true &&
+            Array.isArray(res.data)
+         ) {      
+            originalInboxData =
+               res.data;    
+         }     
+         else {     
+            originalInboxData = [];     
+         }    
+         inboxData =
+            [...originalInboxData];  
+         currentPage = 1;    
+         updateBadge(
+            inboxData.length
+         );    
+         updateNotifInbox();    
+         renderTable();    
+      })     
+      .catch(err => {      
+         console.error(
+            "Inbox API error:",
+            err
+         );     
+         inboxData = [];     
+         updateBadge(0);     
+         renderTable();      
+      })      
+      .finally(() => {     
+         GlobalLoading
+         ?.hide?.();      
       });
   }
-  
   window.applyFilter = function () {
     const nomor = document.getElementById("filterNomor").value.trim();
     const tahun = document.getElementById("filterTahun").value.trim();
