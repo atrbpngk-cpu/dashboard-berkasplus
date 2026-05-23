@@ -91,43 +91,57 @@ const GlobalLoading = (() => {
   const originalFetch =
     window.fetch;
   window.fetch =
-    async (...args) => {
-      const opt =
-        args[1] || {};
-      const headers =
-        opt.headers || {};
-      const silent =
+  async (...args)=>{ 
+     const opt =
+        args[1]||{};
+     const headers =
+        opt.headers||{}; 
+     const silent =
         headers[
-          "X-SILENT"
-        ] === "1";
-      const noLoading =
+           "X-SILENT"
+        ]==="1";
+     const noLoading =
         headers[
-          "X-NO-LOADING"
-        ] === "1";
-      const useLoading =
-        window.USE_GLOBAL_LOADING === true
-        && !silent
-        &&!noLoading
-        &&
-        isUserAction();
-      if (
-        useLoading
-      ) {
-        show();
-      }
-      try {
-        return await originalFetch(
-          ...args
+           "X-NO-LOADING"
+        ]==="1"; 
+     const url =
+        String(
+           args[0]||""
+        );  
+     const isInboxRequest =
+        url.includes(
+           "action=inbox"
+        ) 
+        ||
+        url.includes(
+           "action=inboxUser"
         );
-      }
-      finally {
-        if (
-          useLoading
-        ) {
-          hide();
-        }
-      }
-    };
+     const useLoading =
+        window
+        .USE_GLOBAL_LOADING
+        === true
+        &&
+        !silent
+        &&
+        !noLoading
+        &&
+        !isInboxRequest
+        &&
+        isUserAction(); 
+     if(useLoading){ 
+        show(); 
+     } 
+     try{  
+        return await originalFetch(
+           ...args
+        );  
+     }  
+     finally{ 
+        if(useLoading){ 
+           hide(); 
+        }  
+     }
+  };
   return {show,hide,forceHide
   };
 })();
