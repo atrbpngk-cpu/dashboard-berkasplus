@@ -111,20 +111,16 @@ const GlobalLoading = (() => {
                 );
             const lowerUrl =
                 url.toLowerCase();
-            const isNotifInbox =
+            const isInboxPolling =
+            
+                lowerUrl.includes(
+                    "action=inbox"
+                )
+            
+                ||
+            
                 lowerUrl.includes(
                     "action=inboxuser"
-                )
-                ||
-                (
-                    lowerUrl.includes(
-                        "action=inbox"
-                    )
-                    &&
-                    !location.pathname
-                        .includes(
-                            "inbox"
-                        )
                 );
             const useLoading =
                 window
@@ -135,7 +131,7 @@ const GlobalLoading = (() => {
                 &&
                 !noLoading
                 &&
-                !isNotifInbox
+                !isInboxPolling
                 &&
                 isUserAction();
             if (
