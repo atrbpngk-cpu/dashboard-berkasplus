@@ -449,114 +449,219 @@ window.isAdmin = isAdmin;
 
 /* 6===============================notif.js=============================== */
 
+let isLoadingInbox = false;
+let lastInboxCount = -1;
+
 function loadInboxNotif() {
-    const userLogin = JSON.parse(localStorage.getItem("user") || "{}");
-    const namaUser = (
-      userLogin.nama_lengkap ||
-      userLogin.nama ||
-      userLogin.username ||
-      ""
-    ).trim();
-    
-    if (!namaUser || !window.APP_CONFIG?.API_WEB) return;
-    fetch(`${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`)
-      .then(r => r.json())
-      .then(res => {
-        let inbox = [];    
-        if (Array.isArray(res)) {
-          inbox = res;
-        } else if (res && res.success === true && Array.isArray(res.data)) {
-          inbox = res.data;
-        }   
-        const total = inbox.length;  
-        const badge = document.getElementById("notifBadge");
-        const notifInbox = document.getElementById("notifInbox");
-        const notifText = document.getElementById("notifText");
-        const sidebarBadge = document.getElementById("inbox-badge");
-          
-    
-        if (badge) {
-          badge.innerText = total;
-          badge.classList.toggle("hidden", total === 0);
-        }
-        
-        if (sidebarBadge) {
-          sidebarBadge.innerText = total;
-          sidebarBadge.classList.toggle("hidden", total === 0);
-        }
-      
-        if (notifInbox && notifText) {
-          if (total > 0) {
-            notifInbox.classList.remove("hidden");
-            notifText.innerText = `📥 ${total} inbox baru masuk untuk Anda`;
-          } else {
-            notifInbox.classList.add("hidden");
-          }
-        }
-      })    
-      .catch(() => {});
-  }
-  document.addEventListener("DOMContentLoaded", () => {
+  
+  if (isLoadingInbox) return;
+
+  const userLogin =
+    JSON.parse(
+      localStorage.getItem("user")
+      || "{}"
+    );
+  const namaUser = (
+    userLogin.nama_lengkap ||
+    userLogin.nama ||
+    userLogin.username ||
+    ""
+  ).trim();
+
+  if (
+    !namaUser ||
+    !window.APP_CONFIG?.API_WEB
+  ) return;
+
+  isLoadingInbox = true;
+
+  fetch(
+    `${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`,
+    {
+      headers: {
+        "X-SILENT": "1"
+      }
+    }
+  )
+
+  .then(r => r.json())
+  .then(res => {
+    let inbox = [];
+    if (Array.isArray(res)) {
+      inbox = res;
+    } else if (
+      res &&
+      res.success === true &&
+      Array.isArray(res.data)
+    ) {
+      inbox = res.data;
+    }
+    const total = inbox.length;    
+    if (total === lastInboxCount) return;
+    lastInboxCount = total;
+    const badge =
+      document.getElementById(
+        "notifBadge"
+      );
+    const notifInbox =
+      document.getElementById(
+        "notifInbox"
+      );
+    const notifText =
+      document.getElementById(
+        "notifText"
+      );
+    const sidebarBadge =
+      document.getElementById(
+        "inbox-badge"
+      );
+
+    if (badge) {
+      badge.innerText = total;
+      badge.classList.toggle(
+        "hidden",
+        total === 0
+      );
+    }
+    if (sidebarBadge) {
+      sidebarBadge.innerText = total;
+      sidebarBadge.classList.toggle(
+        "hidden",
+        total === 0
+      );
+    }
+    if (
+      notifInbox &&
+      notifText
+    ) {
+      if (total > 0) {
+        notifInbox.classList.remove(
+          "hidden"
+        );
+        notifText.innerText =
+          `📥 ${total} inbox baru masuk untuk Anda`;
+      }
+      else {
+        notifInbox.classList.add(
+          "hidden"
+        );
+      }
+    }
+  })
+  .catch(err => {
+    console.warn(
+      "Inbox notif gagal:",
+      err
+    );
+  })
+  .finally(() => {
+    isLoadingInbox = false;
+  });
+}
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
     loadInboxNotif();
     setInterval(() => {
-        if (
-          document.visibilityState
-          === "visible"
-       ) {
-          loadInboxNotif();
-       }},30000);
-  });
-  
-  window.showToast = function (message, type = "info") {
-    // buat container kalau belum ada
-    let container = document.getElementById("toastContainer");
-    if (!container) {
-      container = document.createElement("div");
-      container.id = "toastContainer";
-      container.style.position = "fixed";
-      container.style.top = "20px";
-      container.style.right = "20px";
-      container.style.zIndex = "9999";
-      container.style.display = "flex";
-      container.style.flexDirection = "column";
-      container.style.gap = "10px";
-      document.body.appendChild(container);
-    }
-  
-    const toast = document.createElement("div");  
-    const colors = {
-      success: "#16a34a",
-      error: "#dc2626",
-      warning: "#f59e0b",
-      info: "#2563eb"
-    };
-  
-    toast.style.background = colors[type] || colors.info;
-    toast.style.color = "#fff";
-    toast.style.padding = "10px 16px";
-    toast.style.borderRadius = "6px";
-    toast.style.fontSize = "13px";
-    toast.style.boxShadow = "0 4px 12px rgba(0,0,0,.2)";
-    toast.style.opacity = "0";
-    toast.style.transform = "translateY(-10px)";
-    toast.style.transition = "all .3s ease"; 
-    toast.innerText = message;
-  
-    container.appendChild(toast);
-  
-    // animasi masuk
-    setTimeout(() => {
-      toast.style.opacity = "1";
-      toast.style.transform = "translateY(0)";
-    }, 50);
-  
-    // hilang otomatis
-    setTimeout(() => {
-      toast.style.opacity = "0";
-      toast.style.transform = "translateY(-10px)";
-      setTimeout(() => toast.remove(), 300);
-    }, 3000);
+      if (
+        document.visibilityState
+        === "visible"
+      ) {
+        loadInboxNotif();
+      }
+    }, 30000);
+  }
+);
+
+window.showToast = function (
+  message,
+  type = "info"
+) {
+  let container =
+    document.getElementById(
+      "toastContainer"
+    );
+  if (!container) {
+    container =
+      document.createElement(
+        "div"
+      );
+    container.id =
+      "toastContainer";
+    container.style.position =
+      "fixed";
+    container.style.top =
+      "20px";
+    container.style.right =
+      "20px";
+    container.style.zIndex =
+      "9999";
+    container.style.display =
+      "flex";
+    container.style.flexDirection =
+      "column";
+    container.style.gap =
+      "10px";
+    document.body.appendChild(
+      container
+    );
+  }
+  const toast =
+    document.createElement(
+      "div"
+    );
+  const colors = {
+    success:
+      "#16a34a",
+    error:
+      "#dc2626",
+    warning:
+      "#f59e0b",
+    info:
+      "#2563eb"
   };
+  toast.style.background =
+    colors[type] ||
+    colors.info;
+  toast.style.color =
+    "#fff";
+  toast.style.padding =
+    "10px 16px";
+  toast.style.borderRadius =
+    "6px";
+  toast.style.fontSize =
+    "13px";
+  toast.style.boxShadow =
+    "0 4px 12px rgba(0,0,0,.2)";
+  toast.style.opacity =
+    "0";
+  toast.style.transform =
+    "translateY(-10px)";
+  toast.style.transition =
+    "all .3s ease";
+  toast.innerText =
+    message;
+  container.appendChild(
+    toast
+  );
+  setTimeout(() => {
+    toast.style.opacity =
+      "1";
+    toast.style.transform =
+      "translateY(0)";
+  }, 50);
+  setTimeout(() => {
+    toast.style.opacity =
+      "0";
+    toast.style.transform =
+      "translateY(-10px)";
+    setTimeout(
+      () =>
+        toast.remove(),
+      300
+    );
+  }, 3000);
+};
 /* 7===============================informasi.js=============================== */
 
 function initInformasiBerkas() {
