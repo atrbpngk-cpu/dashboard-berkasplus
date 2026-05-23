@@ -114,81 +114,79 @@ if (!window.__HISTORY_JS_LOADED__) {
     updatePagination();
   };
 
-  function renderTable() {
-    const tbody =
-      document.querySelector(
-        "#content tbody"
-      );
-    if (!tbody)
-      return;
-    tbody.innerHTML = "";
-    if (
-      historyData.length === 0
-    ) {
-      showEmptyState(
-        "Data tidak ditemukan"
-      );
-      return;
-    }
-    const start =
-      (
-        currentPage - 1
-      ) * limit;
-    const end =
-      start + limit;
-    const pageData =
-      historyData.slice(
-        start,
-        end
-      );
-
-    pageData.forEach(
-      (
-        row,
-        i
-      ) => {
-        const tr =
-          document
-          .createElement(
-            "tr"
-          );
-        tr.innerHTML = `
-          <td class="border px-2 py-1 text-center">
-            ${start + i + 1}
-          </td>
-          <td class="border px-2 py-1">
-            ${row[0] || "-"}
-          </td>
-          <td class="border px-2 py-1">
-            ${row[1] || "-"}
-          </td>
-          <td class="border px-2 py-1">
-            ${formatTanggal(row[2])}
-          </td>
-          <td class="border px-2 py-1">
-            ${row[3] || "-"}
-          </td>
-          <td class="border px-2 py-1">
-            ${row[4] || "-"}
-          </td>
-          <td class="border px-2 py-1">
-            ${row[5] || "-"}
-          </td>
-          <td class="border px-2 py-1">
-            ${formatTanggal(row[6])}
-          </td>
-          <td class="border px-2 py-1 font-medium ${getStatusColor(row[7])}">
-            ${row[7] || "-"}
-          </td>
-          <td class="border px-2 py-1">
-            ${row[8] || "-"}
-          </td>
-        `;
-        tbody.appendChild(
-          tr
-        );
-      });
-  }
+   function renderTable(){ 
+     const tbody=
+       document.querySelector(
+         "#content tbody"
+       );  
+     if(!tbody)
+       return;  
+     tbody.innerHTML="";  
+     if(
+       historyData.length===0
+     ){ 
+       showEmptyState(
+         "Data tidak ditemukan"
+       );  
+       return;   
+     }
+   
+     const start=
+       (currentPage-1)
+       *limit; 
+     const end=
+       start+limit;  
+     const pageData=
+       historyData.slice(
+         start,
+         end
+       );   
+     pageData.forEach(
+       (row,i)=>{   
+       const tr=
+         document.createElement(
+           "tr"
+         );
+   
+       tr.innerHTML=`   
+   <td class="border px-2 py-1 text-center">
+   ${start+i+1}
+   </td>   
+   <td class="border px-2 py-1">
+   ${row["Nomor/Tahun"]||"-"}
+   </td>   
+   <td class="border px-2 py-1">
+   ${row["Pengirim"]||"-"}
+   </td>  
+   <td class="border px-2 py-1">
+   ${formatTanggal(row["Tgl Dikirim"])}
+   </td>  
+   <td class="border px-2 py-1">
+   ${row["Nama Seksi"]||"-"}
+   </td>  
+   <td class="border px-2 py-1">
+   ${row["Dikirim Ke"]||"-"}
+   </td>  
+   <td class="border px-2 py-1">
+   ${row["Penerima"]||"-"}
+   </td>   
+   <td class="border px-2 py-1">
+   ${formatTanggal(row["Tgl Diterima"])}
+   </td>   
+   <td class="border px-2 py-1">
+   ${row["Status"]||"-"}
+   </td>   
+   <td class="border px-2 py-1">
+   ${row["Keterangan"]||"-"}
+   </td>  
+   `; 
+       tbody.appendChild(
+         tr
+       );
+   
+     });
+   
+   }
 
   function updatePagination() {
     const totalPage =
