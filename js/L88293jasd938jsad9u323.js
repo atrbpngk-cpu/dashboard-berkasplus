@@ -1,147 +1,164 @@
 // js/loading.js
+
 window.USE_GLOBAL_LOADING = true;
 
 const GlobalLoading = (() => {
-  const el =
-    document.getElementById(
-      "globalLoading"
-    );
-  const textEl =
-    document.getElementById(
-      "globalLoadingText"
-    );
-
-  if (!el) {
-    console.warn(
-      "[GlobalLoading] #globalLoading tidak ditemukan"
-    );
-    return {};
-  }
-  let counter = 0;
-  let lastUserAction = 0;
-  document.addEventListener(
-    "click",
-    e => {
-      const btn =
-        e.target.closest(
-          "button,a,input[type=submit]"
+    const el =
+        document.getElementById(
+            "globalLoading"
         );
-      if (!btn) return;
-      lastUserAction =
-        Date.now();
-    },
-    true
-  );
-  document.addEventListener(
-    "submit",
-    () => {
-      lastUserAction =
-        Date.now();
-    },
-    true
-  );
-  function isUserAction() {
-    return (
-      Date.now()-lastUserAction<
-      10000
-    );
-  }
-  function show(
-    text =
-    "Sedang memproses data..."
-  ) {
-    counter++;
-    if (textEl) {
-      textEl.textContent =
-        text;
+    const textEl =
+        document.getElementById(
+            "globalLoadingText"
+        );
+    if (!el) {
+        console.warn(
+            "[GlobalLoading] #globalLoading tidak ditemukan"
+        );
+        return {};
     }
-    el.classList.remove(
-      "hidden"
+    let counter = 0;
+    let lastUserAction = 0;
+    document.addEventListener(
+        "click",
+        e => {
+            const btn =
+                e.target.closest(
+                    "button,a,input[type=submit]"
+                );
+            if (!btn) return;
+            lastUserAction =
+                Date.now();
+        },
+        true
     );
-    el.classList.add(
-      "flex"
+    document.addEventListener(
+        "submit",
+        () => {
+            lastUserAction =
+                Date.now();
+        },
+        true
     );
-  }
-  function hide() {
-    counter =
-      Math.max(
-        0,
-        counter - 1
-      );
-    if (
-      counter === 0
+    function isUserAction() {
+        return (
+            Date.now()-lastUserAction<
+            10000
+        );
+    }
+    function show(
+        text =
+        "Sedang memproses data..."
     ) {
-      el.classList.add(
-        "hidden"
-      );
-      el.classList.remove(
-        "flex"
-      );
-    }
-  }
-  function forceHide() {
-    counter = 0;
-    el.classList.add(
-      "hidden"
-    );
-    el.classList.remove(
-      "flex"
-    );
-  }
-  const originalFetch =
-    window.fetch;
-  window.fetch =
-  async (...args)=>{ 
-     const opt =
-        args[1]||{};
-     const headers =
-        opt.headers||{}; 
-     const silent =
-        headers[
-           "X-SILENT"
-        ]==="1";
-     const noLoading =
-        headers[
-           "X-NO-LOADING"
-        ]==="1"; 
-     const url =
-        String(
-           args[0]||""
-        );  
-     const isInboxRequest =
-        url.includes(
-           "action=inbox"
-        ) 
-        ||
-        url.includes(
-           "action=inboxUser"
+        counter++;
+        if (textEl) {
+
+            textEl.textContent =
+                text;
+        }
+        el.classList.remove(
+            "hidden"
         );
-     const useLoading =
-        window
-        .USE_GLOBAL_LOADING
-        === true
-        &&
-        !silent
-        &&
-        !noLoading
-        &&
-        !isInboxRequest
-        &&
-        isUserAction(); 
-     if(useLoading){ 
-        show(); 
-     } 
-     try{  
-        return await originalFetch(
-           ...args
-        );  
-     }  
-     finally{ 
-        if(useLoading){ 
-           hide(); 
-        }  
-     }
-  };
-  return {show,hide,forceHide
-  };
+        el.classList.add(
+            "flex"
+        );
+    }
+    function hide() {
+        counter =
+            Math.max(
+                0,
+                counter - 1
+            );
+        if (
+            counter === 0
+        ) {
+            el.classList.add(
+                "hidden"
+            );
+            el.classList.remove(
+                "flex"
+            );
+        }
+    }
+    function forceHide() {
+        counter = 0;
+        el.classList.add(
+            "hidden"
+        );
+        el.classList.remove(
+            "flex"
+        );
+    }
+    const originalFetch =
+        window.fetch;
+    window.fetch =
+        async (...args) => {
+            const opt =
+                args[1] || {};
+            const headers =
+                opt.headers || {};
+            const silent =
+                headers[
+                    "X-SILENT"
+                ] === "1";
+            const noLoading =
+                headers[
+                    "X-NO-LOADING"
+                ] === "1";
+            const url =
+                String(
+                    args[0] || ""
+                );
+            const lowerUrl =
+                url.toLowerCase();
+            const isNotifInbox =
+                lowerUrl.includes(
+                    "action=inboxuser"
+                )
+                ||
+                (
+                    lowerUrl.includes(
+                        "action=inbox"
+                    )
+                    &&
+                    !location.pathname
+                        .includes(
+                            "inbox"
+                        )
+                );
+            const useLoading =
+                window
+                    .USE_GLOBAL_LOADING
+                === true
+                &&
+                !silent
+                &&
+                !noLoading
+                &&
+                !isNotifInbox
+                &&
+                isUserAction();
+            if (
+                useLoading
+            ) {
+                show();
+            }
+            try {
+                return await originalFetch(
+                    ...args
+                );
+            }
+            finally {
+                if (
+                    useLoading
+                ) {
+                    hide();
+                }
+            }
+        };
+    return {
+        show,
+        hide,
+        forceHide
+    };
 })();
