@@ -4,8 +4,6 @@
  * =====================================================
  */
 
-
-
 console.log("kirim.js loaded");
 
 window.initKirimBerkas = function () {
@@ -76,15 +74,22 @@ window.initKirimBerkas = function () {
     });
   }
 
-  /* ================= SEKSI → STAFF ================= */
+    /* ================= SEKSI → STAFF ================= */
+    
     let cacheStaff = [];
+    
     selectSeksi.addEventListener(
-    "change",
-    ()=>{   
-    fillSelect(    selectDikirimKe,cacheStaff,    
-    "-- Pilih Penerima --"    
-    );    
-    });
+      "change",
+      () => {
+    
+        fillSelect(
+          selectDikirimKe,
+          cacheStaff,
+          "-- Pilih Penerima --"
+        );
+    
+      }
+    );
   /* ================= CARI BERKAS ================= */
   btnCari.onclick = async () => {
     if (!useGlobalLoading()) show(loadingCari);
@@ -105,20 +110,31 @@ window.initKirimBerkas = function () {
         return;
       }
 
-      const info = res.data.info;
-      const master =
-        res.data.master || {};   
-        fillSelect(  
-        selectSeksi,master.seksi || [],     
-        "-- Pilih Seksi --" 
+        const info=
+        res.data.info;
+        
+        const master=
+        res.data.master||{};
+        
+        fillSelect(
+        selectSeksi,
+        master.seksi||[],
+        "-- Pilih Seksi --"
         );
-        fillSelect(selectPetugasUkur,master.petugas || [],        
-        "-- Pilih Petugas Ukur --"        
-        );        
-        cacheStaff =master.staff || [];        
-        fillSelect(      
-        selectDikirimKe,     
-        "-- Pilih Penerima --" 
+        
+        fillSelect(
+        selectPetugasUkur,
+        master.petugas||[],
+        "-- Pilih Petugas Ukur --"
+        );
+        
+        cacheStaff=
+        master.staff||[];
+        
+        fillSelect(
+        selectDikirimKe,
+        [],
+        "-- Pilih Penerima --"
         );
 
       hasilTanggal.innerText = info.tanggal_mulai || "-";
