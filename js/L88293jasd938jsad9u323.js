@@ -32,6 +32,7 @@ const GlobalLoading = (() => {
         },
         true
     );
+
     document.addEventListener(
         "submit",
         () => {
@@ -40,19 +41,20 @@ const GlobalLoading = (() => {
         },
         true
     );
+
     function isUserAction() {
         return (
             Date.now()-lastUserAction<
             10000
         );
     }
+
     function show(
         text =
         "Sedang memproses data..."
     ) {
         counter++;
         if (textEl) {
-
             textEl.textContent =
                 text;
         }
@@ -91,6 +93,7 @@ const GlobalLoading = (() => {
     }
     const originalFetch =
         window.fetch;
+
     window.fetch =
         async (...args) => {
             const opt =
@@ -108,20 +111,23 @@ const GlobalLoading = (() => {
             const url =
                 String(
                     args[0] || ""
-                );
-            const lowerUrl =
-                url.toLowerCase();
+                )
+                .toLowerCase();
             const isInboxPolling =
-            
-                lowerUrl.includes(
+                url.includes(
                     "action=inbox"
                 )
-            
                 ||
-            
-                lowerUrl.includes(
+                url.includes(
                     "action=inboxuser"
                 );
+            if (
+                isInboxPolling
+            ) {
+                return originalFetch(
+                    ...args
+                );
+            }
             const useLoading =
                 window
                     .USE_GLOBAL_LOADING
@@ -130,8 +136,6 @@ const GlobalLoading = (() => {
                 !silent
                 &&
                 !noLoading
-                &&
-                !isInboxPolling
                 &&
                 isUserAction();
             if (
