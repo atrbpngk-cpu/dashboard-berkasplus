@@ -498,7 +498,13 @@ function loadInboxNotif() {
   }
   document.addEventListener("DOMContentLoaded", () => {
     loadInboxNotif();
-    setInterval(loadInboxNotif, 30000);
+    setInterval(() => {
+        if (
+          document.visibilityState
+          === "visible"
+       ) {
+          loadInboxNotif();
+       }},30000);
   });
   
   window.showToast = function (message, type = "info") {
