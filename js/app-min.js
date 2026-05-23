@@ -1212,6 +1212,11 @@ window.initKirimBerkas = function () {
 
   const API = APP_CONFIG.API_WEB;
   let currentBerkas = null;
+  const CACHE_MASTER = {
+      seksi: [],
+      petugas: [],
+      staff: []
+  };
 
   /* ================= DOM ================= */
   const nomorBerkas = document.getElementById("nomorBerkas");
@@ -1286,6 +1291,41 @@ window.initKirimBerkas = function () {
     
       }
     );
+    /* ================= PRELOAD MASTER ================= */
+    (async function preloadMaster(){    
+       try{    
+          const [    
+             seksiRes,   
+             petugasRes,   
+             staffRes   
+          ]  
+          =  
+          await Promise.all([  
+             apiGet(
+                "daftarSeksi"
+             ),  
+             apiGet(
+                "petugasUkur"
+             ),  
+             apiGet(
+                "staffSeksi"
+             ) 
+          ]);
+    
+          CACHE_MASTER.seksi =
+             seksiRes.data || [];    
+          CACHE_MASTER.petugas =
+             petugasRes.data || [];   
+          CACHE_MASTER.staff =
+             staffRes.data || [];
+       } 
+       catch(err){ 
+          console.error(
+             "preload master gagal",
+             err
+          );   
+       }    
+    })();
   /* ================= CARI BERKAS ================= */
   btnCari.onclick = async () => {
     if (!useGlobalLoading()) show(loadingCari);
@@ -1309,24 +1349,18 @@ window.initKirimBerkas = function () {
         const info=
         res.data.info;
         
-        const master=
-        res.data.master||{};
-        
+         fillSelect(
+           selectSeksi,
+           CACHE_MASTER.seksi,
+           "-- Pilih Seksi --"
+        );        
         fillSelect(
-        selectSeksi,
-        master.seksi||[],
-        "-- Pilih Seksi --"
-        );
-        
-        fillSelect(
-        selectPetugasUkur,
-        master.petugas||[],
-        "-- Pilih Petugas Ukur --"
-        );
-        
-        cacheStaff=
-        master.staff||[];
-        
+           selectPetugasUkur,
+           CACHE_MASTER.petugas,
+           "-- Pilih Petugas Ukur --"
+        );        
+        cacheStaff =
+           CACHE_MASTER.staff;       
         fillSelect(
         selectDikirimKe,
         [],
