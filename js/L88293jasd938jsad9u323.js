@@ -1,71 +1,169 @@
 // js/loading.js
+
 window.USE_GLOBAL_LOADING = true;
 
 const GlobalLoading = (() => {
-  const el = document.getElementById("globalLoading");
-  const textEl = document.getElementById("globalLoadingText");
-
+  const el = document.getElementById(
+    "globalLoading"
+  );
+  const textEl = document.getElementById(
+    "globalLoadingText"
+  );
   if (!el) {
-    console.warn("[GlobalLoading] #globalLoading tidak ditemukan");
+    console.warn(
+      "[GlobalLoading] #globalLoading tidak ditemukan"
+    );
     return {};
   }
-
   let counter = 0;
   let lastUserAction = 0;
+  document.addEventListener(
+    "click",
+    e => {
+      const btn = e.target.closest(
+        "button, a, input[type=submit]"
+      );
+      if (!btn) return;
 
-  document.addEventListener("click", e => {
-    const btn = e.target.closest("button, a, input[type=submit]");
-    if (!btn) return;
-
-    lastUserAction = Date.now();
-  }, true);
-
-  document.addEventListener("submit", () => {
-    lastUserAction = Date.now();
-  }, true);
-
+      lastUserAction = Date.now();
+    },
+    true
+  );
+  document.addEventListener(
+    "submit",
+    () => {
+      lastUserAction = Date.now();
+    },
+    true
+  );
   function isUserAction() {
-    return Date.now() - lastUserAction < 10000;
+    return (
+      Date.now() -
+      lastUserAction
+    ) < 10000;
   }
 
-  function show(text = "Sedang memproses data...") {
+  function isSilentRequest(
+    headers
+  ) {
+    if (!headers)
+      return false;
+    try {
+      if (
+        headers instanceof Headers
+      ) {
+        return (
+          headers.get(
+            "X-SILENT"
+          ) === "1"
+        );
+      }
+      return (
+        headers[
+          "X-SILENT"
+        ] === "1"
+      );
+    }
+    catch {
+      return false;
+    }
+  }
+  function show(
+    text =
+      "Sedang memproses data..."
+  ) {
     counter++;
-    if (textEl) textEl.textContent = text;
-    el.classList.remove("hidden");
-    el.classList.add("flex");
+    if (textEl) {
+      textEl.textContent =
+        text;
+    }
+    el.classList.remove(
+      "hidden"
+    );
+    el.classList.add(
+      "flex"
+    );
   }
-
   function hide() {
-    counter = Math.max(0, counter - 1);
+    counter = Math.max(
+      0,
+      counter - 1
+    );
     if (counter === 0) {
-      el.classList.add("hidden");
-      el.classList.remove("flex");
+      el.classList.add(
+        "hidden"
+      );
+      el.classList.remove(
+        "flex"
+      );
     }
   }
 
   function forceHide() {
     counter = 0;
-    el.classList.add("hidden");
-    el.classList.remove("flex");
+    el.classList.add(
+      "hidden"
+    );
+    el.classList.remove(
+      "flex"
+    );
   }
 
-  const originalFetch = window.fetch;
-
-  window.fetch = async (...args) => {
-    const useLoading = isUserAction();
-
-    if (useLoading) {
-      show();
-    }
-
+  async function run(
+    fn,
+    text =
+      "Sedang memproses data..."
+  ) {
+    show(text);
     try {
-      return await originalFetch(...args);
-    } finally {
-      if (useLoading) {
-        hide();
-      }
+      return await fn();
     }
-  };
+    finally {
+      hide();
+    }
+  }
 
-  return { show, hide, forceHide };
+  function getCounter() {
+    return counter;
+  }
+
+  const originalFetch =
+    window.fetch;
+  window.fetch =
+    async (...args) => {
+      const options =
+        args[1] || {};
+      const silent =
+        isSilentRequest(
+          options.headers
+        );
+      const useLoading =
+        !silent &&
+        isUserAction();
+      if (
+        useLoading
+      ) {
+        show();
+      }
+      try {
+        return await originalFetch(
+          ...args
+        );
+      }
+      finally {
+        if (
+          useLoading
+        ) {
+          hide();
+        }
+      }
+    };
+
+  return {
+    show,
+    hide,
+    forceHide,
+    run,
+    getCounter
+  };
 })();
