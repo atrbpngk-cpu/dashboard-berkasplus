@@ -1,227 +1,71 @@
 // js/loading.js
-
 window.USE_GLOBAL_LOADING = true;
 
 const GlobalLoading = (() => {
-    const el =
-        document.getElementById(
-            "globalLoading"
-        );
-    const textEl =
-        document.getElementById(
-            "globalLoadingText"
-        );
+  const el = document.getElementById("globalLoading");
+  const textEl = document.getElementById("globalLoadingText");
 
-    if (!el) {
-        return {};
-    }
-    let counter = 0;
-    let pendingUserAction =
-        false;
-    let lastUserAction = 0;
-    document.addEventListener(
-        "click",
-        e => {
-            const target =
-                e.target.closest(
-                    `
-                    button,
-                    a,
-                    input[type=submit],
-                    .btn,
-                    [data-loading]                    `
-                );
-            if (!target)
-                return;
-            pendingUserAction =
-                true;
-            lastUserAction =
-                Date.now();
-        },
-        true
-    );
-    document.addEventListener(
-        "submit",
-        () => {
-            pendingUserAction =
-                true;
-            lastUserAction =
-                Date.now();
-        },
-        true
-    );
-    function consumeUserAction(){
-        if(
-            !pendingUserAction
-        ){
-            return false;
-        }
-        pendingUserAction =
-            false;
-        return true;
-    }
-    function show(
-        text =
-        "Sedang memproses data..."
-    ){
-        counter++;
-        if(textEl){
+  if (!el) {
+    console.warn("[GlobalLoading] #globalLoading tidak ditemukan");
+    return {};
+  }
 
-            textEl.textContent =
-                text;
-        }
-        el.classList.remove(
-            "hidden"
-        );
-        el.classList.add(
-            "flex"
-        );
+  let counter = 0;
+  let lastUserAction = 0;
+
+  document.addEventListener("click", e => {
+    const btn = e.target.closest("button, a, input[type=submit]");
+    if (!btn) return;
+
+    lastUserAction = Date.now();
+  }, true);
+
+  document.addEventListener("submit", () => {
+    lastUserAction = Date.now();
+  }, true);
+
+  function isUserAction() {
+    return Date.now() - lastUserAction < 10000;
+  }
+
+  function show(text = "Sedang memproses data...") {
+    counter++;
+    if (textEl) textEl.textContent = text;
+    el.classList.remove("hidden");
+    el.classList.add("flex");
+  }
+
+  function hide() {
+    counter = Math.max(0, counter - 1);
+    if (counter === 0) {
+      el.classList.add("hidden");
+      el.classList.remove("flex");
+    }
+  }
+
+  function forceHide() {
+    counter = 0;
+    el.classList.add("hidden");
+    el.classList.remove("flex");
+  }
+
+  const originalFetch = window.fetch;
+
+  window.fetch = async (...args) => {
+    const useLoading = isUserAction();
+
+    if (useLoading) {
+      show();
     }
 
-    function hide(){
-        counter =
-        Math.max(
-            0,
-            counter - 1
-        );
-        if(
-            counter === 0
-        ){
-            el.classList.add(
-                "hidden"
-            );
-            el.classList.remove(
-                "flex"
-            );
-        }
+    try {
+      return await originalFetch(...args);
+    } finally {
+      if (useLoading) {
+        hide();
+      }
     }
+  };
 
-    function forceHide(){
-        counter = 0;
-        el.classList.add(
-            "hidden"
-        );
-        el.classList.remove(
-            "flex"
-        );
-    }
-    async function run(
-        callback,
-        text =
-        "Sedang memproses data..."
-    ){
-        show(text);
-        try{
-            return await callback();
-        }
-        finally{
-            hide();
-        }
-    }
-
-    const originalFetch =
-        window.fetch;
-    window.fetch =
-        async (...args)=>{
-        const opt =
-            args[1] || {};
-        const headers =
-            opt.headers || {};
-        const rawUrl =
-            String(
-                args[0] || ""
-            );
-        const url =
-            rawUrl.toLowerCase();
-        const silent =
-            headers[
-                "X-SILENT"
-            ] === "1";
-        const noLoading =
-            headers[
-                "X-NO-LOADING"
-            ] === "1";
-        const ignoredRequest =
-            url.includes(
-                "?action=inbox"
-            ) ||
-            url.includes(
-                "action=inboxuser"
-            ) ||
-            url.includes(
-                "action=inboxboxuser"
-            ) ||
-            url.includes(
-                "action=inboxrekapseksi"
-            ) ||
-            url.includes(
-                "action=inboxbebanpu"
-            ) ||
-            url.includes(
-                "action=inboxpu"
-            ) ||
-            url.includes(
-                "poll"
-            ) ||
-            url.includes(
-                "heartbeat"
-            );
-        if(
-            ignoredRequest ||
-            silent ||
-            noLoading
-        ){
-            return originalFetch(
-                ...args
-            );
-        }
-
-        const useLoading =
-            window
-            .USE_GLOBAL_LOADING &&
-            consumeUserAction();
-
-        if(
-            useLoading
-        ){
-            show();
-        }
-
-        try{
-            return await originalFetch(
-                ...args
-            );
-
-        }
-        finally{
-            if(
-                useLoading
-            ){
-                hide();
-            }
-        }
-    };
-
-    window.addEventListener(
-        "pageshow",
-        forceHide
-    );
-
-    window.addEventListener(
-        "beforeunload",
-        forceHide
-    );
-
-    return {
-        show,
-        hide,
-        forceHide,
-        run,
-        get counter(){
-            return counter;
-        },
-        get lastAction(){
-            return lastUserAction;
-        }
-    };
+  return { show, hide, forceHide };
 })();
