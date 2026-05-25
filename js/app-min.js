@@ -537,7 +537,7 @@ function loadInboxNotif() {
           "hidden"
         );
         notifText.innerText =
-          `📥 ${total} inbox baru masuk untuk Anda`;
+          `📥 ${total} inbox baru masuk untuk anda`;
       }
       else {
         notifInbox.classList.add(
