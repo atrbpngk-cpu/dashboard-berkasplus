@@ -3,43 +3,43 @@
 window.USE_GLOBAL_LOADING = true;
 
 const GlobalLoading = (() => {
-    const el = document.getElementById(
-        "globalLoading"
-    );
+    const el =
+        document.getElementById(
+            "globalLoading"
+        );
     const textEl =
         document.getElementById(
             "globalLoadingText"
         );
+
     if (!el) {
-        console.warn(
-            "[GlobalLoading] #globalLoading tidak ditemukan"
-        );
         return {};
     }
     let counter = 0;
-    let pendingUserAction = false;
+    let pendingUserAction =
+        false;
     let lastUserAction = 0;
     document.addEventListener(
         "click",
-        (e) => {
+        e => {
             const target =
-                e.target.closest(                   `
+                e.target.closest(
+                    `
                     button,
                     a,
                     input[type=submit],
                     .btn,
-                    [data-loading]
-                    `
+                    [data-loading]                    `
                 );
             if (!target)
                 return;
-            pendingUserAction = true;
+            pendingUserAction =
+                true;
             lastUserAction =
                 Date.now();
         },
         true
     );
-
     document.addEventListener(
         "submit",
         () => {
@@ -50,23 +50,23 @@ const GlobalLoading = (() => {
         },
         true
     );
-    function consumeUserAction() {
-        if (
+    function consumeUserAction(){
+        if(
             !pendingUserAction
-        ) {
+        ){
             return false;
         }
         pendingUserAction =
             false;
         return true;
     }
-
     function show(
         text =
         "Sedang memproses data..."
-    ) {
+    ){
         counter++;
-        if (textEl) {
+        if(textEl){
+
             textEl.textContent =
                 text;
         }
@@ -78,14 +78,15 @@ const GlobalLoading = (() => {
         );
     }
 
-    function hide() {
-        counter = Math.max(
+    function hide(){
+        counter =
+        Math.max(
             0,
             counter - 1
         );
-        if (
+        if(
             counter === 0
-        ) {
+        ){
             el.classList.add(
                 "hidden"
             );
@@ -94,7 +95,8 @@ const GlobalLoading = (() => {
             );
         }
     }
-    function forceHide() {
+
+    function forceHide(){
         counter = 0;
         el.classList.add(
             "hidden"
@@ -103,29 +105,34 @@ const GlobalLoading = (() => {
             "flex"
         );
     }
-
     async function run(
         callback,
         text =
         "Sedang memproses data..."
-    ) {
+    ){
         show(text);
-        try {
+        try{
             return await callback();
         }
-        finally {
+        finally{
             hide();
         }
-
     }
+
     const originalFetch =
         window.fetch;
     window.fetch =
-        async (...args) => {
+        async (...args)=>{
         const opt =
             args[1] || {};
         const headers =
             opt.headers || {};
+        const rawUrl =
+            String(
+                args[0] || ""
+            );
+        const url =
+            rawUrl.toLowerCase();
         const silent =
             headers[
                 "X-SILENT"
@@ -134,64 +141,36 @@ const GlobalLoading = (() => {
             headers[
                 "X-NO-LOADING"
             ] === "1";
-        const url =
-            String(
-                args[0] || ""
-            ).toLowerCase();
-        let action = "";
-        try {
-            const parsed =
-                new URL(
-                    url,
-                    location.origin
-                );
-            action =
-                (
-                    parsed
-                    .searchParams
-                    .get(
-                        "action"
-                    ) || ""
-                )
-                .toLowerCase();
-        }
-        catch {
-            action = "";
-        }
-
-        const ignoredActions = [
-            "inbox",
-            "inboxuser",
-            "inboxboxuser",
-            "inboxrekapseksi",
-            "inboxbebanpu",
-            "inboxpu"
-        ];
-
         const ignoredRequest =
-            ignoredActions.includes(
-                action
+            url.includes(
+                "?action=inbox"
+            ) ||
+            url.includes(
+                "action=inboxuser"
+            ) ||
+            url.includes(
+                "action=inboxboxuser"
+            ) ||
+            url.includes(
+                "action=inboxrekapseksi"
+            ) ||
+            url.includes(
+                "action=inboxbebanpu"
+            ) ||
+            url.includes(
+                "action=inboxpu"
             ) ||
             url.includes(
                 "poll"
             ) ||
             url.includes(
                 "heartbeat"
-            ) ||
-            url.includes(
-                "socket"
-            ) ||
-            url.includes(
-                "analytics"
-            ) ||
-            url.includes(
-                "logger"
             );
-        if (
+        if(
             ignoredRequest ||
             silent ||
             noLoading
-        ) {
+        ){
             return originalFetch(
                 ...args
             );
@@ -199,23 +178,25 @@ const GlobalLoading = (() => {
 
         const useLoading =
             window
-            .USE_GLOBAL_LOADING ===
-            true &&
+            .USE_GLOBAL_LOADING &&
             consumeUserAction();
-        if (
+
+        if(
             useLoading
-        ) {
+        ){
             show();
         }
-        try {
+
+        try{
             return await originalFetch(
                 ...args
             );
+
         }
-        finally {
-            if (
+        finally{
+            if(
                 useLoading
-            ) {
+            ){
                 hide();
             }
         }
@@ -225,6 +206,7 @@ const GlobalLoading = (() => {
         "pageshow",
         forceHide
     );
+
     window.addEventListener(
         "beforeunload",
         forceHide
@@ -235,10 +217,10 @@ const GlobalLoading = (() => {
         hide,
         forceHide,
         run,
-        get counter() {
+        get counter(){
             return counter;
         },
-        get lastAction() {
+        get lastAction(){
             return lastUserAction;
         }
     };
