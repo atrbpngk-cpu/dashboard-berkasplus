@@ -6,7 +6,7 @@ if (!window.__HISTORY_JS_LOADED__) {
     window.__HISTORY_JS_LOADED__ = true;
   
     let historyData = [];
-    let originalHistoryData = []; // ⬅️ untuk reset filter
+    let originalHistoryData = [];
     let currentPage = 1;
     const limit = 10;
 
@@ -17,7 +17,7 @@ if (!window.__HISTORY_JS_LOADED__) {
   
     async function loadHistory() {
       try {
-        currentPage = 1; // 🔥 RESET DI SINI (PENTING)
+        currentPage = 1;
     
         const url = window.APP_CONFIG.API_WEB + "?action=history";
         const res = await fetch(url);
