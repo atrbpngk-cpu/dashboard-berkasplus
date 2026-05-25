@@ -34,12 +34,10 @@ if (!window.__QWYUSAJKHU1_JS_LOADED__) {
       return;
     }
   
-    fetch(
+   fetch(
    `${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`,
    {
-      headers:{
-         "X-SILENT":"1"
-      }
+      silent:true
    })
       .then(r => r.json())
       .then(res => {
@@ -122,13 +120,8 @@ if (!window.__QWYUSAJKHU1_JS_LOADED__) {
    async function loadInboxData() {  
       try {  
          const r =
-         await fetch( 
-            `${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`,
-            {
-               headers:{
-                  "X-SILENT":"1"
-               }
-            } 
+         await fetch(
+         `${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`
          );
          const res =
             await r.json();
