@@ -478,9 +478,7 @@ function loadInboxNotif() {
   fetch(
     `${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`,
     {
-      headers: {
-        "X-SILENT": "1"
-      }
+      silent:true
     }
   )
 
