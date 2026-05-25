@@ -1,7 +1,6 @@
 // js/loading.js
 
 window.USE_GLOBAL_LOADING = true;
-
 const GlobalLoading = (() => {
   const el = document.getElementById(
     "globalLoading"
@@ -24,7 +23,6 @@ const GlobalLoading = (() => {
         "button, a, input[type=submit]"
       );
       if (!btn) return;
-
       lastUserAction = Date.now();
     },
     true
@@ -42,32 +40,6 @@ const GlobalLoading = (() => {
       lastUserAction
     ) < 10000;
   }
-
-  function isSilentRequest(
-    headers
-  ) {
-    if (!headers)
-      return false;
-    try {
-      if (
-        headers instanceof Headers
-      ) {
-        return (
-          headers.get(
-            "X-SILENT"
-          ) === "1"
-        );
-      }
-      return (
-        headers[
-          "X-SILENT"
-        ] === "1"
-      );
-    }
-    catch {
-      return false;
-    }
-  }
   function show(
     text =
       "Sedang memproses data..."
@@ -84,6 +56,7 @@ const GlobalLoading = (() => {
       "flex"
     );
   }
+
   function hide() {
     counter = Math.max(
       0,
@@ -98,7 +71,6 @@ const GlobalLoading = (() => {
       );
     }
   }
-
   function forceHide() {
     counter = 0;
     el.classList.add(
@@ -122,7 +94,6 @@ const GlobalLoading = (() => {
       hide();
     }
   }
-
   function getCounter() {
     return counter;
   }
@@ -134,9 +105,8 @@ const GlobalLoading = (() => {
       const options =
         args[1] || {};
       const silent =
-        isSilentRequest(
-          options.headers
-        );
+        options.silent === true;
+      delete options.silent;
       const useLoading =
         !silent &&
         isUserAction();
@@ -147,7 +117,8 @@ const GlobalLoading = (() => {
       }
       try {
         return await originalFetch(
-          ...args
+          args[0],
+          options
         );
       }
       finally {
