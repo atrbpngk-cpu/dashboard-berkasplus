@@ -78,94 +78,93 @@ if (!window.__QWYUSAJKHU1_JS_LOADED__) {
       });
   };
   
-   window.initInboxBerkas = function () {  
-       if (
+   window.initInboxBerkas = function () {
+   
+      if (
          !window.APP_CONFIG?.API_WEB ||
          !namaUser
-       ) return;
-       GlobalLoading?.show?.(
-         "Memuat inbox..."
-       ); 
-       tableBody =
+      ) return;   
+      tableBody =
          document.getElementById(
-           "tableBody"
-         ); 
-       badgeBaru =
+            "tableBody"
+         );   
+      badgeBaru =
          document.getElementById(
-           "badgeBaru"
+            "badgeBaru"
          );  
-       notifInbox =
+      notifInbox =
          document.getElementById(
-           "notifInbox"
-         ); 
-       notifText =
-         document.getElementById(
-           "notifText"
+            "notifInbox"
          );  
-       btnPrev =
+      notifText =
          document.getElementById(
-           "btnPrev"
+            "notifText"
          );  
-       btnNext =
+      btnPrev =
          document.getElementById(
-           "btnNext"
+            "btnPrev"
          );  
-       if (!tableBody){  
-         GlobalLoading
-         ?.hide?.();  
-         return;  
-       }  
-       loadInboxData();  
+      btnNext =
+         document.getElementById(
+            "btnNext"
+         );   
+      if(!tableBody){
+         return;
+      }   
+      await GlobalLoading.run(      
+         async ()=>{     
+            await loadInboxData();   
+         },  
+         "Memuat inbox..."   
+      );
    };
 
-  function loadInboxData() {
-      fetch(
-         `${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`,
-         {
-            headers:{
-               "X-SILENT":"1"
-            }
+   async function loadInboxData() {  
+      try {  
+         const r =
+         await fetch( 
+            `${APP_CONFIG.API_WEB}?action=inbox&user=${encodeURIComponent(namaUser)}`,
+            {
+               headers:{
+                  "X-SILENT":"1"
+               }
+            } 
+         );
+         const res =
+            await r.json();
+         if(Array.isArray(res)){
+            originalInboxData =
+               res;
          }
-      )     
-      .then(r => r.json())      
-      .then(res => {      
-         if (Array.isArray(res)) {     
-            originalInboxData = res;    
-         }      
-         else if (
+         else if(
             res &&
             res.success === true &&
             Array.isArray(res.data)
-         ) {      
+         ){
             originalInboxData =
-               res.data;    
-         }     
-         else {     
-            originalInboxData = [];     
-         }    
+               res.data;
+         }  
+         else{
+            originalInboxData=[];
+         }
          inboxData =
-            [...originalInboxData];  
-         currentPage = 1;    
+            [...originalInboxData];
+         currentPage = 1;
          updateBadge(
             inboxData.length
-         );    
-         updateNotifInbox();    
-         renderTable();    
-      })     
-      .catch(err => {      
+         );
+         updateNotifInbox();
+         renderTable();
+      }  
+      catch(err){ 
          console.error(
-            "Inbox API error:",
             err
-         );     
-         inboxData = [];     
-         updateBadge(0);     
-         renderTable();      
-      })      
-      .finally(() => {     
-         GlobalLoading
-         ?.hide?.();      
-      });
-  }
+         );  
+         inboxData=[]; 
+         updateBadge(0);   
+         renderTable();  
+      }
+   }     
   window.applyFilter = function () {
     const nomor = document.getElementById("filterNomor").value.trim();
     const tahun = document.getElementById("filterTahun").value.trim();
@@ -196,6 +195,8 @@ if (!window.__QWYUSAJKHU1_JS_LOADED__) {
   };
 
   function renderTable() {
+    if(!tableBody)
+       return;
     tableBody.innerHTML = "";
 
     if (inboxData.length === 0) {
