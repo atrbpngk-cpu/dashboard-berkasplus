@@ -3977,12 +3977,10 @@ function getCurrentUser() {
 
 
 /* 23===============================daftar-plotting.js=============================== */
-
 const API_URL = window.APP_CONFIG?.API_WEB;
 if (!API_URL) {
   console.error("❌ APP_CONFIG.API_WEB belum diset");
 }
-
 
 function initDaftarPloting() {
   console.log("INIT: Daftar Ploting 📊");
@@ -3996,17 +3994,16 @@ function initDaftarPloting() {
   loadDaftarEmail();
 }
 
-
 function initTabDaftarPloting() {
   const tabs = document.querySelectorAll(".tab-btn");
   const contents = document.querySelectorAll(".tab-content");
 
-  tabs.forEach(btn => {
+  tabs.forEach((btn) => {
     btn.addEventListener("click", () => {
-      tabs.forEach(b =>
+      tabs.forEach((b) =>
         b.classList.remove("text-blue-600", "border-b-2", "border-blue-600")
       );
-      contents.forEach(c => c.classList.add("hidden"));
+      contents.forEach((c) => c.classList.add("hidden"));
 
       btn.classList.add("text-blue-600", "border-b-2", "border-blue-600");
       document.getElementById(btn.dataset.tab)?.classList.remove("hidden");
@@ -4014,30 +4011,24 @@ function initTabDaftarPloting() {
   });
 }
 
-
 function loadDaftarPloting() {
   const url = `${API_URL}?action=daftarPlot_getPlot`;
   console.log("FETCH:", url);
 
   fetch(url)
-    .then(res => res.json())
-    .then(res => {
-
+    .then((res) => res.json())
+    .then((res) => {
       console.log("RESPONSE API:", res);
 
       let data = [];
 
-    
       if (Array.isArray(res)) {
         data = res;
-      } 
-      else if (res.data && Array.isArray(res.data)) {
+      } else if (res.data && Array.isArray(res.data)) {
         data = res.data;
-      } 
-      else if (res.data && Array.isArray(res.data.data)) {
+      } else if (res.data && Array.isArray(res.data.data)) {
         data = res.data.data;
-      } 
-      else {
+      } else {
         console.error("FORMAT DATA TIDAK DIKENALI:", res);
         alert("Format data tidak dikenali");
         return;
@@ -4046,40 +4037,37 @@ function loadDaftarPloting() {
       console.log("DATA FINAL:", data);
       console.log("JUMLAH DATA:", data.length);
 
-    
       GLOBAL_DATA_PLOTING = data;
       FILTERED_DATA_PLOTING = data;
 
-    
       renderTablePloting(GLOBAL_DATA_PLOTING);
       initFilterTanggalPloting();
     })
-    .catch(err => {
+    .catch((err) => {
       console.error("ERROR:", err);
       alert("Koneksi gagal");
     });
 }
 
-function formatTanggal(value){
+function formatTanggal(value) {
+  if (!value) return "";
 
-  if(!value) return "";
-
-  if(typeof value === "string" && value.includes("/")){
+  if (typeof value === "string" && value.includes("/")) {
     return value;
   }
 
-  if(typeof value === "string" && value.includes("T")){
-    value = value.replace("T"," ").split(".")[0];
+  if (typeof value === "string" && value.includes("T")) {
+    value = value.replace("T", " ").split(".")[0];
   }
 
   const d = new Date(value);
-  if(isNaN(d)) return value;
+  if (isNaN(d)) return value;
 
-  const tgl = String(d.getDate()).padStart(2,"0");
-  const bln = String(d.getMonth()+1).padStart(2,"0");
+  const tgl = String(d.getDate()).padStart(2, "0");
+  const bln = String(d.getMonth() + 1).padStart(2, "0");
   const thn = d.getFullYear();
-  const jam = String(d.getHours()).padStart(2,"0");
-  const min = String(d.getMinutes()).padStart(2,"0");
+  const jam = String(d.getHours()).padStart(2, "0");
+  const min = String(d.getMinutes()).padStart(2, "0");
 
   return `${tgl}/${bln}/${thn} ${jam}:${min}`;
 }
@@ -4087,7 +4075,6 @@ function renderTablePloting(data) {
   const tbody = document.querySelector("#tab-plot tbody");
   tbody.innerHTML = "";
 
- 
   if (!Array.isArray(data) || data.length === 0) {
     tbody.innerHTML = `
       <tr>
@@ -4103,18 +4090,17 @@ function renderTablePloting(data) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="border px-1 py-1 text-center">${i + 1}</td>
-      ${row.map((col, idx) => {
+      ${row
+        .map((col, idx) => {
+          if (idx === 14) {
+            col = formatTanggal(col);
+          }
 
-       
-        if (idx === 14) {
-          col = formatTanggal(col);
-        }
-      
-        return `
+          return `
           <td class="border px-1 py-1">${col ?? ""}</td>
         `;
-      
-      }).join("")}
+        })
+        .join("")}
     `;
     tbody.appendChild(tr);
   });
@@ -4124,132 +4110,102 @@ let GLOBAL_DATA_PLOTING = [];
 let FILTERED_DATA_PLOTING = [];
 
 function initFilterTanggalPloting() {
+  const filterBulan = document.getElementById("filterBulan");
 
-  const filterBulan =
-    document.getElementById("filterBulan");
-
-  const filterTahun =
-    document.getElementById("filterTahun");
+  const filterTahun = document.getElementById("filterTahun");
 
   if (!filterBulan || !filterTahun) return;
 
   const bulanSet = new Set();
+
   const tahunSet = new Set();
 
-  GLOBAL_DATA_PLOTING.forEach(row => {
-
+  GLOBAL_DATA_PLOTING.forEach((row) => {
     const tanggal = formatTanggal(row[14]);
 
     if (!tanggal) return;
 
-    const tanggalOnly = tanggal.split(" ")[0];
+    const p = tanggal.split(" ")[0].split("/");
 
-    const parts = tanggalOnly.split("/");
+    if (p.length < 3) return;
 
-    if (parts.length < 3) return;
+    bulanSet.add(p[1]);
 
-    bulanSet.add(parts[1]);
-    tahunSet.add(parts[2]);
-
+    tahunSet.add(p[2]);
   });
 
   const namaBulan = {
-    "01":"Januari",
-    "02":"Februari",
-    "03":"Maret",
-    "04":"April",
-    "05":"Mei",
-    "06":"Juni",
-    "07":"Juli",
-    "08":"Agustus",
-    "09":"September",
-    "10":"Oktober",
-    "11":"November",
-    "12":"Desember"
+    "01": "Januari",
+    "02": "Februari",
+    "03": "Maret",
+    "04": "April",
+    "05": "Mei",
+    "06": "Juni",
+    "07": "Juli",
+    "08": "Agustus",
+    "09": "September",
+    10: "Oktober",
+    11: "November",
+    12: "Desember",
   };
 
-  filterBulan.innerHTML =
-    `<option value="">Semua Bulan</option>`;
+  filterBulan.innerHTML = `<option value="">
+      Semua Bulan
+    </option>`;
 
-  filterTahun.innerHTML =
-    `<option value="">Semua Tahun</option>`;
+  filterTahun.innerHTML = `<option value="">
+      Semua Tahun
+    </option>`;
 
-  [...bulanSet]
-    .sort()
-    .forEach(bulan => {
-
-      filterBulan.innerHTML += `
+  [...bulanSet].sort().forEach((bulan) => {
+    filterBulan.innerHTML += `
         <option value="${bulan}">
           ${namaBulan[bulan]}
         </option>
       `;
-
-    });
+  });
 
   [...tahunSet]
     .sort()
     .reverse()
-    .forEach(tahun => {
-
+    .forEach((tahun) => {
       filterTahun.innerHTML += `
         <option value="${tahun}">
           ${tahun}
         </option>
       `;
-
     });
 
   function applyFilterTanggal() {
-
     const bulan = filterBulan.value;
+
     const tahun = filterTahun.value;
 
-    const hasil = GLOBAL_DATA_PLOTING.filter(row => {
-
+    FILTERED_DATA_PLOTING = GLOBAL_DATA_PLOTING.filter((row) => {
       const tanggal = formatTanggal(row[14]);
 
       if (!tanggal) return false;
 
-      const tanggalOnly =
-        tanggal.split(" ")[0];
+      const p = tanggal.split(" ")[0].split("/");
 
-      const parts =
-        tanggalOnly.split("/");
+      if (p.length < 3) return false;
 
-      if (parts.length < 3)
-        return false;
-
-      const bln = parts[1];
-      const thn = parts[2];
-
-      const cocokBulan =
-        !bulan || bln === bulan;
-
-      const cocokTahun =
-        !tahun || thn === tahun;
-
-      return cocokBulan && cocokTahun;
-
+      return (!bulan || p[1] === bulan) && (!tahun || p[2] === tahun);
     });
 
-    FILTERED_DATA_PLOTING = hasil;
-
-    renderTablePloting(hasil);
-
+    renderTablePloting(FILTERED_DATA_PLOTING);
   }
 
-  filterBulan.addEventListener(
-    "change",
-    applyFilterTanggal
-  );
+  /* CEGAH DOBEL */
 
-  filterTahun.addEventListener(
-    "change",
-    applyFilterTanggal
-  );
+  if (!filterBulan.dataset.ready) {
+    filterBulan.dataset.ready = "1";
 
+    filterBulan.addEventListener("change", applyFilterTanggal);
+
+    filterTahun.addEventListener("change", applyFilterTanggal);
+  }
 }
-
 
 function initFilterDaftarPloting() {
   const btnCari = document.getElementById("btnCari");
@@ -4258,26 +4214,21 @@ function initFilterDaftarPloting() {
   if (!btnCari || !btnReset) return;
 
   btnCari.addEventListener("click", () => {
+    const inputNoHak = document
+      .getElementById("filterNoHak")
+      .value.toLowerCase();
+    const inputDesa = document.getElementById("filterDesa").value.toLowerCase();
 
-    const inputNoHak = document.getElementById("filterNoHak").value.toLowerCase();
-    const inputDesa  = document.getElementById("filterDesa").value.toLowerCase();
-
-    const hasil = GLOBAL_DATA_PLOTING.filter(row => {
-
-      
+    const hasil = GLOBAL_DATA_PLOTING.filter((row) => {
       const rawNoHak = (row[9] || "").toString().toLowerCase();
 
-      
       const cleanNoHak = rawNoHak.replace(/[^\d]/g, "");
       const cleanInput = inputNoHak.replace(/[^\d]/g, "");
 
-      
       const desa = (row[12] || "").toString().toLowerCase();
 
-      
       const cocokNoHak =
-        rawNoHak.includes(inputNoHak) || 
-        cleanNoHak.includes(cleanInput); 
+        rawNoHak.includes(inputNoHak) || cleanNoHak.includes(cleanInput);
 
       const cocokDesa = desa.includes(inputDesa);
 
@@ -4295,18 +4246,17 @@ function initFilterDaftarPloting() {
 }
 
 function initDownloadExcelDaftarPloting() {
-  const btn = [...document.querySelectorAll("button")]
-    .find(b => b.innerText.includes("Download Excel"));
+  const btn = [...document.querySelectorAll("button")].find((b) =>
+    b.innerText.includes("Download Excel")
+  );
 
   if (!btn) return;
 
   btn.addEventListener("click", () => {
+    const dataExport = FILTERED_DATA_PLOTING.length
+      ? FILTERED_DATA_PLOTING
+      : GLOBAL_DATA_PLOTING;
 
-    const dataExport =
-      FILTERED_DATA_PLOTING.length
-        ? FILTERED_DATA_PLOTING
-        : GLOBAL_DATA_PLOTING;
-  
     const headers = [
       "No Plotting",
       "Email Address",
@@ -4326,55 +4276,42 @@ function initDownloadExcelDaftarPloting() {
       "Validasi SU",
       "Validasi NIB",
       "Plotting Pemetaan",
-      "Keterangan"
+      "Keterangan",
     ];
-  
+
     // FORMAT DATA AGAR SAMA DENGAN TABEL WEB
-    const rows = dataExport.map(row => {
-  
+    const rows = dataExport.map((row) => {
       const newRow = [...row];
-  
+
       // FORMAT TANGGAL PROSES
       newRow[14] = formatTanggal(newRow[14]);
-  
+
       // FORMAT NIB AGAR TIDAK MENJADI SCIENTIFIC
       newRow[10] = "'" + (newRow[10] ?? "");
-  
+
       return newRow;
-  
     });
-  
-    const finalData = [
-      headers,
-      ...rows
-    ];
-  
-    const workbook =
-      XLSX.utils.book_new();
-  
-    const worksheet =
-      XLSX.utils.aoa_to_sheet(finalData);
-  
-    XLSX.utils.book_append_sheet(
-      workbook,
-      worksheet,
-      "Daftar_Ploting"
-    );
-  
-    const filename =
-      `Daftar_Ploting_${new Date()
-        .toISOString()
-        .slice(0,10)}.xlsx`;
-  
+
+    const finalData = [headers, ...rows];
+
+    const workbook = XLSX.utils.book_new();
+
+    const worksheet = XLSX.utils.aoa_to_sheet(finalData);
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Daftar_Ploting");
+
+    const filename = `Daftar_Ploting_${new Date()
+      .toISOString()
+      .slice(0, 10)}.xlsx`;
+
     XLSX.writeFile(workbook, filename);
-  
   });
 }
 
 function loadDaftarEmail() {
   fetch(`${API_URL}?action=daftarPlot_getEmail`)
-    .then(res => res.json())
-    .then(res => {
+    .then((res) => res.json())
+    .then((res) => {
       console.log("RESP EMAIL:", res);
 
       if (!res.success || !Array.isArray(res.data)) {
@@ -4384,7 +4321,6 @@ function loadDaftarEmail() {
 
       const tbody = document.querySelector("#tab-email tbody");
       tbody.innerHTML = "";
-
 
       if (res.data.length === 0) {
         tbody.innerHTML = `
@@ -4413,46 +4349,37 @@ function loadDaftarEmail() {
       });
       initSearchEmail();
     })
-    .catch(err => {
+    .catch((err) => {
       console.error("LOAD EMAIL ERROR:", err);
       alert("Koneksi gagal");
     });
 }
-function initSearchEmail(){
-
+function initSearchEmail() {
   const input = document.getElementById("searchEmail");
-  if(!input) return;
+  if (!input) return;
 
-
-  if(input.dataset.searchReady) return;
+  if (input.dataset.searchReady) return;
   input.dataset.searchReady = "1";
 
-  input.addEventListener("input", function(){
-
+  input.addEventListener("input", function () {
     const keyword = this.value.toLowerCase();
     const rows = document.querySelectorAll("#tab-email tbody tr");
 
-    rows.forEach(row => {
-
+    rows.forEach((row) => {
       const text = row.textContent.toLowerCase();
 
-      row.style.display = text.includes(keyword)
-        ? ""
-        : "none";
-
+      row.style.display = text.includes(keyword) ? "" : "none";
     });
-
   });
-
 }
 
 function initDaftarEmailTab() {
   const tableBody = document.querySelector("#tab-email tbody");
-  const btnTambah = [...document.querySelectorAll("button")]
-    .find(b => b.innerText.includes("Tambah Email"));
+  const btnTambah = [...document.querySelectorAll("button")].find((b) =>
+    b.innerText.includes("Tambah Email")
+  );
 
   if (!tableBody || !btnTambah) return;
-
 
   btnTambah.addEventListener("click", () => {
     const email = prompt("Alamat Email:");
@@ -4469,35 +4396,32 @@ function initDaftarEmailTab() {
         action: "daftarPlot_addEmail",
         email,
         nama,
-        telp
+        telp,
       },
       loadDaftarEmail
     );
   });
 
-
-  tableBody.addEventListener("click", e => {
+  tableBody.addEventListener("click", (e) => {
     const tr = e.target.closest("tr");
     if (!tr) return;
 
-
     const sheetRow = tr.rowIndex + 1;
 
-    
     if (e.target.classList.contains("edit-email")) {
       const email = prompt("Alamat Email:", tr.cells[1].innerText);
-      const nama  = prompt("Nama Notaris:", tr.cells[2].innerText);
-      const telp  = prompt("No Telp:", tr.cells[3].innerText);
+      const nama = prompt("Nama Notaris:", tr.cells[2].innerText);
+      const telp = prompt("No Telp:", tr.cells[3].innerText);
 
       if (!email || !nama || !telp) return;
 
       postAPI(
         {
           action: "daftarPlot_updateEmail",
-          row: sheetRow,   
+          row: sheetRow,
           email,
           nama,
-          telp
+          telp,
         },
         loadDaftarEmail
       );
@@ -4509,7 +4433,7 @@ function initDaftarEmailTab() {
       postAPI(
         {
           action: "daftarPlot_deleteEmail",
-          row: sheetRow  
+          row: sheetRow,
         },
         loadDaftarEmail
       );
@@ -4517,21 +4441,20 @@ function initDaftarEmailTab() {
   });
 }
 
-
 function postAPI(payload, callback) {
   fetch(API_URL, {
     method: "POST",
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   })
-    .then(res => res.json())
-    .then(res => {
+    .then((res) => res.json())
+    .then((res) => {
       if (!res.success) {
         alert("Operasi gagal");
         return;
       }
       if (typeof callback === "function") callback();
     })
-    .catch(err => {
+    .catch((err) => {
       console.error("POST ERROR:", err);
       alert("Koneksi gagal");
     });
