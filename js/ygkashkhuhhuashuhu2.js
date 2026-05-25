@@ -307,21 +307,20 @@ if (!window.__HISTORY_JS_LOADED__) {
       return value;
     }
   }
-  function sortByTanggalDesc(data) {
-    return data.sort(
-      (
-        a,
-        b
-      ) => {
-        const dateA =
-          new Date(
-            a[2]
-          ).getTime() || 0;
-        const dateB =
-          new Date(
-            b[2]
-          ).getTime() || 0;
-        return dateB - dateA;
-      });
-  }
-}
+   function sortByTanggalDesc(data){
+     return data.sort(
+       (a,b)=>{
+   
+         const dateA =
+           new Date(
+             a["Tgl Dikirim"] || 0
+           ).getTime();
+   
+         const dateB =
+           new Date(
+             b["Tgl Dikirim"] || 0
+           ).getTime();
+         return dateB-dateA; 
+       }
+     );
+   }
