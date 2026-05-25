@@ -78,7 +78,7 @@ if (!window.__QWYUSAJKHU1_JS_LOADED__) {
       });
   };
   
-   window.initInboxBerkas = function () {
+   window.initInboxBerkas = async function () {
    
       if (
          !window.APP_CONFIG?.API_WEB ||
