@@ -325,7 +325,7 @@ if (!window.__QWYUSAJKHU1_JS_LOADED__) {
     if (!notifInbox || !notifText) return;
     if (inboxData.length > 0) {
       notifInbox.classList.remove("hidden");
-      notifText.innerText = `📥 ${inboxData.length} inbox baru masuk`;
+      notifText.innerText = `📥 ${inboxData.length} inbox baru masuk untuk anda`;
     } else {
       notifInbox.classList.add("hidden");
     }
