@@ -781,10 +781,8 @@ function initInformasiBerkas() {
         <tr>
           <td class="border px-2 py-1">${row["Nomor/Tahun Berkas"] || "-"}</td>
           <td class="border px-2 py-1">${row["Pengirim"] || "-"}</td>
-          <td class="border px-2 py-1">${row["Tgl dikirim"] || "-"}</td>
           <td class="border px-2 py-1">${row["Dikirim Ke"] || "-"}</td>
-          <td class="border px-2 py-1">${row["Penerima"] || "-"}</td>
-          <td class="border px-2 py-1">${row["Tgl diterima"] || "-"}</td>
+          <td class="border px-2 py-1">${row["Tgl dikirim"] || "-"}</td>
           <td class="border px-2 py-1">${row["Status"] || "-"}</td>
           <td class="border px-2 py-1">${row["Keterangan"] || "-"}</td>
         </tr>
