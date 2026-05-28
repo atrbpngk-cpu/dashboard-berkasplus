@@ -196,6 +196,7 @@ function lihatBerkasSeksi(namaSeksi) {
         <td class="border px-2 py-1">${row["Jenis permohonan"] || "-"}</td>
         <td class="border px-2 py-1">${row["Desa/Kecamatan"] || "-"}</td>
         <td class="border px-2 py-1">${row["Status Berkas"] || "-"}</td>
+        <td class="border px-2 py-1">${row["Keterangan"] || "-"}</td>
       </tr>
     `;
   });
@@ -219,7 +220,8 @@ function downloadExcelSeksi() {
     "Jenis Permohonan": row["Jenis permohonan"],
     "Desa / Kecamatan": row["Desa/Kecamatan"],
     "Status": row["Status Berkas"],
-    "Posisi Terakhir": row["Posisi terakhir"]
+    "Posisi Terakhir": row["Posisi terakhir"],
+    "Keterangan": row["Keterangan"]
   }));
 
   const ws = XLSX.utils.json_to_sheet(excelData);
