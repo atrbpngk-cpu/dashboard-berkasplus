@@ -225,19 +225,11 @@ function initInformasiBerkas() {
           </td>
 
           <td class="border px-2 py-1">
-            ${row["Tgl dikirim"] || "-"}
-          </td>
-
-          <td class="border px-2 py-1">
             ${row["Dikirim Ke"] || "-"}
           </td>
 
           <td class="border px-2 py-1">
-            ${row["Penerima"] || "-"}
-          </td>
-
-          <td class="border px-2 py-1">
-            ${row["Tgl diterima"] || "-"}
+            ${row["Tgl dikirim"] || "-"}
           </td>
 
           <td class="border px-2 py-1">
