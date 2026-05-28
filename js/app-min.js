@@ -776,9 +776,10 @@ function initInformasiBerkas() {
       return;
     }
 
-    history.forEach(row => {
+    history.forEach((row, i) => {
       riwayatBody.insertAdjacentHTML("beforeend", `
         <tr>
+          <td class="border px-2 py-1 text-center">${i + 1}</td>
           <td class="border px-2 py-1">${row["Nomor/Tahun Berkas"] || "-"}</td>
           <td class="border px-2 py-1">${row["Pengirim"] || "-"}</td>
           <td class="border px-2 py-1">${row["Dikirim Ke"] || "-"}</td>
