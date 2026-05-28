@@ -1,231 +1,174 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Daftar Ploting</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Daftar Ploting</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <style>
-    html, body {
-      overflow-x: hidden;
-    }
-    table th, table td {
-      white-space: normal;
-      word-break: break-word;
-      line-height: 1.3;
-    }
-  </style>
-</head>
-
-<body class="bg-gray-100 p-4 overflow-x-hidden">
-
-<div class="w-full max-w-full overflow-hidden">
-  <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
-
-    <div class="px-4 py-3 border-b flex items-center gap-2">
-      <img src="icons/database.svg" class="w-4 h-4" alt="icon">
-      <h2 class="font-semibold text-blue-600 text-sm">
-        Data Ploting SiGundul
-      </h2>
-    </div>
-
-    <div class="px-4 pt-2 border-b">
-      <div class="flex gap-1 text-xs">
-        <button
-          class="tab-btn pb-2 font-medium text-gray-500 hover:text-gray-700"
-          data-tab="tab-plot">
-          Daftar Hasil Ploting
-        </button>
-        <button
-          class="tab-btn pb-2 font-medium text-gray-500 hover:text-gray-700"
-          data-tab="tab-email">
-          Daftar Email
-        </button>
-      </div>
-    </div>
-
-    <div class="px-4 py-4 overflow-hidden">
-
-      <div id="tab-plot" class="tab-content space-y-3">
-
-        <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
-
-          
-          <div class="flex flex-wrap gap-2 items-center">
-        
-            <input
-              id="filterNoHak"
-              type="text"
-              placeholder="Nomor HM / HGB / Wakaf "
-              class="border rounded px-2 py-1 w-48">
-        
-            <input
-              id="filterDesa"
-              type="text"
-              placeholder="Desa / Kecamatan"
-              class="border rounded px-2 py-1 w-40">
-        
-            <button
-              id="btnCari"
-              class="bg-blue-600 text-white px-3 py-1 rounded">
-              Cari
-            </button>
-        
-            <button
-              id="btnReset"
-              class="bg-red-500 text-white px-3 py-1 rounded">
-              Reset
-            </button>
-        
-          </div>
-        
-          
-          <div class="flex flex-wrap gap-2 items-center">
-        
-            <select
-              id="filterBulan"
-              class="border rounded px-2 py-1 text-xs">
-              <option value="">Semua Bulan</option>
-            </select>
-        
-            <select
-              id="filterTahun"
-              class="border rounded px-2 py-1 text-xs">
-              <option value="">Semua Tahun</option>
-            </select>
-        
-            <button
-              class="bg-green-600 text-white px-3 py-1 rounded">
-              Download Excel
-            </button>
-        
-          </div>
-        
-        </div>
-
-
-        <div class="border rounded bg-white overflow-hidden">
-          <table class="w-full text-[11px] border-collapse">
-            <thead class="bg-gray-100">
-              <tr>
-                <th class="border px-1 py-2">No</th>
-                <th class="border px-1 py-2">No Plotting</th>
-                <th class="border px-1 py-2">Email Address</th>
-                <th class="border px-1 py-2">Link Lokasi Tanah</th>
-                <th class="border px-1 py-2">Lampiran Kepemilikan</th>
-                <th class="border px-1 py-2">Nama Pemilik</th>
-                <th class="border px-1 py-2">Tanggal Lahir</th>
-                <th class="border px-1 py-2">No Telepon</th>
-                <th class="border px-1 py-2">Jenis Permohonan</th>
-                <th class="border px-1 py-2">Jenis Kepemilikan</th>
-                <th class="border px-1 py-2">No HM / HGB / Wakaf</th>
-                <th class="border px-1 py-2">NIB</th>
-                <th class="border px-1 py-2">Surat Ukur</th>
-                <th class="border px-1 py-2">Desa / Kecamatan</th>
-                <th class="border px-1 py-2">Petugas Plotting</th>
-                <th class="border px-1 py-2">Tanggal Proses</th>
-                <th class="border px-1 py-2">Validasi SU</th>
-                <th class="border px-1 py-2">Validasi NIB</th>
-                <th class="border px-1 py-2">Plotting Pemetaan</th>
-                <th class="border px-1 py-2">Keterangan</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-
-      <div id="tab-email" class="tab-content hidden space-y-3">
-
-        <div class="flex flex-wrap gap-2 items-center text-xs">
-          <input
-            id="searchEmail"
-            type="text"
-            placeholder="Cari email / nama notaris..."
-            class="border rounded px-2 py-1 w-60">
-
-          <button class="bg-blue-600 text-white px-3 py-1 rounded">
-            Tambah Email
-          </button>
-        </div>
-
-        <div class="border rounded bg-white overflow-hidden">
-          <table class="w-full text-[11px] border-collapse">
-            <thead class="bg-gray-100">
-              <tr>
-                <th class="border px-2 py-2 w-10">No</th>
-                <th class="border px-2 py-2">Alamat Email</th>
-                <th class="border px-2 py-2">Nama Notaris</th>
-                <th class="border px-2 py-2">No Telp</th>
-                <th class="border px-2 py-2 w-24">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-<script>
-const tabs = document.querySelectorAll('.tab-btn');
-const contents = document.querySelectorAll('.tab-content');
-
-tabs.forEach(btn => {
-  btn.addEventListener('click', () => {
-    tabs.forEach(b => b.classList.remove(
-      'text-blue-600','border-b-2','border-blue-600'
-    ));
-    contents.forEach(c => c.classList.add('hidden'));
-
-    btn.classList.add('text-blue-600','border-b-2','border-blue-600');
-    document.getElementById(btn.dataset.tab).classList.remove('hidden');
-  });
-});
-</script>
-
-<script>
-
-
-  document.getElementById('btnReset').addEventListener('click', () => {
-  document.getElementById('filterNoHak').value = '';
-  document.getElementById('filterDesa').value = '';
-
-  document.querySelectorAll('#tab-plot tbody tr').forEach(row => {
-    row.style.display = '';
-  });
-});
-</script>
-<script>
-
-  setInterval(function(){
-  
-    const input = document.getElementById("searchEmail");
-    if(!input) return;
-  
-    const keyword = input.value.toLowerCase();
-  
-    const rows = document.querySelectorAll("#tab-email tbody tr");
-  
-    rows.forEach(row => {
-  
-      const text = row.innerText.toLowerCase();
-  
-      if(text.includes(keyword)){
-        row.style.display = "";
-      }else{
-        row.style.display = "none";
+    <style>
+      html,
+      body {
+        overflow-x: hidden;
       }
-  
-    });
-  
-  },300);
-  
-  </script>
-</body>
+      table th,
+      table td {
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.3;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100 p-4 overflow-x-hidden">
+    <div class="w-full max-w-full overflow-hidden">
+      <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+        <div class="px-4 py-3 border-b flex items-center gap-2">
+          <img src="icons/database.svg" class="w-4 h-4" alt="icon" />
+          <h2 class="font-semibold text-blue-600 text-sm">
+            Data Ploting SiGundul
+          </h2>
+        </div>
+
+        <div class="px-4 pt-2 border-b">
+          <div class="flex gap-1 text-xs">
+            <button
+              class="tab-btn pb-2 font-medium text-gray-500 hover:text-gray-700"
+              data-tab="tab-plot"
+            >
+              Daftar Hasil Ploting
+            </button>
+            <button
+              class="tab-btn pb-2 font-medium text-gray-500 hover:text-gray-700"
+              data-tab="tab-email"
+            >
+              Daftar Email
+            </button>
+          </div>
+        </div>
+
+        <div class="px-4 py-4 overflow-hidden">
+          <div id="tab-plot" class="tab-content space-y-3">
+            <div
+              class="flex flex-wrap items-center justify-between gap-3 text-xs"
+            >
+              <div class="flex flex-wrap gap-2 items-center">
+                <input
+                  id="filterNoHak"
+                  type="text"
+                  placeholder="Nomor HM / HGB / Wakaf "
+                  class="border rounded px-2 py-1 w-48"
+                />
+
+                <input
+                  id="filterDesa"
+                  type="text"
+                  placeholder="Desa / Kecamatan"
+                  class="border rounded px-2 py-1 w-40"
+                />
+
+                <button
+                  id="btnCari"
+                  class="bg-blue-600 text-white px-3 py-1 rounded"
+                >
+                  🔍 Cari
+                </button>
+
+                <button
+                  id="btnReset"
+                  class="bg-red-500 text-white px-3 py-1 rounded"
+                >
+                  Reset
+                </button>
+              </div>
+
+              <div class="flex flex-wrap gap-2 items-center">
+                <select
+                id="filterBulan"
+                class="border rounded px-2 py-1 text-xs relative z-50 bg-white"
+                >
+                  <option value="">Semua Bulan</option>
+                </select>
+
+                <select
+                id="filterTahun"
+                class="border rounded px-2 py-1 text-xs relative z-50 bg-white"
+                >
+                  <option value="">Semua Tahun</option>
+                </select>
+
+                <button class="bg-green-600 text-white px-3 py-1 rounded">
+                  Download Excel
+                </button>
+              </div>
+            </div>
+
+            <div class="border rounded bg-white overflow-auto">
+              <table class="w-full text-[11px] border-collapse">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="border px-1 py-2">No</th>
+                    <th class="border px-1 py-2">No Plotting</th>
+                    <th class="border px-1 py-2">Email Address</th>
+                    <th class="border px-1 py-2">Link Lokasi Tanah</th>
+                    <th class="border px-1 py-2">Lampiran Kepemilikan</th>
+                    <th class="border px-1 py-2">Nama Pemilik</th>
+                    <th class="border px-1 py-2">Tanggal Lahir</th>
+                    <th class="border px-1 py-2">No Telepon</th>
+                    <th class="border px-1 py-2">Jenis Permohonan</th>
+                    <th class="border px-1 py-2">Jenis Kepemilikan</th>
+                    <th class="border px-1 py-2">No HM / HGB / Wakaf</th>
+                    <th class="border px-1 py-2">NIB</th>
+                    <th class="border px-1 py-2">Surat Ukur</th>
+                    <th class="border px-1 py-2">Desa / Kecamatan</th>
+                    <th class="border px-1 py-2">Petugas Plotting</th>
+                    <th class="border px-1 py-2">Tanggal Proses</th>
+                    <th class="border px-1 py-2">Validasi SU</th>
+                    <th class="border px-1 py-2">Validasi NIB</th>
+                    <th class="border px-1 py-2">Plotting Pemetaan</th>
+                    <th class="border px-1 py-2">Keterangan</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="tab-email" class="tab-content hidden space-y-3">
+            <div class="flex flex-wrap gap-2 items-center text-xs">
+              <input
+                id="searchEmail"
+                type="text"
+                placeholder="Cari email / nama notaris..."
+                class="border rounded px-2 py-1 w-60"
+              />
+
+              <button class="bg-blue-600 text-white px-3 py-1 rounded">
+                Tambah Email
+              </button>
+            </div>
+
+            <div class="border rounded bg-white overflow-auto">
+              <table class="w-full text-[11px] border-collapse">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="border px-2 py-2 w-10">No</th>
+                    <th class="border px-2 py-2">Alamat Email</th>
+                    <th class="border px-2 py-2">Nama Notaris</th>
+                    <th class="border px-2 py-2">No Telp</th>
+                    <th class="border px-2 py-2 w-24">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/daftar-ploting.js"></script>
+    <script src="../js/app-min.js"></script>
+    
+  </body>
 </html>
