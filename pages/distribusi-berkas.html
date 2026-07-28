@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Distribusi Berkas</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-slate-100">
+    <div class="max-w-7xl mx-auto p-6 space-y-6">
+      <!-- ========================================================= -->
+      <!-- HEADER -->
+      <!-- ========================================================= -->
+
+      <div class="bg-white rounded-xl shadow border">
+        <div class="px-6 py-5 border-b">
+          <h1 class="text-2xl font-bold text-slate-800">Distribusi Berkas</h1>
+
+          <p class="text-sm text-slate-500 mt-1">
+            Halaman ini digunakan untuk melakukan Entry Berkas, Daftar Isi
+            Berkas dan Distribusi Berkas dalam satu halaman.
+          </p>
+        </div>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- PENCARIAN BERKAS -->
+      <!-- ========================================================= -->
+
+      <div class="bg-white rounded-xl shadow border">
+        <div class="px-6 py-4 border-b">
+          <h2 class="font-semibold text-blue-700">Pencarian Berkas</h2>
+        </div>
+
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <!-- Nomor -->
+
+            <div class="md:col-span-6">
+              <label class="block text-sm font-medium mb-2">
+                Nomor Berkas
+              </label>
+
+              <input
+                id="nomorBerkasCari"
+                type="number"
+                placeholder="Masukkan Nomor Berkas"
+                class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <!-- Tahun -->
+
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium mb-2"> Tahun </label>
+
+              <input
+                id="tahunCari"
+                type="number"
+                placeholder="2025"
+                class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <!-- Tombol -->
+
+            <div class="md:col-span-4 flex items-end gap-3">
+              <button
+                id="btnCariBerkas"
+                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-3 transition"
+              >
+                Cari Berkas
+              </button>
+
+              <button
+                id="btnResetCari"
+                class="flex-1 bg-slate-300 hover:bg-slate-400 rounded-lg py-3 transition"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- STATUS -->
+      <!-- ========================================================= -->
+
+      <div id="statusPanel" class="hidden bg-white rounded-xl shadow border">
+        <div class="px-6 py-4">
+          <div id="statusMessage" class="text-sm text-slate-700">-</div>
+        </div>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- PANEL KONTEN -->
+      <!-- ========================================================= -->
+
+      <div id="mainPanel" class="hidden space-y-6">
+        <!-- ===================================================== -->
+        <!-- INFORMASI BERKAS -->
+        <!-- ===================================================== -->
+
+        <div
+          id="informasiPanel"
+          class="hidden bg-white rounded-xl shadow border"
+        >
+          <div class="px-6 py-4 border-b">
+            <h2 class="font-semibold text-blue-700">Informasi Berkas</h2>
+          </div>
+
+          <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs text-slate-500">
+                  Nomor Berkas
+                </label>
+
+                <p id="infoNomor" class="mt-1 font-semibold">-</p>
+              </div>
+
+              <div>
+                <label class="block text-xs text-slate-500">
+                  Nama Pemohon
+                </label>
+
+                <p id="infoNama" class="mt-1 font-semibold">-</p>
+              </div>
+
+              <div>
+                <label class="block text-xs text-slate-500">
+                  Desa / Kecamatan</label
+                >
+
+                <p id="infoDesa" class="mt-1 font-semibold">-</p>
+              </div>
+
+              <div>
+                <label class="block text-xs text-slate-500">
+                  Petugas Ukur
+                </label>
+
+                <p id="infoPukur" class="mt-1 font-semibold">-</p>
+              </div>
+
+              <div class="md:col-span-2">
+                <label class="block text-xs text-slate-500">
+                  Jenis Permohonan
+                </label>
+
+                <p id="infoJenis" class="mt-1 font-semibold">-</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================== -->
+        <!-- ENTRY BERKAS -->
+        <!-- ===================================================== -->
+
+        <div id="entryPanel" class="hidden bg-white rounded-xl shadow border">
+          <div class="px-6 py-4 border-b">
+            <h2 class="font-semibold text-blue-700">Entry Berkas Baru</h2>
+            <p class="text-sm text-slate-500 mt-1">
+              Silahkan Isi Data Berkas Baru Anda Disini.
+            </p>
+          </div>
+
+          <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm mb-2"> Nomor Berkas </label>
+
+                <input
+                  id="entryNomorBerkas"
+                  type="text"
+                  class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                />
+              </div>
+
+              <div>
+                <label class="block text-sm mb-2"> Tahun </label>
+
+                <input
+                  id="entryTahun"
+                  type="number"
+                  class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                />
+              </div>
+
+              <div>
+                <label class="block text-sm mb-2"> Tanggal Mulai </label>
+                <input
+                  id="tglMulai"
+                  type="date"
+                  class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                />
+              </div>
+
+              <div class="md:col-span-2">
+                <label class="block text-sm mb-2"> Nama Pemohon </label>
+
+                <input
+                  id="entryNama"
+                  type="text"
+                  class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                />
+              </div>
+
+              <div>
+                <label class="block text-sm mb-2"> Desa / Kecamatan </label>
+
+                <select
+                  id="entryDesa"
+                  class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                >
+                  <option value="">-- Pilih Desa / Kecamatan --</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm mb-2"> Jenis Permohonan </label>
+
+                <select
+                  id="JenisPermohonan"
+                  class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                >
+                  <option value="">-- Pilih Jenis Permohonan --</option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-6 flex justify-end">
+              <button
+                id="btnSimpanEntry"
+                type="button"
+                class="px-8 py-3 rounded-lg bg-green-600 hover:bg-green-700 text-white"
+              >
+                Simpan Data
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BAGIAN 2 DIMULAI DARI PANEL DAFTAR ISI BERKAS -->
+        <!-- ===================================================== -->
+        <!-- DAFTAR ISI BERKAS -->
+        <!-- ===================================================== -->
+
+        <div id="daftarIsiPanel" class="bg-white rounded-xl shadow border">
+          <div class="px-6 py-4 border-b">
+            <h2 class="font-semibold text-blue-700">Daftar Isi Berkas</h2>
+
+            <p class="text-sm text-slate-500 mt-1">
+              Lengkapi data dokumen yang terdapat di dalam berkas.
+            </p>
+          </div>
+
+          <div class="p-6 space-y-8">
+            <!-- ============================================= -->
+            <!-- FORMULIR 301 -->
+            <!-- ============================================= -->
+
+            <div class="border rounded-xl border-slate-200">
+              <div class="px-5 py-3 border-b bg-slate-50">
+                <h3 class="font-semibold text-slate-700">Daftar Isi 301</h3>
+              </div>
+
+              <div class="p-5">
+                <div class="grid md:grid-cols-2 gap-5">
+                  <div>
+                    <label class="block text-sm mb-2"> Nomor 301 </label>
+
+                    <input
+                      id="no301"
+                      type="text"
+                      class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                    />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm mb-2"> Tanggal 301 </label>
+
+                    <input
+                      id="tgl301"
+                      type="date"
+                      class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================= -->
+            <!-- FORMULIR 302 -->
+            <!-- ============================================= -->
+
+            <div class="border rounded-xl border-slate-200">
+              <div class="px-5 py-3 border-b bg-slate-50">
+                <h3 class="font-semibold text-slate-700">Daftar Isi 302</h3>
+              </div>
+
+              <div class="p-5">
+                <div class="grid md:grid-cols-2 gap-5">
+                  <div>
+                    <label class="block text-sm mb-2"> Nomor 302 </label>
+
+                    <input
+                      id="no302"
+                      type="text"
+                      class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                    />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm mb-2"> Tanggal 302 </label>
+
+                    <input
+                      id="tgl302"
+                      type="date"
+                      class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================= -->
+            <!-- FORMULIR 303 -->
+            <!-- ============================================= -->
+
+            <div class="border rounded-xl border-slate-200">
+              <div class="px-5 py-3 border-b bg-slate-50">
+                <h3 class="font-semibold text-slate-700">Daftar Isi 303</h3>
+              </div>
+
+              <div class="p-5">
+                <div class="grid md:grid-cols-2 gap-5">
+                  <div>
+                    <label class="block text-sm mb-2"> Nomor 303 </label>
+
+                    <input
+                      id="no303"
+                      type="text"
+                      class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                    />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm mb-2"> Tanggal 303 </label>
+
+                    <input
+                      id="tgl303"
+                      type="date"
+                      class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================================= -->
+            <!-- FORMULIR 307 -->
+            <!-- ============================================= -->
+
+            <div class="border rounded-xl border-slate-200">
+              <div class="px-5 py-3 border-b bg-slate-50">
+                <h3 class="font-semibold text-slate-700">Daftar Isi 307</h3>
+              </div>
+
+              <div class="p-5">
+                <div class="grid md:grid-cols-2 gap-5">
+                  <div>
+                    <label class="block text-sm mb-2"> Nomor 307 </label>
+
+                    <input
+                      id="no307"
+                      type="text"
+                      class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                    />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm mb-2"> Tanggal 307 </label>
+
+                    <input
+                      id="tgl307"
+                      type="date"
+                      class="w-full rounded-lg border border-slate-300 px-4 py-3"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BAGIAN 3 DIMULAI DARI PANEL DISTRIBUSI BERKAS -->
+        <!-- ===================================================== -->
+        <!-- DISTRIBUSI BERKAS -->
+        <!-- ===================================================== -->
+
+        <div id="distribusiPanel" class="bg-white rounded-xl shadow border">
+          <div class="px-6 py-4 border-b">
+            <h2 class="font-semibold text-blue-700">Distribusi Berkas</h2>
+
+            <p class="text-sm text-slate-500 mt-1">
+              Tentukan tujuan distribusi berkas.
+            </p>
+          </div>
+
+          <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Seksi -->
+
+              <div>
+                <label class="block text-sm font-medium mb-2"> Seksi </label>
+
+                <select
+                  id="seksiDistribusi"
+                  class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">-- Pilih Seksi --</option>
+                </select>
+              </div>
+
+              <!-- Petugas -->
+
+              <div>
+                <label class="block text-sm font-medium mb-2">
+                  Petugas Ukur</label
+                >
+
+                <select
+                  id="petugasDistribusi"
+                  class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">-- Pilih Petugas Ukur--</option>
+                </select>
+              </div>
+
+              <!-- Dikirim Ke -->
+
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium mb-2">
+                  Distribusikan Kepada
+                </label>
+
+                <select
+                  id="tujuanDistribusi"
+                  class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">-- Pilih Tujuan --</option>
+                </select>
+              </div>
+
+              <!-- Keterangan -->
+
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium mb-2">
+                  Keterangan
+                </label>
+
+                <textarea
+                  id="keteranganDistribusi"
+                  rows="4"
+                  placeholder="Tambahkan catatan jika diperlukan..."
+                  class="w-full rounded-lg border border-slate-300 px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================== -->
+        <!-- TOMBOL AKSI -->
+        <!-- ===================================================== -->
+
+        <div class="bg-white rounded-xl shadow border">
+          <div class="px-6 py-5 flex flex-col sm:flex-row justify-end gap-3">
+            <button
+              id="btnBatalDistribusi"
+              type="button"
+              class="px-8 py-3 rounded-lg border border-slate-300 hover:bg-slate-100 transition"
+            >
+              Batal
+            </button>
+
+            <button
+              id="btnDistribusikan"
+              type="button"
+              class="px-8 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition"
+            >
+              Distribusikan Berkas
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- EMPTY STATE -->
+      <!-- ========================================================= -->
+
+      <div id="emptyState" class="hidden">
+        <div class="bg-white rounded-xl border border-dashed border-slate-300">
+          <div class="py-16 px-6 text-center">
+            <h2 class="text-xl font-semibold text-slate-700">Belum Ada Data</h2>
+
+            <p class="text-slate-500 mt-3">
+              Silakan lakukan pencarian Nomor Berkas terlebih dahulu.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
