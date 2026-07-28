@@ -124,6 +124,12 @@ function loadPage(page) {
           initKirimBerkas();
         }
 
+         if (page === "distribusi-berkas.html" &&
+             typeof initDistribusiBerkas === "function") {
+            console.log("INIT: Distribusi Berkas 🚀");
+            initDistribusiBerkas();
+          }
+
         // INBOX BERKAS
         if (page === "inbox.html" &&
             typeof initInboxBerkas === "function") {
