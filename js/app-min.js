@@ -275,8 +275,13 @@ window.isAdmin = isAdmin;
             console.log("INIT: Kirim Berkas 🚀");
             initKirimBerkas();
           }
+
+          if (page === "distribusi-berkas.html" &&
+             typeof initDistribusiBerkas === "function") {
+            console.log("INIT: Distribusi Berkas 🚀");
+            initDistribusiBerkas();
+          }
   
-          
           if (page === "inbox.html" &&
               typeof initInboxBerkas === "function") {
             console.log("INIT: Inbox Berkas");
