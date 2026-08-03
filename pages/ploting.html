@@ -1,296 +1,389 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Ploting</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ploting</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <style>
-    html, body {
-      overflow-x: hidden;
-    }
+    <style>
+      html,
+      body {
+        overflow-x: hidden;
+      }
 
-    table th,
-    table td {
-      white-space: normal;
-      word-break: break-word;
-      line-height: 1.3;
-    }
-  </style>
-</head>
+      table th,
+      table td {
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.3;
+      }
+    </style>
+  </head>
 
-<body class="bg-gray-100 p-4 overflow-x-hidden">
+  <body class="bg-gray-100 p-4 overflow-x-hidden">
+    <div class="w-full max-w-full overflow-hidden">
+      <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+        <div class="px-4 py-3 border-b flex items-center gap-2">
+          <img src="icons/map-pin.svg" class="w-4 h-4" alt="icon" />
+          <h2 class="font-semibold text-blue-600 text-sm">Ploting SiGundul</h2>
+        </div>
 
-<div class="w-full max-w-full overflow-hidden">
-
-  <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
-
-    
-    <div class="px-4 py-3 border-b flex items-center gap-2">
-      <img src="icons/map-pin.svg" class="w-4 h-4" alt="icon">
-      <h2 class="font-semibold text-blue-600 text-sm">
-        Ploting SiGundul
-      </h2>
-    </div>
-
-    
-    <div class="px-4 pt-2 border-b">
-      <div class="flex gap-1 text-xs">
-        <button
-          class="tab-btn pb-2 font-medium text-gray-500 hover:text-gray-700"
-          data-tab="tab-data">
-          Data Plotting
-        </button>
-        <button
-          class="tab-btn pb-2 font-medium text-gray-500 hover:text-gray-700"
-          data-tab="tab-proses">
-          Proses Plotting
-        </button>
-      </div>
-    </div>
-
-    
-    <div class="px-4 py-4 overflow-hidden">
-
-      
-      <div id="tab-data" class="tab-content space-y-3">
-
-        
-        <div class="flex items-center justify-between flex-wrap gap-3">
-
-          
-          <div class="flex flex-wrap gap-2 items-center text-xs">
-        
-            <input
-              id="filterNoHak"
-              type="text"
-              placeholder="Nomor HM / HGB / Wakaf"
-              class="border rounded px-2 py-1 w-48"
-            >
-        
-            <input
-              id="filterDesa"
-              type="text"
-              placeholder="Desa / Kecamatan"
-              class="border rounded px-2 py-1 w-40"
-            >
-        
+        <div class="px-4 pt-2 border-b">
+          <div class="flex gap-1 text-xs">
             <button
-              id="btnCari"
-              class="bg-blue-600 text-white px-3 py-1 rounded">
-              🔍 Cari
+              class="tab-btn pb-2 font-medium text-gray-500 hover:text-gray-700"
+              data-tab="tab-data"
+            >
+              Data Plotting
             </button>
-        
             <button
-              id="btnReset"
-              class="bg-red-500 text-white px-3 py-1 rounded">
-              Reset
-            </button>
-        
-          </div>
-        
-          
-          <div>
-        
-            <select
-              id="filterStatus"
-              class="border rounded px-3 py-1 text-xs bg-white shadow-sm">
-        
-              <option value="all">Semua Data</option>
-              <option value="progress">Data Proses</option>
-              <option value="done">Data Done</option>
-        
-            </select>
-        
-          </div>
-        
-        </div>
-
-        
-        <div class="border rounded bg-white overflow-hidden">
-
-          <table class="w-full text-[11px] border-collapse">
-            <thead class="bg-gray-100">
-              <tr>
-                <th class="border px-1 py-2">No</th>
-                <th class="border px-1 py-2">Tanggal Data Masuk</th>
-                <th class="border px-1 py-2">Email</th>
-                <th class="border px-1 py-2">Lokasi Tanah</th>
-                <th class="border px-1 py-2">Lampiran</th>
-                <th class="border px-1 py-2">Nama Pemilik</th>
-                <th class="border px-1 py-2">Tgl Lahir</th>
-                <th class="border px-1 py-2">Telepon</th>
-                <th class="border px-1 py-2">Jenis Permohonan</th>
-                <th class="border px-1 py-2">Jenis Hak</th>
-                <th class="border px-1 py-2">No Hak</th>
-                <th class="border px-1 py-2">NIB</th>
-                <th class="border px-1 py-2">Surat Ukur</th>
-                <th class="border px-1 py-2">Desa / Kecamatan</th>
-                <th class="border px-1 py-2">Proses Data</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              
-            </tbody>
-          </table>
-
-        </div>
-      </div>
-
-      
-      <div id="tab-proses" class="tab-content hidden">
-
-        <div id="emptyProses"
-             class="flex flex-col items-center justify-center py-20 text-gray-400 text-sm">
-      
-            <p class="font-medium">Tidak ada Proses Plotting Saat ini</p>
-            <p class="text-xs">Silakan pilih Data plotting terlebih dahulu</p>
-      
-        </div>
-      
-        <div id="formProses" class="hidden">
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-white border rounded-lg p-4 shadow-sm text-xs space-y-3">
-            <h3 class="font-semibold text-blue-600 border-b pb-2">
-              Informasi Pemohon Plotting
-            </h3>
-
-            <div>
-              <p class="text-gray-500">Nama Pemohon</p>
-              <p class="font-medium" id="info-Nama">-</p>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <p class="text-gray-500">Nomor Hak</p>
-                <input
-                  id="edit-NoHak"
-                  type="text"
-                  class="w-full border rounded px-2 py-1 text-xs"
-                  placeholder="Nomor Hak">
-              </div>
-            
-              <div>
-                <p class="text-gray-500">Nomor NIB</p>
-                <input
-                  id="edit-NIB"
-                  type="text"
-                  class="w-full border rounded px-2 py-1 text-xs"
-                  placeholder="Nomor NIB">
-              </div>
-            </div>
-            
-            <div>
-              <p class="text-gray-500">Nomor Surat Ukur</p>
-              <input
-                id="edit-SU"
-                type="text"
-                class="w-full border rounded px-2 py-1 text-xs"
-                placeholder="Nomor Surat Ukur">
-            </div>
-
-            <div>
-              <p class="text-gray-500">Lokasi Tanah</p>
-              <a id="info-Lokasi" href="#" target="_blank"
-                 class="text-blue-600 underline">-</a>
-            </div>
-
-            <div>
-              <p class="text-gray-500">Lampiran</p>
-              <a id="info-Lampiran" href="#" target="_blank"
-                 class="text-indigo-600 underline">-</a>
-            </div>
-
-            <div>
-              <p class="text-gray-500">Desa / Kecamatan</p>
-              <p class="font-medium" id="info-wilayah">-</p>
-            </div>
-          </div>
-
-          <div class="bg-white border rounded-lg p-4 shadow-sm text-xs space-y-4">
-            <h3 class="font-semibold text-green-600 border-b pb-2">
+              class="tab-btn pb-2 font-medium text-gray-500 hover:text-gray-700"
+              data-tab="tab-proses"
+            >
               Proses Plotting
-            </h3>
+            </button>
+          </div>
+        </div>
 
-            <input
-            type="text"
-            id="nomorPlotting"
-            readonly
-            class="w-full border rounded px-3 py-1.5 text-xs bg-gray-100 text-gray-600 cursor-not-allowed"
-            placeholder="Otomatis oleh sistem"
-            />
-
-            <div class="space-y-2">
-              <label class="flex items-center gap-2">
-                <input type="checkbox" id="cekSU"> Plotting KKP
-              </label>
-              <label class="flex items-center gap-2">
-                <input type="checkbox" id="cekNIB"> Validasi NIB
-              </label>
-              <label class="flex items-center gap-2">
-                <input type="checkbox" id="cekPlotting"> Validasi Surat Ukur
-              </label>
-            </div>
-            
-            <div class="space-y-1">
-              <label class="text-gray-500 text-xs font-medium">
-                Upload File Plotting
-              </label>
-
-              <div class="flex items-center gap-3">
+        <div class="px-4 py-4 overflow-hidden">
+          <div id="tab-data" class="tab-content space-y-3">
+            <div class="flex items-center justify-between flex-wrap gap-3">
+              <div class="flex flex-wrap gap-2 items-center text-xs">
                 <input
-                  type="file"
-                  id="uploadFilePlotting"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  class="hidden"
-                >
+                  id="filterNoHak"
+                  type="text"
+                  placeholder="Nomor HM / HGB / Wakaf"
+                  class="border rounded px-2 py-1 w-48"
+                />
+
+                <input
+                  id="filterDesa"
+                  type="text"
+                  placeholder="Desa / Kecamatan"
+                  class="border rounded px-2 py-1 w-40"
+                />
 
                 <button
-                  type="button"
-                  onclick="document.getElementById('uploadFilePlotting').click()"
-                  class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-xs">
-                  Upload File
+                  id="btnCari"
+                  class="bg-blue-600 text-white px-3 py-1 rounded"
+                >
+                  🔍 Cari
                 </button>
 
-                <span
-                  id="namaFilePlotting"
-                  class="text-gray-500 text-xs italic truncate max-w-[200px]">
-                  Belum ada file
-                </span>
+                <button
+                  id="btnReset"
+                  class="bg-red-500 text-white px-3 py-1 rounded"
+                >
+                  Reset
+                </button>
+              </div>
+
+              <div>
+                <select
+                  id="filterStatus"
+                  class="border rounded px-3 py-1 text-xs bg-white shadow-sm"
+                >
+                  <option value="all">Semua Data</option>
+                  <option value="progress">Data Proses</option>
+                  <option value="done">Data Done</option>
+                </select>
               </div>
             </div>
 
-            <textarea
-              id="keteranganProses"
-              rows="4"
-              placeholder="Tuliskan keterangan proses plotting di sini..."
-              class="w-full border rounded px-3 py-2 text-xs resize-none"></textarea>
+            <div class="border rounded bg-white overflow-hidden">
+              <table class="w-full text-[11px] border-collapse">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="border px-1 py-2">No</th>
+                    <th class="border px-1 py-2">Tanggal Data Masuk</th>
+                    <th class="border px-1 py-2">Email</th>
+                    <th class="border px-1 py-2">Lokasi Tanah</th>
+                    <th class="border px-1 py-2">Lampiran</th>
+                    <th class="border px-1 py-2">Nama Pemilik</th>
+                    <th class="border px-1 py-2">Tgl Lahir</th>
+                    <th class="border px-1 py-2">Telepon</th>
+                    <th class="border px-1 py-2">Jenis Permohonan</th>
+                    <th class="border px-1 py-2">Jenis Hak</th>
+                    <th class="border px-1 py-2">No Hak</th>
+                    <th class="border px-1 py-2">NIB</th>
+                    <th class="border px-1 py-2">Surat Ukur</th>
+                    <th class="border px-1 py-2">Desa / Kecamatan</th>
+                    <th class="border px-1 py-2">Proses Data</th>
+                  </tr>
+                </thead>
 
-            <div class="flex gap-3 mt-4">
-              <button
-                id="btnSimpan"
-                class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded text-xs font-medium">
-                Simpan Plotting
-              </button>
-            
-              <button
-                id="btnBatal"
-                class="flex-1 bg-gray-400 hover:bg-gray-500 text-white py-2 rounded text-xs font-medium">
-                Batal
-              </button>
+                <tbody></tbody>
+              </table>
             </div>
           </div>
 
+          <div id="tab-proses" class="tab-content hidden">
+            <div
+              id="emptyProses"
+              class="flex flex-col items-center justify-center py-20 text-gray-400 text-sm"
+            >
+              <p class="font-medium">Tidak ada Proses Plotting Saat ini</p>
+              <p class="text-xs">Silakan pilih Data plotting terlebih dahulu</p>
+            </div>
+
+            <div id="formProses" class="hidden">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div
+                  class="bg-white border rounded-lg p-4 shadow-sm text-xs space-y-3"
+                >
+                  <h3 class="font-semibold text-blue-600 border-b pb-2">
+                    Informasi Pemohon Plotting
+                  </h3>
+
+                  <div>
+                    <p class="text-gray-500">Nama Pemohon</p>
+                    <p class="font-medium" id="info-Nama">-</p>
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <p class="text-gray-500">Nomor Hak</p>
+                      <input
+                        id="edit-NoHak"
+                        type="text"
+                        class="w-full border rounded px-2 py-1 text-xs"
+                        placeholder="Nomor Hak"
+                      />
+                    </div>
+
+                    <div>
+                      <p class="text-gray-500">Nomor NIB</p>
+                      <input
+                        id="edit-NIB"
+                        type="text"
+                        class="w-full border rounded px-2 py-1 text-xs"
+                        placeholder="Nomor NIB"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <p class="text-gray-500">Nomor Surat Ukur</p>
+                    <input
+                      id="edit-SU"
+                      type="text"
+                      class="w-full border rounded px-2 py-1 text-xs"
+                      placeholder="Nomor Surat Ukur"
+                    />
+                  </div>
+
+                  <div>
+                    <p class="text-gray-500">Lokasi Tanah</p>
+                    <a
+                      id="info-Lokasi"
+                      href="#"
+                      target="_blank"
+                      class="text-blue-600 underline"
+                      >-</a
+                    >
+                  </div>
+
+                  <div>
+                    <p class="text-gray-500">Lampiran</p>
+                    <a
+                      id="info-Lampiran"
+                      href="#"
+                      target="_blank"
+                      class="text-indigo-600 underline"
+                      >-</a
+                    >
+                  </div>
+
+                  <div>
+                    <p class="text-gray-500">Desa / Kecamatan</p>
+                    <p class="font-medium" id="info-wilayah">-</p>
+                  </div>
+                </div>
+
+                <div
+                  class="bg-white border rounded-lg p-4 shadow-sm text-xs space-y-4"
+                >
+                  <h3 class="font-semibold text-green-600 border-b pb-2">
+                    Proses Plotting
+                  </h3>
+
+                  <input
+                    type="text"
+                    id="nomorPlotting"
+                    readonly
+                    class="w-full border rounded px-3 py-1.5 text-xs bg-gray-100 text-gray-600 cursor-not-allowed"
+                    placeholder="Otomatis oleh sistem"
+                  />
+
+                  <div class="space-y-2">
+                    <label class="flex items-center gap-2">
+                      <input type="checkbox" id="cekSU" /> Plotting KKP
+                    </label>
+                    <label class="flex items-center gap-2">
+                      <input type="checkbox" id="cekNIB" /> Validasi NIB
+                    </label>
+                    <label class="flex items-center gap-2">
+                      <input type="checkbox" id="cekPlotting" /> Validasi Surat
+                      Ukur
+                    </label>
+                  </div>
+
+                  <div class="space-y-1">
+                    <label class="text-gray-500 text-xs font-medium">
+                      Upload File Plotting
+                    </label>
+
+                    <div class="flex items-center gap-3">
+                      <input
+                        type="file"
+                        id="uploadFilePlotting"
+                        accept=".jpg,.jpeg,.png,.pdf"
+                        class="hidden"
+                      />
+
+                      <button
+                        type="button"
+                        onclick="document.getElementById('uploadFilePlotting').click()"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-xs"
+                      >
+                        Upload File
+                      </button>
+
+                      <span
+                        id="namaFilePlotting"
+                        class="text-gray-500 text-xs italic truncate max-w-[200px]"
+                      >
+                        Belum ada file
+                      </span>
+                    </div>
+                  </div>
+
+                  <textarea
+                    id="keteranganProses"
+                    rows="4"
+                    placeholder="Tuliskan keterangan proses plotting di sini..."
+                    class="w-full border rounded px-3 py-2 text-xs resize-none"
+                  ></textarea>
+
+                  <div class="flex gap-3 mt-4">
+                    <button
+                      id="btnSimpan"
+                      class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded text-xs font-medium"
+                    >
+                      Simpan Plotting
+                    </button>
+
+                    <button
+                      id="btnBatal"
+                      class="flex-1 bg-gray-400 hover:bg-gray-500 text-white py-2 rounded text-xs font-medium"
+                    >
+                      Batal
+                    </button>
+
+                    <button
+                      id="btnTolak"
+                      class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded text-xs font-medium"
+                    >
+                      Tolak
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
     </div>
-  </div>
-</div>
+    <div
+      id="modalTolak"
+      class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50"
+    >
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-lg">
+        <div class="border-b px-5 py-3">
+          <h2 class="font-semibold text-red-600">Tolak Permohonan Plotting</h2>
+        </div>
 
-</body>
+        <div class="p-5">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Alasan Penolakan
+          </label>
+
+          <textarea
+            id="txtAlasanTolak"
+            rows="5"
+            class="w-full border rounded px-3 py-2 text-sm resize-none"
+            placeholder="Tuliskan alasan penolakan..."
+          ></textarea>
+        </div>
+
+        <div class="border-t px-5 py-3 flex justify-end gap-2">
+          <button
+            id="btnBatalTolak"
+            class="px-4 py-2 rounded bg-gray-400 text-white"
+          >
+            Batal
+          </button>
+
+          <button
+            id="btnKonfirmasiTolak"
+            class="px-4 py-2 rounded bg-red-600 text-white"
+          >
+            Tolak
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      id="modalInfoTolak"
+      class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50"
+    >
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-xl">
+        <div class="border-b px-5 py-3">
+          <h2 class="font-semibold text-red-600">Informasi Penolakan</h2>
+        </div>
+
+        <div class="p-5 space-y-4">
+          <div>
+            <p class="text-xs text-gray-500">Nama Pemohon</p>
+
+            <p id="infoTolakNama" class="font-medium">-</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-xs text-gray-500">Petugas Plotting</p>
+
+              <p id="infoTolakPetugas" class="font-medium">-</p>
+            </div>
+
+            <div>
+              <p class="text-xs text-gray-500">Tanggal Penolakan</p>
+
+              <p id="infoTolakTanggal" class="font-medium">-</p>
+            </div>
+          </div>
+
+          <div>
+            <p class="text-xs text-gray-500">Alasan Penolakan</p>
+
+            <div
+              id="infoTolakAlasan"
+              class="border rounded bg-gray-50 p-3 text-sm min-h-[120px] whitespace-pre-wrap"
+            ></div>
+          </div>
+        </div>
+
+        <div class="border-t px-5 py-3 flex justify-end">
+          <button
+            id="btnTutupInfoTolak"
+            class="px-5 py-2 rounded bg-blue-600 text-white"
+          >
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
