@@ -16,11 +16,6 @@ window.initDistribusiBerkas = function () {
 
   const API = window.APP_CONFIG.API_WEB;
 
-  /* =====================================================
-   * STATE
-   * =====================================================
-   */
-
   let currentBerkas = null;
   let currentInformasi = null;
   let daftarIsiData = null;
@@ -32,11 +27,6 @@ window.initDistribusiBerkas = function () {
 
   let entryInited = false;
 
-  /* =====================================================
-   * PANEL
-   * =====================================================
-   */
-
   const statusPanel = document.getElementById("statusPanel");
   const statusMessage = document.getElementById("statusMessage");
 
@@ -46,10 +36,6 @@ window.initDistribusiBerkas = function () {
   const distribusiPanel = document.getElementById("distribusiPanel");
   const daftarIsiPanel = document.getElementById("daftarIsiPanel");
 
-  /* =====================================================
-   * PENCARIAN
-   * =====================================================
-   */
 
   const nomorBerkasCari = document.getElementById("nomorBerkasCari");
 
@@ -58,11 +44,6 @@ window.initDistribusiBerkas = function () {
   const btnCariBerkas = document.getElementById("btnCariBerkas");
 
   const btnResetCari = document.getElementById("btnResetCari");
-
-  /* =====================================================
-   * INFORMASI BERKAS
-   * =====================================================
-   */
 
   const infoNomor = document.getElementById("infoNomor");
 
@@ -73,11 +54,6 @@ window.initDistribusiBerkas = function () {
   const infoDesa = document.getElementById("infoDesa");
 
   const infoPukur = document.getElementById("infoPukur");
-
-  /* =====================================================
-   * ENTRY BERKAS
-   * =====================================================
-   */
 
   const entryNomorBerkas = document.getElementById("entryNomorBerkas");
 
@@ -91,10 +67,7 @@ window.initDistribusiBerkas = function () {
 
   const jenisPermohonan = document.getElementById("JenisPermohonan");
 
-  /* =====================================================
-   * DAFTAR ISI
-   * =====================================================
-   */
+ 
 
   const no301 = document.getElementById("no301");
   const tgl301 = document.getElementById("tgl301");
@@ -108,10 +81,7 @@ window.initDistribusiBerkas = function () {
   const no307 = document.getElementById("no307");
   const tgl307 = document.getElementById("tgl307");
 
-  /* =====================================================
-   * DISTRIBUSI
-   * =====================================================
-   */
+
 
   const seksiDistribusi = document.getElementById("seksiDistribusi");
 
@@ -125,10 +95,7 @@ window.initDistribusiBerkas = function () {
 
   const btnBatalDistribusi = document.getElementById("btnBatalDistribusi");
 
-  /* =====================================================
-   * HELPER
-   * =====================================================
-   */
+
 
   async function apiGet(action, params = {}) {
     const qs = new URLSearchParams({
@@ -190,15 +157,7 @@ window.initDistribusiBerkas = function () {
   hide(entryPanel);
   hide(informasiPanel);
 
-  /* =====================================================
-   * BAGIAN 2
-   * ENTRY BERKAS
-   * =====================================================
-   */
-  /* =====================================================
-   * INIT ENTRY
-   * =====================================================
-   */
+
 
   function initEntryBerkas() {
     if (entryInited) return;
@@ -209,10 +168,7 @@ window.initDistribusiBerkas = function () {
     loadDesaKecamatan();
   }
 
-  /* =====================================================
-   * LOAD MASTER JENIS
-   * =====================================================
-   */
+
 
   async function loadJenisPermohonan() {
     try {
@@ -230,10 +186,7 @@ window.initDistribusiBerkas = function () {
     }
   }
 
-  /* =====================================================
-   * LOAD MASTER DESA
-   * =====================================================
-   */
+
 
   async function loadDesaKecamatan() {
     try {
@@ -251,10 +204,7 @@ window.initDistribusiBerkas = function () {
     }
   }
 
-  /* =====================================================
-   * VALIDASI ENTRY
-   * =====================================================
-   */
+
 
   function validasiEntry() {
     if (!tglMulai.value) return "Tanggal Mulai wajib diisi";
@@ -272,10 +222,7 @@ window.initDistribusiBerkas = function () {
     return "";
   }
 
-  /* =====================================================
-   * ENTRY BERKAS
-   * =====================================================
-   */
+
 
   async function submitEntry() {
     try {
@@ -422,24 +369,12 @@ window.initDistribusiBerkas = function () {
 
     show(distribusiPanel);
   }
-  /* =====================================================
-   * BAGIAN 3
-   * CARI BERKAS
-   * =====================================================
-   */
-  /* =====================================================
-   * SEKSI → TUJUAN DISTRIBUSI
-   * =====================================================
-   */
+
 
   seksiDistribusi.addEventListener("change", () => {
     fillSelect(tujuanDistribusi, cacheStaff, "-- Pilih Tujuan --");
   });
 
-  /* =====================================================
-   * CARI BERKAS
-   * =====================================================
-   */
 
   async function prosesCariBerkas() {
     hideStatus();
@@ -460,9 +395,6 @@ window.initDistribusiBerkas = function () {
         tahun,
       });
 
-      /* -----------------------------------------
-       * BERKAS TIDAK DITEMUKAN
-       * ----------------------------------------- */
 
       if (!res.success || !res.data || !res.data.info) {
         currentBerkas = null;
@@ -491,9 +423,6 @@ window.initDistribusiBerkas = function () {
         return;
       }
 
-      /* -----------------------------------------
-       * BERKAS DITEMUKAN
-       * ----------------------------------------- */
 
       const info = res.data.info;
 
@@ -511,14 +440,6 @@ window.initDistribusiBerkas = function () {
     }
   }
 
-  /* =====================================================
-   * BAGIAN 3B
-   * =====================================================
-   */
-  /* =====================================================
-   * RESET INFORMASI
-   * =====================================================
-   */
 
   function resetInformasi() {
     infoNomor.textContent = "-";
@@ -536,10 +457,7 @@ window.initDistribusiBerkas = function () {
     entryDesa.selectedIndex = 0;
     JenisPermohonan.selectedIndex = 0;
   }
-  /* =====================================================
-   * RESET DISTRIBUSI
-   * =====================================================
-   */
+
 
   function resetDistribusi() {
     seksiDistribusi.value = "";
@@ -552,10 +470,7 @@ window.initDistribusiBerkas = function () {
     keteranganDistribusi.value = "";
   }
 
-  /* =====================================================
-   * RESET PENCARIAN
-   * =====================================================
-   */
+
 
   function resetPencarian() {
     nomorBerkasCari.value = "";
@@ -585,24 +500,13 @@ window.initDistribusiBerkas = function () {
     hide(distribusiPanel);
   }
 
-  /* =====================================================
-   * BIND EVENT PENCARIAN
-   * =====================================================
-   */
+
 
   btnCariBerkas.addEventListener("click", prosesCariBerkas);
 
   btnResetCari.addEventListener("click", resetPencarian);
 
-  /* =====================================================
-   * BAGIAN 4
-   * DAFTAR ISI BERKAS
-   * =====================================================
-   */
-  /* =====================================================
-   * DAFTAR ISI
-   * =====================================================
-   */
+
 
   function kosongkanDaftarIsi() {
     no301.value = "";
@@ -620,10 +524,7 @@ window.initDistribusiBerkas = function () {
     daftarIsiData = {};
   }
 
-  /* =====================================================
-   * ISI FORM DAFTAR ISI
-   * =====================================================
-   */
+
 
   function isiDaftarIsi(data = {}) {
     daftarIsiData = data;
@@ -641,10 +542,7 @@ window.initDistribusiBerkas = function () {
     tgl307.value = data.tgl307 || "";
   }
 
-  /* =====================================================
-   * AMBIL DATA FORM
-   * =====================================================
-   */
+
 
   function ambilDataDaftarIsi() {
     return {
@@ -668,19 +566,13 @@ window.initDistribusiBerkas = function () {
     };
   }
 
-  /* =====================================================
-   * VALIDASI
-   * =====================================================
-   */
+
 
   function validasiDaftarIsi() {
     return true;
   }
 
-  /* =====================================================
-   * SIMPAN (sementara tanpa backend)
-   * =====================================================
-   */
+
 
   async function simpanDaftarIsi() {
     if (!validasiDaftarIsi()) {
@@ -728,11 +620,7 @@ window.initDistribusiBerkas = function () {
     }
   }
 
-  /* =====================================================
-   * LOAD DATA
-   * (sementara frontend saja)
-   * =====================================================
-   */
+
 
   async function loadDaftarIsi() {
     kosongkanDaftarIsi();
@@ -767,15 +655,6 @@ window.initDistribusiBerkas = function () {
     }
   }
 
-  /* =====================================================
-   * BAGIAN 5
-   * DISTRIBUSI BERKAS
-   * =====================================================
-   */
-  /* =====================================================
-   * VALIDASI DISTRIBUSI
-   * =====================================================
-   */
 
   function validasiDistribusi() {
     if (!currentBerkas) {
@@ -791,10 +670,7 @@ window.initDistribusiBerkas = function () {
     return true;
   }
 
-  /* =====================================================
-   * DISTRIBUSIKAN BERKAS
-   * =====================================================
-   */
+
 
   async function distribusikanBerkas() {
     if (!validasiDistribusi()) {
@@ -848,10 +724,6 @@ window.initDistribusiBerkas = function () {
     }
   }
 
-  /* =====================================================
-   * BATAL
-   * =====================================================
-   */
 
   function batalDistribusi() {
     if (confirm("Batalkan proses distribusi?")) {
@@ -859,10 +731,7 @@ window.initDistribusiBerkas = function () {
     }
   }
 
-  /* =====================================================
-   * EVENT
-   * =====================================================
-   */
+
 
   btnDistribusikan.addEventListener("click", distribusikanBerkas);
 
@@ -870,10 +739,7 @@ window.initDistribusiBerkas = function () {
 
   btnSimpanEntry.addEventListener("click", simpanEntryBaru);
 
-  /* =====================================================
-   * INISIALISASI
-   * =====================================================
-   */
+
 
   resetPencarian();
 };
