@@ -39,7 +39,8 @@ function loadPage(page) {
     "daftar-petugas.html",
     "petugas-ukur.html",
     "jenis-permohonan.html",
-    "daftar-berkas.html"
+    "daftar-berkas.html",
+    "alat-plotting.html",
   ];
 
   if (adminPages.includes(page)) {
@@ -257,7 +258,9 @@ function setPageTitle(page) {
     "jenis-permohonan.html": "Jenis Permohonan",
     "daftar-berkas.html": "Daftar Berkas",
     "ploting.html": "Ploting SiGundul",
-    "daftar-ploting.html": "Daftar Ploting"
+    "daftar-ploting.html": "Daftar Ploting",
+    "distribusi-berkas.html": "Distribusi Berkas",
+    "alat-plotting.html": "Alat Plotting",
   };
 
   const titleEl = document.getElementById("page-title");
