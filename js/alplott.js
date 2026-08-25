@@ -4,11 +4,8 @@
 
 function bukaTabAlatPlotting(tab) {
   const tabCariPdf = document.getElementById("tabCariPdf");
-
   const tabResetData = document.getElementById("tabResetData");
-
   const btnCariPdf = document.getElementById("tabBtnCariPdf");
-
   const btnResetData = document.getElementById("tabBtnResetData");
 
   /* Jika elemen belum tersedia */
@@ -16,65 +13,35 @@ function bukaTabAlatPlotting(tab) {
     return;
   }
 
-  /* ========================================================
-       TAB CARI PDF
-       ======================================================== */
 
   if (tab === "cari-pdf") {
     tabCariPdf.style.display = "block";
-
     tabResetData.style.display = "none";
-
     btnCariPdf.classList.add("active");
-
     btnResetData.classList.remove("active");
   }
 
-  /* ========================================================
-       TAB RESET DATA
-       ======================================================== */
 
   if (tab === "reset-data") {
     tabCariPdf.style.display = "none";
-
     tabResetData.style.display = "block";
-
     btnCariPdf.classList.remove("active");
-
     btnResetData.classList.add("active");
   }
 }
 
-/* ============================================================
-   PENCARIAN PDF PLOTTING
-============================================================ */
 
 async function cariPDFPlotting() {
   const input = document.getElementById("nomorPlotting");
-
   const hasil = document.getElementById("hasilPDFPlotting");
-
   const jumlah = document.getElementById("jumlahHasilPDF");
-
-  /* ========================================================
-       CEK ELEMEN
-    ======================================================== */
 
   if (!input || !hasil || !jumlah) {
     console.error("Elemen Alat Plotting tidak ditemukan.");
-
     return;
   }
 
-  /* ========================================================
-       AMBIL NOMOR
-    ======================================================== */
-
   const nomor = input.value.trim();
-
-  /* ========================================================
-       VALIDASI
-    ======================================================== */
 
   if (nomor === "") {
     jumlah.textContent = "0 hasil";
@@ -92,13 +59,9 @@ async function cariPDFPlotting() {
       `;
 
     input.focus();
-
     return;
   }
 
-  /* ========================================================
-       VALIDASI ANGKA
-    ======================================================== */
 
   if (!/^[0-9]+$/.test(nomor)) {
     jumlah.textContent = "0 hasil";
@@ -120,15 +83,7 @@ async function cariPDFPlotting() {
     return;
   }
 
-  /* ========================================================
-       NAMA FILE
-    ======================================================== */
-
   const namaFile = "PLOT-" + nomor + ".pdf";
-
-  /* ========================================================
-       LOADING
-    ======================================================== */
 
   jumlah.textContent = "Mencari...";
 
@@ -178,10 +133,6 @@ async function cariPDFPlotting() {
       </div>
     `;
 
-  /* ========================================================
-       PANGGIL APPS SCRIPT
-    ======================================================== */
-
   try {
     const url =
       API_URL +
@@ -200,17 +151,10 @@ async function cariPDFPlotting() {
       throw new Error("HTTP Error " + response.status);
     }
 
-    /* ======================================================
-         PARSE RESPONSE
-      ====================================================== */
-
     const result = await response.json();
 
     console.log("Response Alat Plotting:", result);
 
-    /* ======================================================
-         CEK SUCCESS
-      ====================================================== */
 
     if (!result || result.success !== true) {
       throw new Error(
@@ -220,9 +164,6 @@ async function cariPDFPlotting() {
       );
     }
 
-    /* ======================================================
-         FILE TIDAK DITEMUKAN
-      ====================================================== */
 
     if (result.found !== true) {
       jumlah.textContent = "0 hasil";
@@ -259,10 +200,6 @@ async function cariPDFPlotting() {
 
       return;
     }
-
-    /* ======================================================
-         FILE DITEMUKAN
-      ====================================================== */
 
     jumlah.textContent = "1 hasil";
 
@@ -435,9 +372,6 @@ async function cariPDFPlotting() {
   }
 }
 
-/* ============================================================
-   PENCARIAN DATA NOMOR HM
-============================================================ */
 
 async function cariDataHM() {
   const input = document.getElementById("nomorHM");
@@ -453,9 +387,6 @@ async function cariDataHM() {
 
   const nomorHM = input.value.trim();
 
-  /* ========================================================
-       VALIDASI
-    ======================================================== */
 
   if (nomorHM === "") {
     jumlah.textContent = "0 data";
@@ -476,9 +407,6 @@ async function cariDataHM() {
     return;
   }
 
-  /* ========================================================
-       TAMPILKAN LOADING
-    ======================================================== */
 
   jumlah.textContent = "Mencari...";
 
@@ -494,9 +422,6 @@ async function cariDataHM() {
       </div>
     `;
 
-  /* ========================================================
-       PANGGIL APPS SCRIPT
-    ======================================================== */
 
   try {
     const url =
@@ -516,17 +441,11 @@ async function cariDataHM() {
       throw new Error("HTTP Error " + response.status);
     }
 
-    /* ======================================================
-         PARSE JSON
-      ====================================================== */
 
     const result = await response.json();
 
     console.log("Response Reset Plotting:", result);
 
-    /* ======================================================
-         ERROR SERVER
-      ====================================================== */
 
     if (!result.success) {
       jumlah.textContent = "Error";
@@ -544,10 +463,6 @@ async function cariDataHM() {
 
       return;
     }
-
-    /* ======================================================
-         DATA TIDAK DITEMUKAN
-      ====================================================== */
 
     if (!result.found || !result.data || result.data.length === 0) {
       jumlah.textContent = "0 data";
@@ -568,15 +483,9 @@ async function cariDataHM() {
       return;
     }
 
-    /* ======================================================
-         JUMLAH DATA
-      ====================================================== */
 
     jumlah.textContent = result.data.length + " data";
 
-    /* ======================================================
-         TABEL HASIL
-      ====================================================== */
 
     hasil.innerHTML = `
   
@@ -795,26 +704,18 @@ async function cariDataHM() {
   }
 }
 
-/* ============================================================
-   RESET STATUS PLOTTING
-============================================================ */
 
 async function resetDataPlotting(rowNumber, nomorHM) {
-  /* ==========================================================
-       VALIDASI NOMOR BARIS
-    ========================================================== */
+
 
   if (!rowNumber) {
     alert("Nomor baris data tidak ditemukan.");
     return;
   }
 
-  /* ==========================================================
-       KONFIRMASI
-    ========================================================== */
 
   const konfirmasi = confirm(
-    "Kosongkan status plotting untuk HM " + nomorHM + "?"
+    "Reset status plotting untuk HM " + nomorHM + "?"
   );
 
   if (!konfirmasi) {
@@ -822,9 +723,6 @@ async function resetDataPlotting(rowNumber, nomorHM) {
   }
 
   try {
-    /* ========================================================
-         LOADING
-      ======================================================== */
 
     const hasil = document.getElementById("hasilDataHM");
 
@@ -843,26 +741,13 @@ async function resetDataPlotting(rowNumber, nomorHM) {
         `;
     }
 
-    /* ========================================================
-         DATA POST
-         
-         Gunakan URLSearchParams agar parsePostData()
-         membaca rows dengan pasti.
-      ======================================================== */
 
     const formData = new URLSearchParams();
-
     formData.append("action", "alatPlottingReset");
-
     formData.append("rows", JSON.stringify([Number(rowNumber)]));
-
     console.log("RESET ROW:", rowNumber);
-
     console.log("RESET DATA:", formData.toString());
 
-    /* ========================================================
-         PANGGIL APPS SCRIPT
-      ======================================================== */
 
     const response = await fetch(API_URL, {
       method: "POST",
@@ -874,25 +759,15 @@ async function resetDataPlotting(rowNumber, nomorHM) {
       body: formData.toString(),
     });
 
-    /* ========================================================
-         CEK HTTP
-      ======================================================== */
 
     if (!response.ok) {
       throw new Error("HTTP Error " + response.status);
     }
 
-    /* ========================================================
-         PARSE RESPONSE
-      ======================================================== */
 
     const result = await response.json();
-
     console.log("Response Reset:", result);
 
-    /* ========================================================
-         RESET GAGAL
-      ======================================================== */
 
     if (!result.success) {
       alert(result.message || "Reset gagal.");
@@ -903,15 +778,8 @@ async function resetDataPlotting(rowNumber, nomorHM) {
       return;
     }
 
-    /* ========================================================
-         RESET BERHASIL
-      ======================================================== */
 
-    alert("Status HM " + nomorHM + " berhasil dikosongkan.");
-
-    /* ========================================================
-         CARI ULANG DATA
-      ======================================================== */
+    alert("Status HM " + nomorHM + " berhasil direset.");
 
     await cariDataHM();
   } catch (error) {
@@ -924,9 +792,6 @@ async function resetDataPlotting(rowNumber, nomorHM) {
   }
 }
 
-/* ============================================================
-   ESCAPE HTML
-   ============================================================ */
 
 function escapeHTML(value) {
   const div = document.createElement("div");
