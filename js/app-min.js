@@ -196,6 +196,7 @@ window.isAdmin = isAdmin;
       "daftar-petugas.html",
       "petugas-ukur.html",
       "jenis-permohonan.html",
+      "alat-plotting.html",
       "daftar-berkas.html"
     ];
   
@@ -402,6 +403,8 @@ window.isAdmin = isAdmin;
       "jenis-permohonan.html": "Jenis Permohonan",
       "daftar-berkas.html": "Daftar Berkas",
       "ploting.html": "Ploting SiGundul",
+      "distribusi-berkas.html": "Distribusi Berkas",
+      "alat-plotting.html": "Alat Plotting",
       "daftar-ploting.html": "Daftar Ploting"
     };
   
