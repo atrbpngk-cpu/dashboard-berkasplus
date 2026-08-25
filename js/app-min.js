@@ -197,7 +197,7 @@ window.isAdmin = isAdmin;
       "petugas-ukur.html",
       "jenis-permohonan.html",
       "daftar-berkas.html",
-      "alat-plotting.html",
+      "alat-Plotting.html",
     ];
   
     if (adminPages.includes(page)) {
@@ -405,7 +405,7 @@ window.isAdmin = isAdmin;
       "ploting.html": "Ploting SiGundul",
       "daftar-ploting.html": "Daftar Ploting",
       "distribusi-berkas.html": "Distribusi Berkas",
-      "alat-plotting.html": "Alat Plotting",
+      "alat-Plotting.html": "Alat Plotting",
     };
   
     const titleEl = document.getElementById("page-title");
